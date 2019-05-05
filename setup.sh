@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # +-------------------------------------------------------------------------+
-# | Setup for .dotfiles                                                     |
+# | Setup for suckless.X11 tools                                            |
 # +-------------------------------------------------------------------------+
 # | Copyright © 1996-2019 Waldemar Schroeer                                 |
 # |                       lassmichinruhe@rz-amper.de                        |
@@ -16,7 +16,7 @@ do
     case $antwoord in
         [yY] | [yY][Ee][Ss] )
             printf "\n Installing Desktop and Suckless Tools to your home directory."
-            declare -a sucklesstools=( "dwm" "dmenu" "st" "slock" )
+            declare -a sucklesstools=( "dwm" "dmenu" "st" "slock" "surf" )
             for i in "${sucklesstools[@]}"
             do
                 cd ~/.dotfiles/suckless/$i
