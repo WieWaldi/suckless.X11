@@ -6,7 +6,7 @@ static const unsigned int gappx         = 7;        /* gaps between windows */
 static const unsigned int snap          = 0;       /* snap pixel */
 static const int showbar                = 1;        /* 0 means no bar */
 static const int topbar                 = 1;        /* 0 means bottom bar */
-static const char *fonts[]              = { "Fira Mono:size=8" };
+static const char *fonts[]              = { "Fira Mono:size=10" };
 static const char dmenufont[]           = "Fira Mono:size=12";
 static const char col_base00[]          = "#657b83";
 static const char col_base01[]          = "#586e75";
@@ -24,16 +24,21 @@ static const char col_violet[]          = "#d33682";
 static const char col_blue[]            = "#268bd2";
 static const char col_cyan[]            = "#2aa198";
 static const char col_green[]           = "#859900";
-static const char *colors[][3]      = {                                          
+static const char col_black[]           = "#000000";
+static const char col_white[]           = "#ffffff";
+static const char *colors[][3]          = {                                          
     /*               fg         bg         border   */                           
     [SchemeNorm] = { col_base3, col_base00, col_base1 },                          
     [SchemeSel]  = { col_base2, col_base03, col_yellow  },                          
+	[SchemeWarn] =	 { col_black, col_yellow, col_red },
+	[SchemeUrgent]=	 { col_white, col_red,    col_red },
 };
 
 
 /* tagging */
 /* static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }; */
-static const char *tags[] = { "I.", "II.", "III.", "IV.", "V.", "VI.", "VII.", "VIII.", "IX." };
+/* static const char *tags[] = { "I.", "II.", "III.", "IV.", "V.", "VI.", "VII.", "VIII.", "IX." }; */
+static const char *tags[] = { "♬", "▲", "▼", "♢", "♤", "Ω", "✝", "∞",};
 
 static const Rule rules[] = {
 	/* xprop(1):
