@@ -10,7 +10,11 @@
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
 /bin/xsetroot -fg black -bg white -bitmap /usr/include/X11/bitmaps/root_weave
-/bin/xrandr --output Virtual-1 --mode 1680x1050
-/bin/xterm &
+# /bin/xrandr --output Virtual-1 --mode 1440x900
+# /bin/xset +fp ~/.fonts
+# /bin/xset fp rehash
+# /bin/xset -b # disable bell
+# /bin/xset s off
 
-exec ~/bin/dwm
+~/bin/dwm_status &
+exec ~/bin/dwm 2> ~/tmp/dwm.log
