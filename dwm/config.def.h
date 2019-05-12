@@ -41,7 +41,7 @@ static const char *colors[][3]          = {
 /* static const char *tags[] = { "♬", "▲", "▼", "♢", "♤", "Ω", "✝", "∞",}; */
 /* static const char *tags[] = { "➊", "➋", "➌", "➍", "➎", "➏", "➐", "➑", "➒" }; */
 /* static const char *tags[] = { "☹", "♨", "♺", "♿", "⚒", "⚓", "⚕", "⚗", "i⚛ }; */
-static const char *tags[] = { "➊", "➋", "➌", "➍", "➎", "➏", "➐", "➑", "➒" }; 
+static const char *tags[] = { "", "", "", "", "", "", "", "", "" }; 
 
 static const Rule rules[] = {
 	/* xprop(1):

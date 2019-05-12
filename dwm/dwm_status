@@ -10,14 +10,19 @@
 print_mem_used() {
     mem_used="$(free -m | grep "Mem" | awk '{print $3}')"
     mem_free="$(free -m | grep "Mem" | awk '{print $4}')"
-    printf "Mem Used:${mem_used}MB|Mem Free:${mem_free}MB"
+    printf " Used:${mem_used}MB|Free:${mem_free}MB"
 }
 
 print_datetime() {
-    datetimeloc="$(date "+%A %d.%m.%Y %Z=%H:%M")"
-    datetimeusc="$(TZ=US/Central date "+%Z=%H:%M")"
+    locdate="$(date "+%A %d.%m.%Y")"
+    loctime="$(date "+%Z=%H:%M")"
+    usctime="$(TZ=US/Central date "+%Z=%H:%M")"
     # datetime="$(date "+%a %d %b  %H:%M")"
-    printf "🌐${datetimeloc} ${datetimeusc}"
+    printf " ${locdate}  ${loctime} ${usctime}"
+}
+
+print_battery() {
+    printf ""
 }
 
 while true; do
@@ -29,7 +34,7 @@ while true; do
     let cpu_used="100 * ($cpu_interval - ($cpu_idle_now-${cpu_idle_old:-0})) / $cpu_interval"
 
     print_cpu_used() {
-        printf "CPU: ${cpu_used}%"
+        printf " ${cpu_used}%%"
     }
 
 

@@ -33,7 +33,7 @@ do
             for i in "${sucklesstools[@]}"
             do
                 cd ${cdir}/${i}
-                $make clean install
+                $make install clean
             done
             break
             ;;
