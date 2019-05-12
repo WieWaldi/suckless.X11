@@ -15,10 +15,10 @@ print_mem_used() {
 
 print_datetime() {
     locdate="$(date "+%A %d.%m.%Y")"
-    loctime="$(date "+%Z=%H:%M")"
-    usctime="$(TZ=US/Central date "+%Z=%H:%M")"
+    loctime="$(date "+%H:%M")"
+    usctime="$(TZ=US/Central date "+%H:%M")"
     # datetime="$(date "+%a %d %b  %H:%M")"
-    printf " ${locdate}  ${loctime} ${usctime}"
+    printf "${locdate} ${loctime} ${usctime}"
 }
 
 print_battery() {
