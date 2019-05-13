@@ -1,0 +1,8 @@
+test/ok/gif
+touch test/ok/gif
+test/ok/jpg
+touch test/ok/jpg
+test/ok/png
+touch test/ok/png
+test/ok/pnm
+touch test/ok/pnm

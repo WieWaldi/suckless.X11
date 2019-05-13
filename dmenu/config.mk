@@ -2,7 +2,7 @@
 VERSION = 4.9
 
 # paths
-PREFIX = ~
+PREFIX = ~/.local
 MANPREFIX = $(PREFIX)/share/man
 
 X11INC = /usr/X11R6/include

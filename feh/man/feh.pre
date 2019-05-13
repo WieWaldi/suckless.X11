@@ -1,0 +1,2140 @@
+.Dd $DATE$
+.Dt FEH 1
+.Os
+.
+.
+.Sh NAME
+.
+.Nm feh
+.Nd image viewer and cataloguer
+.
+.
+.Sh SYNOPSIS
+.
+.Nm
+.Op Ar options
+.Op Ar files | Ar directories | Ar URLs ...
+.
+.
+.Sh VERSION
+.
+This manual documents
+.Nm
+$VERSION$
+.
+.Pp
+.
+Compile-time switches in this build:
+.
+.Bl -bullet -compact
+.
+.It
+remote file support: libcurl $MAN_CURL$
+.
+.It
+natural sorting option $MAN_VERSCMP$
+.
+.It
+Xinerama multi-monitor support $MAN_XINERAMA$
+.
+.It
+builtin EXIF reader $MAN_EXIF$
+.
+.It
+inotify-based auto-reload of changed files $MAN_INOTIFY$
+.
+.El
+.
+$MAN_DEBUG$
+.
+.
+.Sh DESCRIPTION
+.
+.Nm
+is a light-weight, configurable and versatile image viewer.
+It is aimed at command line users, but can also be started from graphical file
+managers.
+Apart from viewing images, it can compile text and thumbnail
+listings, show (un)loadable files, set X11 backgrounds, and more.
+.
+.Pp
+.
+Features include filelists, various image sorting modes, custom action scripts,
+and image captions.
+.Nm
+can be controlled by configurable keyboard and mouse shortcuts, terminal
+input and signals.
+When no file arguments or filelists are specified and
+.Cm --start-at
+is not used,
+.Nm
+displays all files in the current directory.
+.
+.Pp
+.
+EXIF tags are supported either using exiv2 / exifgrep via
+.Cm --info
+.Pq see the Sx USAGE EXAMPLES No section ,
+or as a builtin feature by compiling
+.Nm
+with exif=1. In this build of
+.Nm ,
+builtin EXIF support is $MAN_EXIF$.
+.
+.
+.Sh MODES
+.
+.Nm
+is based on various modes, which are selected at startup by command line
+options.
+.
+.Pp
+.
+Slideshow mode is the default.
+It opens a window and displays the first image in it;
+the slideshow position can be advanced
+.Pq or otherwise changed
+using keyboard and mouse shortcuts.
+In slideshow mode, images can be deleted either from the filelist or from the
+disk, a changed filelist can also be saved to the disk and reopened at a later
+time.
+An image can also be read from stdin via
+.Qq feh - .
+.
+.Pp
+.
+Montage mode forms a montage from the filelist.
+The resulting image can be viewed or saved,
+and its size can be limited by height, width or both.
+.
+.Pp
+.
+Index mode forms an index print from the filelist.
+Image thumbnails are shown along with the filename,
+size and dimensions, printed using a truetype
+font of your choice.
+The resulting image can be viewed or saved, and its size
+can be limited by height, width or both.
+.
+.Pp
+.
+Thumbnail mode is like index mode, but the mini-images are clickable and open
+the selected image in a new window.
+.
+.Pp
+.
+Multiwindow mode shows images in multiple windows, instead of as a slideshow
+in one window.
+Don't use with a large filelist ;)
+.
+.Pp
+.
+List mode doesn't display images.
+Instead, it outputs an
+.Cm ls Ns No - Ns style
+listing of the files in the filelist, including image info such as size, number
+of pixels, type, etc.
+There is also a Customlist mode which prints image info
+in a custom format specified by a printf-like format string.
+.
+.Pp
+.
+.Nm
+can also list either all the loadable files in a filelist or all the
+unloadable files.
+This is useful for preening a directory.
+.
+.
+.Sh SUPPORTED FORMATS
+.
+.Nm
+can open any format supported by imlib2, most notably jpeg, png,
+pnm, tiff, and bmp.
+The gif format is also supported, but only for static images.
+In case of animations, only the first frame will be shown.
+.
+If the convert binary
+.Pq supplied by ImageMagick
+is available, it also has limited support for many other file types, such as
+svg, xcf and otf.
+If dcraw is available,
+.Nm
+also supports RAW files provided by cameras and will display the embedded
+thumbnails.
+Use
+.Cm --conversion-timeout Ar timeout
+with a non-negative value to enable support for these formats.
+.
+.
+.Sh OPTIONS
+.
+.Bl -tag -width indent
+.
+.It Cm -A , --action Oo Ar flag Oc Ns Oo [ Ar title ] Oc Ns Ar action
+.
+Specify a shell command as an action to perform on the image.
+In slideshow or multiwindow mode, the action will be run when
+the action_0 key is pressed, in list mode, it will be run for each file.
+In loadable/unloadable mode, it will be run for each loadable/unloadable
+file, respectively.
+In thumbnail mode, clicking on an image will cause the action to run instead
+of opening the image.
+.
+.Pp
+.
+If
+.Ar flag
+is
+.Qq \&; ,
+.Nm
+will reload the current image instead of switching to the next one
+.Pq slideshow mode
+or closing the window
+.Pq multiwindow mode
+after
+executing the action.
+.
+If
+.Ar [ title ]
+is specified
+.Pq note the literal Qo \&[ Qc and Qo ] Qc ,
+.Cm --draw-actions
+will display
+.Ar title
+instead of
+.Ar action
+in the action list.
+Note that
+.Ar title
+must not start with a space.
+If it does, the action is handled as if it did not have a title.
+This special case exists for backwards compatibility reasons
+and makes sure that actions like
+.Qq \&[ -L %F \&] && foo
+still work.
+.
+.
+.Pp
+.
+The action will be executed by /bin/sh.
+Use format specifiers to refer to image info, see
+.Sx FORMAT SPECIFIERS
+for details.
+Example usage:
+.Qq feh -A Qo mv ~/images/%N Qc * .
+.
+.It Cm --action1 No .. Cm --action9 Oo Ar flag Oc Ns Oo [ Ar title ] Oc Ns Ar action
+.
+Extra actions which can be set and triggered using the appropriate number key.
+.
+.It Cm --auto-reload
+.
+.Pq optional feature, $MAN_INOTIFY$ in this build
+automatically reload image when the underlying file changes.
+Note that auto-reload
+.Pq if enabled in the build
+is on by default.
+This option is only useful to re-enable auto-reload after it has been
+disabled by a preceding
+.Cm --reload=0
+option.
+.
+.It Cm --auto-rotate
+.
+.Pq optional feature, $MAN_EXIF$ in this build
+Automatically rotate images based on EXIF data.
+Does not alter the image files.
+.
+.It Cm -Z , --auto-zoom
+.
+Zoom pictures to screen size in fullscreen / fixed geometry mode.
+.
+.It Cm -x , --borderless
+.
+Create borderless windows.
+.
+.It Cm --cache-size Ar size
+.
+Set imlib2 in-memory cache to
+.Ar size
+MiB.
+A higher cache size can significantly improve performance especially for small
+slide shows, however at the cost of increased memory consumption.
+.Ar size
+must be between 0 and 2048 MiB and defaults to 4.
+.
+.It Cm -P , --cache-thumbnails
+.
+Enable thumbnail caching.
+Thumbnails are saved in
+.Pa $XDG_CACHE_HOME/thumbnails ,
+which defaults to
+.Pa ~/.cache/thumbnails .
+Note that thumbnails are only cached if the configured thumbnail size does
+not exceed 256x256 pixels.
+.
+.It Cm -K , --caption-path Ar path
+.
+Path to directory containing image captions.
+This turns on caption viewing, and if captions are found in
+.Ar path ,
+which is relative to the directory of each image, they are overlayed on the
+displayed image.
+E.g. with caption path
+.Qq captions/ ,
+and viewing image
+.Qq images/foo.jpg ,
+the caption will be looked for in
+.Qq images/captions/foo.jpg.txt .
+.
+.It Cm --conversion-timeout Ar timeout
+.
+.Nm
+can use ImageMagick to try converting unloadable files into a supported
+file format.
+As this can take a long time, it is disabled by default.
+Set
+.Ar timeout
+to a non-negative value to enable it.
+A positive value
+specifies after how many seconds conversion attempts should be aborted,
+zero causes
+.Nm
+to try indefinitely.
+Negative values restore the default by disabling conversion altogether.
+.
+.It Cm -L , --customlist Ar format
+.
+Don't display images, print image info according to
+.Ar format
+instead.
+See
+.Sx FORMAT SPECIFIERS .
+.
+.It Cm -G , --draw-actions
+.
+Draw the defined actions and what they do at the top-left of the image.
+.
+.It Cm --draw-exif
+.
+.Pq optional feature, $MAN_EXIF$ in this build
+display some EXIF information in the bottom left corner, similar to using
+.Cm --info
+with exiv2 / exifgrep .
+.
+.It Cm -d , --draw-filename
+.
+Draw the file name at the top-left of the image.
+.
+.It Cm --draw-tinted
+.
+Show overlay texts
+.Pq as created by Cm --draw-filename No et al
+on a semi-transparent background to improve their readability
+.
+.It Cm --edit
+.
+Enable basic editing of files.
+This makes rotation and mirroring
+.Pq bound to Qo < Qc , Qo > Qc , Qo | Qc , and Qo _ Qc by default
+change the underlying file and not just its displayed content.
+.
+.It Cm -f , --filelist Ar file
+.
+This option is similar to the playlists used by music software.
+If
+.Ar file
+exists, it will be read for a list of files to load, in the order they appear.
+The format is a list of image file names, absolute or relative to the current
+directory, one file name per line.
+.
+.Pp
+.
+If
+.Ar file
+doesn't exist, it will be created from the internal filelist at the end of a
+viewing session.
+This is best used to store the results of complex sorts
+.Pq Cm -Spixels No for example
+for later viewing.
+.
+.Pp
+.
+Any changes to the internal filelist
+.Pq such as deleting a file or it being pruned for being unloadable
+will be saved to
+.Ar file
+when
+.Nm
+exits.
+You can add files to filelists by specifying them on the command line
+when also specifying the list.
+.
+.Pp
+.
+If
+.Ar file
+is
+.Qq - ,
+.Nm
+will read the filelist from its standard input.
+.
+.It Cm -e , --font Ar font
+.
+Set global font.
+Should be a truetype font, resident in the current directory or the font
+directory, and should be defined in the form fontname/points, like
+.Qq myfont/12 .
+.
+.It Cm -C , --fontpath Ar path
+.
+Specify
+.Ar path
+as extra directory in which to search for fonts; can be used multiple times to
+add multiple paths.
+.
+.It Cm --force-aliasing
+.
+Disable anti-aliasing for zooming, background setting etc.
+.
+.It Cm -I , --fullindex
+.
+Same as index mode, but with additional information below the thumbnails.
+Works just like
+.Qq feh --index --index-info \&"\&%n\en\&%S\en\&%wx\&%h\&" .
+Enables
+.Sx MONTAGE MODE OPTIONS .
+.
+.Pp
+.
+Note: This option needs to load all images to calculate the dimensions of the
+.Nm
+window, so when using it with many files it will take a while before a
+.Nm
+window is visible.
+Use
+.Cm --preload
+to get a progress bar.
+.
+.It Cm -F , --fullscreen
+.
+Make the window fullscreen.
+Note that in this mode, large images will always be scaled down to fit the
+screen, and
+.Cm --zoom Ar zoom
+only affects smaller images and never scales larger than necessary to fit the
+screen size.
+The only exception is a
+.Ar zoom
+of 100, in which case images will always be shown at 100% zoom.
+.
+.Pp
+.
+When combined with
+.Cm --thumbnails ,
+this option only affects images opened from the thumbnail overview.
+The thumbnail list itself will still be windowed.
+.
+.It Cm -g , --geometry Ar width Cm x Ar height | Cm + Ar x Cm + Ar y | Ar width Cm x Ar height Cm + Ar x Cm + Ar y
+.
+Use a fixed window size as specified in the X-style geometry
+.Ar string ,
+e.g. 640x480.
+An optional +x+y window offset can be specified.
+Combine with
+.Cm --scale-down
+to scale down larger images like in fullscreen mode.
+.
+Note that this option does not enforce the window size; changing it by a tiling
+WM or manually is still possible.
+However, auto-resize remains disabled.
+.
+.It Cm -Y , --hide-pointer
+.
+Hide the pointer
+.Pq useful for slideshows .
+.
+.It Cm -B , --image-bg Ar style
+.
+Use
+.Ar style
+as background for transparent image parts and the like.
+Accepted values: default, checks, or an XColor
+.Pq e.g. Qo black Qc or Qo #428bdd Qc .
+.
+In windowed mode, the default is checks
+.Pq a checkered background so transparent image parts are easy to see .
+In fullscreen and background setting mode,
+.Cm checks
+is not accepted and the default is black.
+.
+.It Cm -i , --index
+.
+Enable Index mode.
+Index mode is similar to montage mode, and accepts the same options.
+It creates an index print of thumbnails, printing the image name beneath
+each thumbnail.
+Index mode enables certain other options, see
+.Sx INDEX AND THUMBNAIL MODE OPTIONS
+and
+.Sx MONTAGE MODE OPTIONS .
+.
+.It Cm --info Oo Ar flag Oc Ns Ar command_line
+.
+Execute
+.Ar command_line
+and display its output in the bottom left corner of the image.
+Can be used to display e.g. image dimensions or EXIF information.
+Supports
+.Sx FORMAT SPECIFIERS .
+.
+If
+.Ar flag
+is set to
+.Qo ; Qc ,
+the output will not be displayed by default, but has to be enabled by the
+toggle_info key.
+.
+.It Cm --insecure
+.
+When viewing files with HTTPS, this option disables all certificate checks.
+It allows images on sites with self-signed or expired certificates to be
+opened, but is no more secure than plain HTTP.
+.
+.It Cm -k , --keep-http
+.
+When viewing files using HTTP,
+.Nm
+normally deletes the local copies after viewing, or, if caching, on exit.
+This option permanently stores them on disk, either in the directory
+specified by
+.Cm --output-dir ,
+or in the current working directory.
+.
+.It Cm --keep-zoom-vp
+.
+When switching images, keep zoom and viewport settings
+.Pq zoom level and X, Y offsets
+.
+.It Cm -l , --list
+.
+Don't display images.
+Analyze them and display an
+.Xr ls 1 - No style
+listing.
+Useful in scripts to hunt out images of a certain size/resolution/type etc.
+.
+.It Cm -U , --loadable
+.
+Don't display images.
+Just print out their names if imlib2 can successfully load them.
+Returns false if at least one image failed to load.
+.
+.It Cm --max-dimension Ar width No x Ar height
+.
+Only show images with width <=
+.Ar width
+and height <=
+.Ar height .
+If you only care about one parameter, set the other to 0
+.Pq or a negative value .
+.
+.It Cm -M , --menu-font Ar font
+.
+Use
+.Ar font
+.Pq truetype, with size, like Qq yudit/12
+as menu font.
+.
+.It Cm --min-dimension Ar width No x Ar height
+.
+Only show images with width >=
+.Ar width
+and height >=
+.Ar height .
+If you only care about one parameter, set the other to 0.
+.
+.It Cm -m , --montage
+.
+Enable montage mode.
+Montage mode creates a new image consisting of a grid of thumbnails of the
+images in the filelist.
+When montage mode is selected, certain other options become available.
+See
+.Sx MONTAGE MODE OPTIONS .
+.
+.It Cm -w , --multiwindow
+.
+Disable slideshow mode.
+With this setting, instead of opening multiple files in slideshow mode,
+multiple windows will be opened; one per file.
+.
+.It Cm --no-jump-on-resort
+.
+Don't jump to the first image after resorting the filelist.
+.
+.It Cm -N , --no-menus
+.
+Don't load or show any menus.
+.
+.It Cm --no-screen-clip
+.
+By default, window sizes are limited to the screen size.
+With this option, windows will have the size of the image inside them.
+Note that they may become very large this way, making them unmanageable
+in certain window managers.
+.
+.It Cm --no-xinerama
+.
+.Pq optional feature, $MAN_XINERAMA$ in this build
+Disable Xinerama support.
+.
+.It Cm --on-last-slide Cm hold | Cm quit | Cm resume
+.
+Select behaviour when trying to select the next image on the last slide
+.Pq or the previous image on the first slide
+in a slide show.
+.
+.Pp
+.
+With
+.Cm hold ,
+.Nm
+will stop advancing images in this case and continue displaying the first/last
+image, respectively.
+This is intended for linear slide shows.
+Behaviour is unspecified when using other navigation commands than previous
+and next image.
+.
+.Pp
+.
+.Cm quit
+will cause
+.Nm
+to quit when trying to advance past the last image in the slide show.
+.
+.Pp
+.
+.Cm resume
+is the default behaviour: On the last
+.Pq first
+image,
+.Nm
+will wrap around to the first
+.Pq last
+image.
+.
+.It Cm -j , --output-dir Ar directory
+.
+Save files to
+.Ar directory
+when using
+.Cm --keep-http
+or the save_image command.
+By default, files are saved in the current working directory.
+.
+.It Cm -p , --preload
+.
+Preload images.
+This doesn't mean hold them in RAM, it means run through them and eliminate
+unloadable images first.
+Otherwise they will be removed as you flick through.
+This also analyses the images to get data for use in sorting, such as pixel
+size, type etc.
+A preload run will be automatically performed if you specify one of these
+sort modes.
+.
+.It Cm -q , --quiet
+.
+Don't report non-fatal errors for failed loads.
+Verbose and quiet modes are not mutually exclusive, the first controls
+informational messages, the second only errors.
+.
+.It Cm -z , --randomize
+.
+When viewing multiple files in a slideshow, randomize the file list before
+displaying.
+The list is re-randomized whenever the slideshow cycles (that is, transitions
+from last to first image).
+.
+.It Cm -r , --recursive
+.
+Recursively expand any directories in the command line arguments
+to the content of those directories, all the way down to the bottom level.
+.
+.It Cm --no-recursive
+.
+Don't recursively expand any directories.
+This is the default, but this option is useful to override themes containing
+.Cm --recursive .
+.
+.It Cm -R , --reload Ar int
+.
+Reload filelist and current image after
+.Ar int
+seconds.
+Useful for viewing HTTP webcams or frequently changing directories.
+.Pq Note that filelist reloading is still experimental.
+Set to zero to disable any kind of automatic reloading.
+.
+.Pp
+.
+If an image is removed,
+.Nm
+will either show the next one or quit.
+However, if an image still exists, but can no longer be loaded,
+.Nm
+will continue to try loading it.
+.
+.Pp
+.
+Setting this option causes inotify-based auto-reload to be disabled.
+.
+.It Cm -n , --reverse
+.
+Reverse the sort order.
+Use this to invert the order of the filelist.
+E.g. to sort in reverse width order, use
+.Cm -nSwidth .
+.
+.It Cm -. , --scale-down
+.
+Scale images to fit window geometry (defaults to screen size when no geometry
+was specified).
+Note that the window geometry is not updated when changing images at the moment.
+This option is recommended for tiling window managers.
+.
+This option is ignored when in fullscreen and thumbnail list mode.
+.
+.Pp
+.
+In tiling environments, this also causes the image to be centered in the window.
+.
+.It Cm --scroll-step Ar count
+.
+Scroll
+.Ar count
+pixels whenever scroll_up, scroll_down, scroll_left or scroll_right is pressed.
+Note that this option accepts negative numbers in case you need to reverse the
+scroll direction.
+See
+.Sx KEYS CONFIG SYNTAX
+for how to reverse it permanently.
+Default: 20
+.
+.It Cm -D , --slideshow-delay Ar float
+.
+For slideshow mode, wait
+.Ar float
+seconds between automatically changing slides.
+Useful for presentations.
+Specify a negative number to set the delay
+.Pq which will then be Ar float No * (-1) ,
+but start
+.Nm
+in paused mode.
+.
+.It Cm -S , --sort Ar sort_type
+.
+Sort file list according to image parameters.
+Allowed sort types are:
+.Cm name , filename , dirname , mtime , width , height , pixels , size , format .
+For sort modes other than
+.Cm name , filename , dirname ,
+or
+.Cm mtime ,
+a preload run is
+necessary, causing a delay proportional to the number of images in the list.
+.
+.Pp
+.
+.Cm mtime
+starts with the most recently modified image.
+.Cm width , height , pixels
+and
+.Cm size
+start with the smallest.
+Use
+.Cm --reverse
+to sort by oldest or largest first.
+.
+.Pp
+.
+For
+.Cm name , filename ,
+and
+.Cm dirname
+you can use
+.Cm --version-sort
+to sort numbers naturally, so that e.g. 10.jpg comes after 2.jpg.
+.
+.It Cm -| , --start-at Ar filename
+.
+Start the filelist at
+.Ar filename .
+If no other files or filelists were specified on the command line,
+.Nm
+will first load all files from the directory in which
+.Ar filename
+resides.
+This way, it's possible to look at a specific image and use the next / prev
+keys to browse through the directory.
+See
+.Sx USAGE EXAMPLES
+for examples.
+.
+.Pp
+.
+Note: If you use relative paths in your filelist,
+.Ar filename
+should also be a relative path.
+If you use absolute paths, it should also be an absolute path.
+.
+If
+.Nm
+cannot find an exact match, it will compare basenames
+.Pq filenames without the directory suffix .
+This may lead to mismatches if several files in your filelist
+have the same basename.
+.
+.It Cm -T , --theme Ar theme
+.
+Load options from config file with name
+.Ar theme
+- see
+.Sx THEMES CONFIG SYNTAX
+for more info.
+Note that command line options always override theme options.
+The theme can also be set via the program name
+.Pq e.g. with symlinks ,
+so by default
+.Nm
+will look for a
+.Qq Nm
+theme.
+.
+.It Cm -t , --thumbnails
+.
+Same as Index mode, but the thumbnails are clickable image launchers.
+Note that
+.Cm --fullscreen
+and
+.Cm --scale-down
+do not affect the thumbnail window.
+They do, however, work for image windows launched from thumbnail mode.
+Also supports
+.Sx INDEX AND THUMBNAIL MODE OPTIONS
+as well as
+.Sx MONTAGE MODE OPTIONS .
+.
+.It Cm -~ , --thumb-title Ar string
+.
+Set
+.Ar title
+for windows opened from thumbnail mode.
+See also
+.Sx FORMAT SPECIFIERS .
+.
+.It Cm -^ , --title Ar title
+.
+Set window title.
+Applies to all windows except those opened from thumbnail mode.
+See
+.Sx FORMAT SPECIFIERS .
+.
+.It Cm -u , --unloadable
+.
+Don't display images.
+Just print out their names if imlib2 can NOT successfully load them.
+Returns false if at least one image was loadable.
+.
+.It Cm -V , --verbose
+.
+output useful information, progress bars, etc.
+.
+.It Cm -v , --version
+.
+output version information and exit.
+.
+.It Cm --version-sort
+.
+.Pq optional feature, $MAN_VERSCMP$ in this build
+When combined with
+.Cm --sort name , --sort filename ,
+or
+.Cm --sort dirname :
+use natural sorting for file and directory names.
+In this mode, filenames are sorted as an ordinary human would expect, e.g.
+.Qq 2.jpg
+comes before
+.Qq 10.jpg .
+Note that this option only has an effect when a sort mode is set using
+.Cm --sort .
+.
+.It Cm --xinerama-index Ar screen
+.
+.Pq optional feature, $MAN_XINERAMA$ in this build
+Override
+.Nm Ns No 's
+idea of the active Xinerama screen.
+May be useful in certain circumstances where the window manager places the feh
+window on Xinerama screen A while
+.Nm
+assumes that it will be placed on screen B.
+.
+.Pp
+.
+In background setting mode: When used with any option other than
+.Cm --bg-tile :
+Only set wallpaper on
+.Ar screen .
+All other screens will be filled black/white.
+.
+This is most useful in a Xinerama configuration with overlapping screens.
+For instance, assume you have two overlapping displays (index 0 and 1),
+where index 0 is smaller.
+To center a background on the display with index 0 and fill the extra space
+on index 1 black/white, use
+.Qq --xinerama-index 0
+when setting the wallpaper.
+.
+.It Cm --zoom Ar percent | Cm max | Cm fill
+.
+Zoom images by
+.Ar percent
+when in full screen mode or when window geometry is fixed.
+When combined with
+.Cm --auto-zoom ,
+zooming will be limited to the specified
+.Ar percent .
+Specifying
+.Cm max
+is like setting
+.Cm --auto-zoom ,
+using
+.Cm fill
+makes
+.Nm
+zoom the image like the
+.Cm --bg-fill
+mode.
+.
+.El
+.
+.
+.Sh MONTAGE MODE OPTIONS
+.
+These additional options can be used for index, montage and
+.Pq partially
+thumbnail mode.
+.
+.Bl -tag -width indent
+.
+.It Cm -a , --alpha Ar int
+.
+When drawing thumbnails onto the background, set their transparency level to
+.Ar int
+.Pq 0 - 255 .
+.
+.It Cm -b , --bg Ar file | Cm trans
+.
+Use
+.Ar file
+as background for your montage.
+With this option specified, the montage size will default to the size of
+.Ar file
+if no size restrictions were specified.
+Alternatively, if
+.Ar file
+is
+.Qq trans ,
+the background will be made transparent.
+.
+.It Cm -X , --ignore-aspect
+.
+By default, the montage thumbnails will retain their aspect ratios, while
+fitting into thumb-width/-height.
+This options forces them to be the size set by
+.Cm --thumb-width No and Cm --thumb-height .
+This will prevent any empty space in the final montage.
+.
+.It Cm -H , --limit-height Ar pixels
+.
+Limit the height of the montage.
+.
+.It Cm -W , --limit-width Ar pixels
+.
+Limit the width of the montage, defaults to 800 pixels.
+.
+.Pp
+.
+If both
+.Cm --limit-width No and Cm --limit-height
+are specified, the montage will be exactly
+.Ar width No x Ar height
+pixels in dimensions.
+.
+.It Cm -o , --output Ar file
+.
+Save the created montage to
+.Ar file .
+.
+.It Cm -O , --output-only Ar file
+.
+Just save the created montage to
+.Ar file
+without displaying it.
+.
+.It Cm -s , --stretch
+.
+Normally, if an image is smaller than the specified thumbnail size, it will
+not be enlarged.
+If this option is set, the image will be scaled up to fit the thumbnail size.
+Aspect ratio will be maintained unless
+.Cm --ignore-aspect
+is specified.
+.
+.It Cm -E , --thumb-height Ar pixels
+.
+Set thumbnail height.
+.
+.It Cm -y , --thumb-width Ar pixels
+.
+Set thumbnail width.
+.
+.El
+.
+.
+.Sh INDEX AND THUMBNAIL MODE OPTIONS
+.
+In addition to
+.Sx MONTAGE MODE OPTIONS
+.Cm --alpha , --bg , --limit-height , --limit-width , --output , --output-only ,
+.Cm --thumb-height , --thumb-width ,
+the following options can be used.
+.
+.Bl -tag -width indent
+.
+.It Cm --index-info Ar format
+.
+Show image information based on
+.Ar format
+below thumbnails in index / thumbnail mode.
+See
+.Sx FORMAT SPECIFIERS .
+May contain newlines.
+.
+Use
+.Qq --index-info ''
+to display thumbnails without any info text
+.
+.Pp
+.
+Note: If you specify image-related formats
+.Pq such as \&%w or \&%s ,
+.Nm
+needs to load all images to calculate the dimensions of its own window.
+So when using them with many files, it will take a while before a
+.Nm
+window becomes visible.
+Use
+.Cm --preload
+to get a progress bar.
+.
+.It Cm -@ , --title-font Ar font
+.
+Set font to print a title on the index, if no font is specified, no title will
+be printed.
+.
+.It Cm -J , --thumb-redraw Ar n
+.
+Redraw thumbnail window every
+.Ar n
+images while generating thumbnails.
+Redrawing takes quite long, so the default is 10.
+Set
+.Ar n No = 1
+to update the thumbnail window immediately.
+With
+.Ar n No = 0 ,
+there will only be one redraw once all thumbnails are loaded.
+.
+.El
+.
+.
+.Sh BACKGROUND SETTING
+.
+In many desktop environments,
+.Nm
+can also be used as a background setter.
+Unless you pass the
+.Cm --no-fehbg
+option, it will write a script to set the current background to
+.Pa ~/.fehbg .
+So to have your background restored every time you start X, you can add
+.Qq ~/.fehbg &
+to your X startup script
+.Pq such as Pa ~/.xinitrc .
+.
+.Pp
+.
+Note that
+.Nm
+does not support setting the wallpaper of GNOME shell desktops.
+In this environment, you can use
+.Qq gsettings set org.gnome.desktop.background picture-uri file:/// Ns Ar path
+instead.
+.
+.Pp
+.
+For
+.Cm --bg-center , --bg-fill ,
+and
+.Cm --bg-max ,
+you can use
+.Cm --geometry
+to specify an offset from one side of the screen instead of centering the image.
+Positive values will offset from the left/top side, negative values from the
+bottom/right.
++0 and -0 are both valid and distinct values.
+.
+.Pp
+.
+Note that all options except
+.Cm --bg-tile
+support Xinerama.
+For instance, if you have multiple screens connected and use e.g.
+.Cm --bg-center ,
+.Nm
+will center or appropriately offset the image on each screen.
+You may even specify more than one file, in that case, the first file is set
+on screen 0, the second on screen 1, and so on.
+.
+.Pp
+.
+Use
+.Cm --no-xinerama
+to treat the whole X display as one screen when setting wallpapers.
+You may also use
+.Cm --xinerama-index
+to use
+.Nm
+as a background setter for a specific screen.
+.
+.Bl -tag -width indent
+.
+.It Cm --bg-center
+.
+Center the file on the background.
+If it is too small, it will be surrounded by a border as specified by
+.Cm --image-bg .
+.
+.It Cm --bg-fill
+.
+Like
+.Cm --bg-scale ,
+but preserves aspect ratio by zooming the image until it fits.
+Either a horizontal or a vertical part of the image will be cut off
+.
+.It Cm --bg-max
+.
+Like
+.Cm --bg-fill ,
+but scale the image to the maximum size that fits the screen with borders on one side.
+The border color can be set using
+.Cm --image-bg .
+.
+.It Cm --bg-scale
+.
+Fit the file into the background without repeating it, cutting off stuff or
+using borders.
+But the aspect ratio is not preserved either
+.
+.It Cm --bg-tile
+.
+Tile
+.Pq repeat
+the image in case it is too small for the screen
+.
+.It Cm --no-fehbg
+.
+Do not write a
+.Pa ~/.fehbg
+file
+.
+.El
+.
+.
+.Sh FORMAT SPECIFIERS
+.
+.Bl -tag -width indent
+.
+.It %f
+.
+Image path/filename
+.
+.It %F
+.
+Escaped image path/filename
+.Pq for use in shell commands
+.
+.It %g
+.
+w,h window dimensions in pixels (mnemonic: geometry)
+.
+.It %h
+.
+Image height
+.
+.It %l
+.
+Total number of files in filelist
+.
+.It %L
+.
+Temporary copy of filelist.
+Multiple uses of %L within the same format string will return the same copy.
+.
+.It %m
+.
+Current mode
+.
+.It %n
+.
+Image name
+.
+.It \&%N
+.
+Escaped image name
+.
+.It %o
+.
+x,y offset of top-left image corner to window corner in pixels
+.
+.It %p
+.
+Number of image pixels
+.
+.It \&%P
+.
+Number of image pixels in human-readable format with k/M
+.Pq kilopixels / megapixels
+suffix
+.
+.It %r
+.
+Image rotation.
+A half right turn equals pi.
+.
+.It %s
+.
+Image size in bytes
+.
+.It %S
+.
+Human-readable image size
+.Pq kB / MB
+.
+.It %t
+.
+Image format
+.
+.It %u
+.
+Number of current file
+.
+.It %w
+.
+Image width
+.
+.It %v
+.
+.Nm
+version
+.
+.It \&%V
+.
+Process ID
+.
+.It %z
+.
+Current image zoom, rounded to two decimal places
+.
+.It %Z
+.
+Current image zoom, higher precision
+.
+.It %%
+.
+A literal %
+.
+.El
+.
+.
+.Sh CONFIGURATION
+.
+.Nm
+has three config files:
+.Pa themes
+for theme definitions,
+.Pa keys
+for key bindings and
+.Pa buttons
+for mouse button bindings.
+It will try to read them from
+.Pa $XDG_CONFIG_HOME/feh/ ,
+which
+.Pq when XDG_CONFIG_HOME is unset
+defaults to
+.Pa ~/.config/feh/ .
+If the files are not found in that directory, it will also try
+.Pa /etc/feh/ .
+.Pp
+All config files treat lines starting with a
+.Qq #
+character as comments.
+Comments at the end of a line are not supported.
+.
+.
+.Sh THEMES CONFIG SYNTAX
+.
+.Pa .config/feh/themes
+allows the naming of option groups, called themes.
+.
+.Pp
+.
+It takes entries of the form
+.Qq Ar theme options ... ,
+where
+.Ar theme
+is the name of the entry and
+.Ar options
+are the options which will be applied when the theme is used.
+.
+.Pp
+.
+Note that the option parser does not behave like a normal shell: filename
+expansion and backslash escape sequences are not supported and passed to
+feh's option parser as-is.
+However, quoting of arguments is respected and can be used for arguments
+with whitespace.
+.
+So, the sequence
+.Qq --info Qq foo bar
+works as intended
+.Pq that is, it display the string Qq foo bar ,
+whereas the option string
+.Qq --info foo\e bar
+will only display
+.Qq foo\e
+and complain about the file bar not existing.
+Please keep this in mind when writing theme files.
+.
+.Pp
+.
+An example entry is
+.Qq imagemap -rVq --thumb-width 40 --thumb-height 30 --index-info \&'%n\en\&%wx\&%h\&' .
+.
+.Pp
+.
+You can use this theme in two ways.
+Either call
+.Qo
+.Nm
+-Timagemap *.jpg
+.Qc ,
+or create a symbolic link to
+.Nm
+with the name of the theme you want it to use.
+For the example above, this would be
+.Qo
+ln -s `which
+.Nm
+` ~/bin/imagemap
+.Qc .
+Now just run
+.Qq imagemap *.jpg
+to use these options.
+.
+.Pp
+.
+Note that you can split a theme over several lines by placing a backslash at
+the end of an unfinished line.
+A single option-argument-pair must not span multiple lines.
+A single line must not be longer than 1023 characters, but there's no upper
+limit for the length of a theme.
+.
+.Pp
+.
+Command line options always override theme options.
+.
+.
+.Sh KEYS CONFIG SYNTAX
+.
+.Pa .config/feh/keys
+defines key bindings.
+It has entries of the form
+.Qq Ar action Op Ar key1 Op Ar key2 Op Ar key3 .
+.
+.Pp
+.
+Each
+.Ar key
+is an X11 keysym name as shown by
+.Xr xev 1 ,
+like
+.Qq Delete .
+It may optionally start with modifiers for things like Control, in which case
+.Ar key
+looks like
+.Ar mod Ns No - Ns Ar keysym
+.Po
+for example
+.Qq C-Delete
+for Ctrl+Delete or
+.Qq C-1-Delete
+for Ctrl+Alt+Delete
+.Pc
+.
+.Pp
+.
+Available modifiers are
+.Ar C No for Control ,
+.Ar S No for Shift and
+.Ar 1 , 4 No for Mod1 and Mod4 .
+To match an uppercase letter like
+.Qq S
+instead of
+.Qq s ,
+the Shift modifier is not required.
+.
+.Pp
+.
+Specifying an
+.Ar action
+without any keys unbinds it (i.e. the default bindings are removed).
+.
+.Pp
+.
+.Em Note:\&
+Do not use the same keybinding for multiple actions.
+When binding an action to a new key
+.Pq or mouse button ,
+make sure to unbind it from its previous action, if present.
+.Nm
+does not check for conflicting bindings, so their behaviour is undefined.
+.
+.Pp
+.
+For a list of the
+.Ar action
+names, see
+.Sx KEYS .
+Note that not all of the key names used there correspond to X11 keysyms.
+Most notably, page up
+.Pq Prior / Page_Up ,
+page down
+.Pq Next / Page_Down
+and the keypad keys
+.Pq KP_*
+do not.
+.
+.
+.Sh KEYS
+.
+The following actions and default key bindings can be used in an image window.
+.Pq The strings in Bo square brackets Bc are the config action names .
+.
+If
+.Nm
+is running inside a terminal and its standard input is not used for images or
+filelists, key input from the terminal is also accepted.
+However, terminal input support is currently limited to most alphanumeric
+characters
+.Pq 0-9 a-z A-Z and some more ,
+arrow keys, return and backspace.
+The Alt
+.Pq Mod1
+modifier is also supported.
+.
+.Bl -tag -width indent
+.
+.It a Bq toggle_actions
+.
+Toggle actions display
+.Pq see Cm --draw-actions
+.
+.It A Bq toggle_aliasing
+.
+Enable/Disable anti-aliasing
+.
+.It c Bq toggle_caption
+.
+Caption entry mode.
+If
+.Cm --caption-path
+has been specified, then this enables caption editing.
+The caption at the bottom of the screen will turn yellow and can be edited.
+Hit return to confirm and save the caption, or escape to cancel editing.
+Note that you can insert an actual newline into the caption using
+.Aq Ctrl+return .
+.
+.It d Bq toggle_filenames
+.
+Toggle filename display
+.Pq see Cm --draw-filename
+.
+.It e Bq toggle_exif
+.
+.Pq optional feature, $MAN_EXIF$ in this build
+Toggle EXIF tag display
+.
+.It f Bq toggle_fullscreen
+.
+Toggle fullscreen
+.
+.It g Bq toggle_fixed_geometry
+.
+Enable/Disable automatic window resize when changing images.
+.
+.It h Bq toggle_pause
+.
+Pause/Continue the slideshow.
+When it is paused, it will not automatically change slides based on
+.Cm --slideshow-delay .
+.
+.It i Bq toggle_info
+.
+Toggle info display
+.Pq see Cm --info
+.
+.It k Bq toggle_keep_vp
+.
+Toggle zoom and viewport keeping.
+When enabled,
+.Nm
+will keep zoom and X, Y offset when switching images.
+.
+.It L Bq save_filelist
+.
+Save the current filelist as
+.Qq feh_PID_ID_filelist
+.
+.It m Bq toggle_menu
+.
+Show menu.
+Use the arrow keys and return to select items, and
+.Aq escape
+to close the menu.
+.
+.It n , Ao space Ac , Ao Right Ac Bq next_img
+.
+Show next image.
+Selects the next image in thumbnail mode.
+.
+.It o Bq toggle_pointer
+.
+Toggle pointer visibility
+.
+.It p , Ao BackSpace Ac , Ao Left Ac Bq prev_img
+.
+Show previous image.
+Selects the previous image in thumbnail mode.
+.
+.It q , Ao Escape Ac Bq quit
+.
+Quit
+.Nm
+.
+.It r Bq reload_image
+.
+Reload current image.
+Useful for webcams
+.
+.It s Bq save_image
+.
+Save the current image as
+.Qq feh_PID_ID_FILENAME
+.
+.It w Bq size_to_image
+.
+Change window size to fit current image size
+.Pq plus/minus zoom, if set .
+In scale-down and fixed-geometry mode, this also updates the window size limits.
+.
+.It x Bq close
+.
+Close current window
+.
+.It z Bq jump_random
+.
+Jump to a random position in the current filelist
+.
+.It Z Bq toggle_auto_zoom
+.
+Toggle auto-zoom.
+.
+.It \&[, \&] Bq prev_dir, next_dir
+.
+Jump to the first image of the previous or next sequence of images sharing
+a directory name in the current filelist.
+Use --sort dirname if you would like to ensure that all images in a directory
+are grouped together.
+.
+.It < , > Bq orient_3 , orient_1
+.
+rotate the image 90 degrees (counter)clockwise.
+.
+.Pp
+.
+When
+.Cm --edit
+is used, this also rotates the image in the underlying file.
+Rotation is lossless, but may create artifacts in some image corners when
+used with JPEG images.
+Rotating in the reverse direction will make them go away.
+See
+.Xr jpegtran 1
+for more about lossless JPEG rotation.
+.
+.Em Note:\&
+.Nm
+assumes that this feature is used to normalize image orientation.
+For JPEG images, it will unconditionally set the EXIF orientation
+tag to 1
+.Pq Qq 0,0 is top left
+after every rotation.
+See
+.Xr jpegexiforient 1
+for details on how to change this flag.
+.
+.It _ Bq flip
+.
+Vertically flip image.
+When
+.Cm --edit
+is used, this also flips the image in the underlying file
+.Pq see above .
+.
+.It | Bq mirror
+.
+Horizontally flip image.
+When
+.Cm --edit
+is used, this also flips the image in the underlying file
+.Pq see above .
+.
+.It 0 .. 9 Bq action_0 .. action_9
+.
+Execute the corresponding action
+.Pq 0 = Cm --action , No 1 = Cm --action1 No etc.
+.
+.It Ao Return Ac Bq action_0
+.
+Run the command defined by
+.Cm --action
+.
+.It Ao Home Ac Bq jump_first
+.
+Show first image
+.
+.It Ao End Ac Bq jump_last
+.
+Show last image
+.
+.It Ao page up Ac Bq jump_fwd
+.
+Go forward ~5% of the filelist
+.
+.It Ao page down Ac Bq jump_back
+.
+Go backward ~5% of the filelist
+.
+.It + Bq reload_plus
+.
+Increase reload delay by 1 second
+.
+.It - Bq reload_minus
+.
+Decrease reload delay by 1 second
+.
+.It Ao Delete Ac Bq remove
+.
+Remove current file from filelist
+.
+.It Ao Ctrl+Delete Ac Bq delete
+.
+Remove current file from filelist and delete it
+.
+.It Ao keypad Left Ac , Ao Ctrl+Left Ac Bq scroll_left
+.
+Scroll to the left
+.
+.It Ao keypad Right Ac , Ao Ctrl+Right Ac Bq scroll_right
+.
+Scroll to the right
+.
+.It Ao keypad up Ac , Ao Ctrl+Up Ac Bq scroll_up
+.
+Scroll up
+.
+.It Ao keypad Down Ac , Ao Ctrl+Down Ac Bq scroll_down
+.
+Scroll down.
+Note that the scroll keys work without anti-aliasing for performance reasons;
+hit the render key after scrolling to anti-alias the image.
+.
+.It Aq Alt+Left Bq scroll_left_page
+.
+Scroll to the left by one page
+.
+.It Aq Alt+Right Bq scroll_right_page
+.
+Scroll to the right by one page
+.
+.It Aq Alt+Up Bq scroll_up_page
+.
+Scroll up by one page
+.
+.It Aq Alt+Down Bq scroll_down_page
+.
+Scroll down by one page
+.
+.It R, Ao keypad begin Ac Bq render
+.
+Anti-alias the image.
+Opens the currently selected image in thumbnail mode.
+.
+.It Ao keypad + Ac , Ao Up Ac Bq zoom_in
+.
+Zoom in
+.
+.It Ao keypad - Ac , Ao Down Ac Bq zoom_out
+.
+Zoom out
+.
+.It *, Ao keypad * Ac Bq zoom_default
+.
+Zoom to 100%
+.
+.It /, Ao keypad / Ac Bq zoom_fit
+.
+Zoom to fit the window size
+.
+.It ! Bq zoom_fill
+.
+Zoom to fill the window size like
+.Cm --bg-fill
+.
+.El
+.
+.Ss MENU KEYS
+.
+The following keys bindings are used for the
+.Nm
+menu:
+.
+.Bl -tag -width indent
+.
+.It Ao Escape Ac Bq menu_close
+.
+Close the menu
+.
+.It Ao Up Ac Bq menu_up
+.
+Highlight previous menu item
+.
+.It Ao Down Ac Bq menu_down
+.
+Highlight next menu item
+.
+.It Ao Left Ac Bq menu_parent
+.
+Highlight parent menu item
+.
+.It Ao Right Ac Bq menu_child
+.
+Highlight child menu item
+.
+.It Ao Return Ac , Ao space Ac Bq menu_select
+.
+Select highlighted menu item
+.
+.El
+.
+.
+.Sh BUTTONS CONFIG SYNTAX
+.
+.Pa .config/feh/buttons .
+This works like the keys config file: the entries are of the form
+.Qq Ar action Op Ar binding .
+.
+.Pp
+.
+Each
+.Ar binding
+is a button number.
+It may optionally start with modifiers for things like Control, in which case
+.Ar binding
+looks like
+.Ar mod Ns No - Ns Ar button
+.Pq for example "C-1" for Ctrl + Left button .
+.
+.Pp
+.
+.Em Note:\&
+Do not use the same button for multiple actions.
+.Nm
+does not check for conflicting bindings, so their behaviour is undefined.
+.
+Either unbind the unwanted action, or bind it to another unused button.
+.
+The order in which you bind / unbind does not matter, though.
+.
+.Pp
+.
+For the available modifiers, see
+.Sx KEYS CONFIGURATION SYNTAX .
+.
+.
+.Ss BUTTONS
+.
+In an image window, the following buttons may be used
+.Pq The strings in Bo square brackets Bc are the config action names .
+Additionally, all actions specified in the
+.Sx KEYS
+section can also be bound to a button.
+.
+.Bl -tag -width indent
+.
+.It unbound Bq reload
+.
+Reload current image
+.
+.It 1 Ao left mouse button Ac Bq pan
+.
+pan the current image
+.
+.It 2 Ao middle mouse button Ac Bq zoom
+.
+Zoom the current image
+.
+.It 3 Ao right mouse button Ac Bq toggle_menu
+.
+Toggle menu
+.
+.It 4 Ao mousewheel down Ac Bq prev_img
+.
+Show previous image
+.
+.It 5 Ao mousewheel up Ac Bq next_img
+.
+Show next image
+.
+.It Ctrl+1 Bq blur
+.
+Blur current image
+.
+.It Ctrl+2 Bq rotate
+.
+Rotate current image
+.
+.It unbound Bq zoom_in
+.
+Zoom in
+.
+.It unbound Bq zoom_out
+.
+Zoom out
+.
+.
+.El
+.
+.
+.Sh MOUSE ACTIONS
+.
+Default Bindings:
+When viewing an image, mouse button 1 pans the image
+.Pq moves it around
+or, when only clicked, moves to the next image
+.Pq slideshow mode only .
+Quick drags with less than 2px of movement per axis will be treated as clicks
+to aid graphics tablet users.
+.
+Mouse button 2 zooms
+.Po click and drag left->right to zoom in, right->left to zoom out, click once
+to restore zoom to 100%
+.Pc
+and mouse button 3 opens the menu.
+.
+.Pp
+.
+Ctrl+Button 1 blurs or sharpens the image
+.Pq drag left to blur, right to sharpen ;
+Ctrl+Button 2 rotates the image around the center point.
+.
+.Pp
+.
+A note about pan and zoom modes:
+In pan mode, if you reach a window border but haven't yet panned to the end of
+the image,
+.Nm
+will warp your cursor to the opposite border so you can continue panning.
+.
+.Pp
+.
+When clicking the zoom button and immediately releasing it, the image will be
+back at 100% zoom.
+When clicking it and moving the mouse while holding the button down, the zoom
+will be continued at the previous zoom level.
+The zoom will always happen so that the pixel on which you entered the zoom mode
+remains stationary.
+So, to enlarge a specific part of an image, click the zoom button on that part.
+.
+.
+.Sh SIGNALS
+.
+In slideshow and multiwindow mode,
+.Nm
+handles the following signals:
+.
+.Bl -tag -width indent
+.
+.It Dv SIGUSR1
+.
+Slideshow mode: switch to next image;
+reload current image if the slideshow consists of a single file.
+Multiwindow mode: reload all images.
+.
+.It Dv SIGUSR2
+.
+Slideshow mode: switch to previous image;
+reload current image if the slideshow consists of a single file.
+Multiwindow mode: reload all images.
+.
+.El
+.
+.
+.Sh USAGE EXAMPLES
+.
+Here are some examples of useful option combinations.
+See also:
+.Aq https://feh.finalrewind.org/examples/
+.
+.Bl -tag -width indent
+.
+.It feh ~/Pictures
+.
+Show all images in ~/Pictures
+.
+.It feh -r ~/Pictures
+.
+Recursively show all images found in ~/Pictures and subdirectories
+.
+.It feh -rSfilename --version-sort ~/Pictures
+.
+Same as above, but sort naturally.
+By default, feh will show files in the string order of their names, meaning e.g.
+.Qq foo 10.jpg
+will come before
+.Qq foo 2.jpg .
+In this case, they are instead ordered as a human would expect.
+.
+.It feh -t -Sfilename -E 128 -y 128 -W 1024 ~/Pictures
+.
+Show 128x128 pixel thumbnails, limit window width to 1024 pixels.
+.
+.It feh -t -Sfilename -E 128 -y 128 -W 1024 -P -C /usr/share/fonts/truetype/ttf-dejavu/ -e DejaVuSans/8 ~/Pictures
+.
+Same as above, but enable thumbnail caching and use a smaller font.
+.
+.It feh -irFarial/14 -O index.jpg ~/Pictures
+.
+Make an index print of ~/Pictures and all directories below it, using 14 point
+Arial to write the image info under each thumbnail.
+Save the image as index.jpg and don't display it, just exit.
+Note that this even works without a running X server
+.
+.It feh --unloadable -r ~/Pictures
+.
+Print all unloadable images in ~/Pictures, recursively
+.
+.It feh -f by_width -S width --reverse --list \&.
+.
+Write a list of all images in the directory to by_width, sorted by width
+.Pq widest images first
+.
+.It feh -w ~/Pictures/holidays
+.
+Open each image in ~/Pictures/holidays in its own window
+.
+.It feh -FD5 -Sname ~/Pictures/presentation
+.
+Show the images in .../presentation, sorted by name, in fullscreen,
+automatically change to the next image after 5 seconds
+.
+.It feh -rSwidth -A Qo mv %F ~/images/\&%N Qc ~/Pictures
+.
+View all images in ~/Pictures and below, sorted by width, move an image to
+~/image/image_name when enter is pressed
+.
+.It feh --start-at ~/Pictures/foo.jpg
+.
+View all images in ~/Pictures, starting with foo.jpg.
+All other images are still in the slideshow and can be viewed normally
+.
+.It feh --start-at ~/Pictures/foo.jpg ~/Pictures
+.
+Same as above.
+.
+.It feh --info \&"exifgrep '\&(Model\&|DateTimeOriginal\&|FNumber\&|ISO\&|Flash\&)' %F \&| cut -d \&. -f 4-\&" \&.
+.
+Show some EXIF information, extracted by exifprobe/exifgrep
+.
+.It feh --action 'rm %F' -rl --max-dimension 1000x800
+.
+Recursively remove all images with dimensions below or equal to 1000x800 pixels
+from the current directory.
+.
+.It feh -L '%w %h %f' \&| awk '{ if \&($1 > $2\&) { print $0 } }' \&| cut -d ' ' -f 3- \&| feh -f -
+.
+Show landscape pictures
+.Pq image width greater than height
+in the current directory.
+.
+.El
+.
+.
+.Sh DEPENDENCIES
+.
+When
+.Cm --edit
+is used,
+.Nm
+needs the
+.Cm jpegtran
+and
+.Cm jpegexiforient
+binaries
+.Pq usually distributed in Qo libjpeg-progs Qc or similar
+for lossless JPEG rotation.
+.
+.Pp
+.
+To view images from URLs such as "http://",
+.Nm
+must be compiled with libcurl support.
+It is $MAN_CURL$ in this build
+.
+.
+.Sh KNOWN BUGS
+.
+On systems with giflib 5.1.2,
+.Nm
+may be unable to load gif images.
+For affected mips, mipsel and arm devices, gif support is completely
+broken, while on x86 / x86_64 gifs can usually only be loaded if they are
+the first image in the filelist.
+This appears to be a bug in giflib,
+see
+.Aq https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=813729
+for details.
+Workaround: Use
+.Cm --conversion-timeout 5
+.Pq or some other positive value
+to load gifs with imagemagick instead, or downgrade to giflib 5.1.1, or
+upgrade to giflib 5.1.4.
+.
+.Pp
+.
+While loading images using libcurl,
+.Nm
+will not react to key or mouse actions.
+.
+.Pp
+.
+Thumbnail mode is somewhat inefficient, and because of that not nearly as fast
+as it could be.
+.
+.Pp
+.
+.Cm --scale-down
+does not take window decorations into account and may therefore make the
+window slightly too large.
+.
+.Ss REPORTING BUGS
+.
+If you find a bug, please report it to
+.Aq derf+feh@finalrewind.org
+or via
+.Aq https://github.com/derf/feh/issues .
+You are also welcome to direct any feh-related comments/questions/... to #feh
+on irc.oftc.net.
+.
+.Pp
+.
+Please include the feh version
+.Aq the output of Qq feh --version ,
+steps to reproduce the bug and, if necessary, images to reproduce it.
+.
+.
+.Sh FUTURE PLANS
+.
+Plans for the following releases:
+.
+.Bl -bullet -compact
+.
+.It
+Make zoom options more intuitive
+.
+.El
+.
+.
+.Sh LICENSE
+.
+Copyright (C) 1999, 2000 by Paul Duncan.
+Copyright (C) 1999, 2000 by Tom Gilbert (and various contributors).
+Copyright (C) 2010-2018 by Daniel Friesel (and even more contributors).
+.
+.Pp
+.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+.
+.Pp
+.
+The above copyright notice and this permission notice shall be included in
+all copies of the Software and its documentation and acknowledgment shall be
+given in the documentation and software packages that this Software was
+used.
+.
+.Pp
+.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+.
+.Pp
+.
+Current developer: Daniel Friesel
+.Aq derf@finalrewind.org
+.
+.Pp
+.
+Original author
+.Pq no longer developing :
+Tom Gilbert
+.Aq feh_sucks@linuxbrit.co.uk
+.
+.Pp
+.
+See also:
+https://feh.finalrewind.org

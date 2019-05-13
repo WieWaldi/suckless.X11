@@ -17,19 +17,20 @@ do
     case $antwoord in
         [yY] | [yY][Ee][Ss] )
             printf "\n Creating temp directory in your home directory.\n"
-            mkdir -p ~/tmp
-            printf "\n Preparing CentOS 7.\n"
-            sudo yum install -y xorg-x11-xinit xorg-x11-apps xorg-x11-xbitmaps xorg-x11-utils xorg-x11-drv-evdev xorg-x11-fonts-misc.noarch libXrandr-devel libX11-devel libXft-devel libXinerama-devel xterm imsettings ncurses-term ncurses-devel webkitgtk4-devel glib2-devel gcr-devel mesa-libegl mesa-libgl mesa-dri-drivers
+            /bin/mkdir -p ~/tmp
+            # printf "\n Preparing CentOS 7.\n"
+            # sudo yum install -y xorg-x11-xinit xorg-x11-apps xorg-x11-xbitmaps xorg-x11-utils xorg-x11-drv-evdev xorg-x11-fonts-misc.noarch libXrandr-devel libX11-devel libXft-devel libXinerama-devel xterm imsettings ncurses-term ncurses-devel webkitgtk4-devel glib2-devel gcr-devel mesa-libegl mesa-libgl mesa-dri-drivers
             printf "\n Installing Desktop and Suckless Tools to your home directory.\n"
-            declare -a Xres=( ".Xresources" ".xinitrc" ".slocktext" ".fonts" )
+            declare -a Xres=( ".Xresources" ".xinitrc" ".slocktext" )
             for i in "${Xres[@]}"
             do
                 /bin/cp -r ${cdir}/${i} ~
             done
+            /bin/cp -r ${cdir}/.local/share/fonts ~/.local/share
             /bin/fc-cache
             /bin/fc-list
             sleep 2
-            declare -a sucklesstools=( "dwm" "dmenu" "st" "slock" "surf" "tabbed" )
+            declare -a sucklesstools=( "dwm" "dmenu" "st" "st.alpha" "slock" "surf" "tabbed" )
             for i in "${sucklesstools[@]}"
             do
                 cd ${cdir}/${i}

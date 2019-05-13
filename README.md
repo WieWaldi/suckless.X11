@@ -1,5 +1,7 @@
 # suckless.X11
 WieWaldi's fork of suckless.org dynamic window manager and other suckless implementations.
+Yes, the name of this repository may be kinda missleading since it doesn't contain
+suckless implementations only but other stuff as well.
 This repo targets specially and only a minimal CentOS 7 installation.
 
 ## Requirements
