@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# +-------------------------------------------------------------------------+
+# | Name of the Script                                                      |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+# ~/.local/bin/slock -m "$(/bin/cowsay "$(/bin/fortune -a drugs)")"
+~/.local/bin/slock -m "$(/bin/cat ~/.slocktext)"
