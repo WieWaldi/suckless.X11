@@ -15,7 +15,7 @@ libXinerama-devel xterm imsettings ncurses-term ncurses-devel
 ```
 ## Installation
 Edit each config.mk to match your local setup. Otherwise everything will get
-installed into ~/bin. You may use setup.sh to get everything compiled and
+installed into ~/local/bin. You may use setup.sh to get everything compiled and
 installed in one go or simply compile one by one.
 
 Afterwards you have to set uid for slock correctly
