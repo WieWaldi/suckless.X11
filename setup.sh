@@ -51,7 +51,7 @@ while :
 do
     printf "\n\n Make Clean? >> "
     read antwoord
-    case 
+    case $antwoord in
         [yY] | [yY][Ee][Ss] )
             printf "\n Cleaning up.\n"
             declare -a sucklesstools=( "dwm" "dmenu" "st" "slock" "surf" "tabbed" )
