@@ -214,6 +214,9 @@ static Button buttons[] = {
 };
 
 static SearchEngine searchengines[] = {
-    { "g",   "http://www.google.de/search?q=%s"   },
-    { "leo", "http://dict.leo.org/ende?search=%s" },
+    { "b",   "https://www.bing.com/search?q=%s" },
+    { "g",   "https://www.google.com/search?q=%s" },
+    { "leo", "https://dict.leo.org/ende?search=%s" },
+    { "s",   "https://searx.me/?q=%s" },
+    { "w",   "https://de.wikipedia.org/wiki/index.php/Special:Search?search=%s" },
 };
