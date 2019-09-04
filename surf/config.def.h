@@ -198,3 +198,8 @@ static Button buttons[] = {
 	{ OnAny,        0,              9,      clicknavigate,  { .i = +1 },    1 },
 	{ OnMedia,      MODKEY,         1,      clickexternplayer, { 0 },       1 },
 };
+
+static SearchEngine searchengines[] = {
+    { "g",   "http://www.google.de/search?q=%s"   },
+    { "leo", "http://dict.leo.org/ende?search=%s" },
+};
