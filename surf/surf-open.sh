@@ -1,10 +1,14 @@
 #!/bin/sh
 #
-# See the LICENSE file for copyright and license details. 
-#
+# +-------------------------------------------------------------------------+
+# | open-surf.sh                                                            |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
 
 xidfile="$HOME/tmp/tabbed-surf.xid"
-uri=""
+uri="www.google.com"
 
 if [ "$#" -gt 0 ];
 then
@@ -12,8 +16,7 @@ then
 fi
 
 runtabbed() {
-	tabbed -dn tabbed-surf -r 2 surf -e '' "$uri" >"$xidfile" \
-		2>/dev/null &
+	tabbed -dn tabbed-surf -r 2 surf -e '' "$uri" >"$xidfile" 2>/dev/null &
 }
 
 if [ ! -r "$xidfile" ];
