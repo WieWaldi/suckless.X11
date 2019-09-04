@@ -1310,7 +1310,7 @@ buttonreleased(GtkWidget *w, GdkEvent *e, Client *c)
 gboolean
 scrollmultiply(GtkWidget *w, GdkEvent *e, Client *c)
 {
-	e->scroll.delta_y*=7;
+	e->scroll.delta_y*=2;
 	return FALSE;
 }
 
