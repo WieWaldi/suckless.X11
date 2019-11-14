@@ -24,7 +24,8 @@
 # ~/bin/tabbed xterm -into &
 # ~/.local/bin/feh --bg-scale ~/.local/share/background/funeral.jpg &
 # ~/.local/bin/compton &
-~/.local/bin/tabbed -r 2 ~/.local/bin/st -w '' &
+# ~/.local/bin/tabbed -r 2 ~/.local/bin/st -w '' &
+~/.local/bin/st &
 
 ~/.local/bin/dwm_status &
 exec ~/.local/bin/dwm 2> ~/tmp/dwm.log
