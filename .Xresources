@@ -1,14 +1,15 @@
 !! XTerm related
 XTerm.vt100.scrollBar:          false
-XTerm.vt100.faceName:           Fira Mono Regular:size=12:antialias=true
+XTerm.vt100.faceName:           FiraMono NF:size=12:antialias=true
 !! XTerm.vt100.font:               7x13
 XTerm.vt100.background:         #fdf6e3
 XTerm.vt100.foreground:         #657b83
 
 !! suckless st related
 !! st.font:                        Fira Mono Regular:size=12:antialias=false
-st.font:                        Fira Mono:size=10:antialias=true
 !! st.font:                        Monaco:size=12:antialias=true
+!! st.font:                        GoMono NF:size=10:antialias=true
+st.font:                        FiraMono NF:size=10:antialias=true
 st.background:                  #00ff00
 st.foreground:                  #ff0000
 
