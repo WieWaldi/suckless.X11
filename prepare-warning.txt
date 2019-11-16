@@ -1,0 +1,16 @@
++-------------------------------------------------------------------------+
+| WieWaldi's suckless.X11                                                 |
++-------------------------------------------------------------------------+
+| Copyright © 2019 Waldemar Schroeer                                      |
+|                  waldemar.schroeer(at)rz-amper.de                       |
++-------------------------------------------------------------------------+
+|                                                                         |
+| __      __             _                                                |
+| \ \    / /_ _ _ _ _ _ (_)_ _  __ _                                      |
+|  \ \/\/ / _` | '_| ' \| | ' \/ _` |                                     |
+|   \_/\_/\__,_|_| |_||_|_|_||_\__, |                                     |
+|                              |___/                                      |
+|   This setup script will prepare your freshly installed CentOS 7/8.     |
+|   Don't run it on other distros since it will probably mess up your     |
+|   system. You have been warned. 
++-------------------------------------------------------------------------+
