@@ -1,0 +1,27 @@
++-------------------------------------------------------------------------+
+| WieWaldi's suckless.X11                                                 |
++-------------------------------------------------------------------------+
+| Copyright © 2019 Waldemar Schroeer                                      |
+|                  waldemar.schroeer(at)rz-amper.de                       |
++-------------------------------------------------------------------------+
+|                                                                         |
+|                      _    _                __   ____ __                 |
+|                     | |  | |               \ \ / /_ /_ |                |
+|       ___ _   _  ___| | _| | ___  ___ ___   \ V / | || |                |
+|      / __| | | |/ __| |/ / |/ _ \/ __/ __|   > <  | || |                |
+|      \__ \ |_| | (__|   <| |  __/\__ \__ \_ / . \ | || |                |
+|      |___/\__,_|\___|_|\_\_|\___||___/___(_)_/ \_\|_||_|                |
+|                                                                         |
+|   This setup script is going to compile and install the following       |
+|   suckeless.org software bits and peaces into ~/.local.                 |
+|    - dmenu                                                              |
+|    - dwm                                                                |
+|    - slock                                                              |
+|    - st                                                                 |
+|    - surf                                                               |
+|    - tabbed                                                             |
+|                                                                         |
+|   Keep in mind to edit config.def.h directly instead of config.h        |
+|   since config.h will be deleted after installation.                    |
+|                                                                         |
++-------------------------------------------------------------------------+
