@@ -1,0 +1,24 @@
+lsw - list windows
+==================
+lsw prints the title and XID of windows to stdout.
+
+
+Requirements
+------------
+In order to build lsw you need the Xlib header files.
+
+
+Installation
+------------
+Edit config.mk to match your local setup (lsw is installed into
+the /usr/local namespace by default).
+
+Afterwards enter the following command to build and install lsw (if
+necessary as root):
+
+    make clean install
+
+
+Running lsw
+-----------
+See the man page for details.

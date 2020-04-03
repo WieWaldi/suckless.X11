@@ -8,7 +8,7 @@
 # +-------------------------------------------------------------------------+
 
 declare -a Xres=( ".Xresources" ".xinitrc" ".slocktext" )
-declare -a sucklesstools=( "dwm" "dmenu" "st" "slock" "surf" "tabbed" )
+declare -a sucklesstools=( "dwm" "dmenu" "st" "slock" "surf" "tabbed" "lsw")
 make=/bin/make        
 cdir=$(pwd)
 
@@ -27,7 +27,7 @@ function Install_X11files() {
     /bin/fc-cache
 }
 
-function Install_Suckless() {
+function Suckless_Install() {
     for i in "${sucklesstools[@]}"
     do
         cd ${cdir}/${i}
@@ -35,7 +35,7 @@ function Install_Suckless() {
     done
 }
 
-function make_clean() {
+function Suckless_Clean() {
     printf "\n Cleaning up.\n"
     for i in "${sucklesstools[@]}"
     do
@@ -45,14 +45,14 @@ function make_clean() {
 }
 
 while true; do
+    Display_Warning
     printf "\n\n Go ahead? (Yes|No) >> "
     read antwoord
     case $antwoord in
         [yY] | [yY][Ee][Ss] )
-            Display_Warning
             Install_X11files
-            Install_Suckless
-            make_clean
+            Suckless_Install
+            Suckless_Clean
             printf "\n I'm done\n\n"
             break
             ;;
