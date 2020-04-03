@@ -7,24 +7,44 @@
 # |                       lassmichinruhe@rz-amper.de                        |
 # +-------------------------------------------------------------------------+
 
-declare -a Xres=( ".Xresources" ".xinitrc" ".slocktext" )
-declare -a sucklesstools=( "dwm" "dmenu" "st" "slock" "surf" "tabbed" "lsw")
-make=/bin/make        
+backupdir=~/Backup.X11files.$$
 cdir=$(pwd)
+make=/bin/make        
+
+declare -a X11files=(
+    ".Xresources"
+    ".xinitrc"
+    ".slocktext"
+    )
+
+declare -a sucklesstools=(
+    "dwm"
+    "dmenu"
+    "st"
+    "slock"
+    "surf"
+    "tabbed"
+    "lsw"
+    )
 
 function Display_Warning() {
-    /bin/clear
-    /bin/cat ${cdir}/setup-warning.txt
+    clear && cat ${cdir}/setup-warning.txt
 }
 
 function Install_X11files() {
-    /bin/mkdir -p ~/tmp
-    for i in "${Xres[@]}"
+    mkdir -p $backupdir
+    mkdir -p ~/tmp
+    for i in "${X11files[@]}"
     do
+        if [ -f ~/$i ]; then
+            printf "\n Moving $i to $backupdir"
+            mv ~/$i $backupdir
+        fi
+        printf "\n Creating $i"
         /bin/cp -r ${cdir}/${i} ~
     done
-    /bin/cp -r ${cdir}/.local/share/fonts ~/.local/share
-    /bin/fc-cache
+    cp -r ${cdir}/.local/share/fonts ~/.local/share
+    fc-cache
 }
 
 function Suckless_Install() {
