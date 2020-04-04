@@ -6,7 +6,7 @@ static const unsigned int gappx             = 5;        /* gaps between windows 
 static const unsigned int snap              = 32;       /* snap pixel */
 static const int showbar                    = 1;        /* 0 means no bar */
 static const int topbar                     = 1;        /* 0 means bottom bar */
-static const char *fonts[]                  = { "FiraMono Nerd Font:size=10" };
+static const char *fonts[]                  = { "FiraMono Nerd Font:size=11" };
 static const char dmenufont[]               = "FiraMono Nerd Font:size=10";
 static const char col_gray1[]               = "#222222";
 static const char col_gray2[]               = "#444444";
@@ -17,22 +17,37 @@ static const char col_yellow[]              = "#b58900";
 static const char col_DeepPink[]            = "#5f005f";
 static const char col_DarkMagenta[]         = "#8700af";
 static const char col_MediumPurple[]        = "#af87d7";
+static const char col_AppleBG[]             = "#c0cae4";
+static const char col_AppleFG[]             = "#101531";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-    [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-    [SchemeSel]  = { col_gray4, col_cyan,  col_yellow  },
-    [SchemeStatus]  = { col_gray4, col_DeepPink,  "#000000"  },             // Statusbar right {text,background,not used but cannot be empty}
-    [SchemeTagsSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // Tagbar left selected {text,background,not used but cannot be empty}
-    [SchemeTagsNorm]  = { col_MediumPurple, col_DeepPink,  "#000000"  },    // Tagbar left unselected {text,background,not used but cannot be empty}
-    [SchemeInfoSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
-    [SchemeInfoNorm]  = { col_gray4, col_DeepPink,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
+    // My Theme
+    // [SchemeNorm] = { col_gray4, col_gray1, col_gray2 },
+    // [SchemeSel]  = { col_gray4, col_cyan,  col_yellow  },
+    // [SchemeStatus]  = { col_gray4, col_DeepPink,  "#000000"  },             // Statusbar right {text,background,not used but cannot be empty}
+    // [SchemeTagsSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // Tagbar left selected {text,background,not used but cannot be empty}
+    // [SchemeTagsNorm]  = { col_MediumPurple, col_DeepPink,  "#000000"  },    // Tagbar left unselected {text,background,not used but cannot be empty}
+    // [SchemeInfoSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
+    // [SchemeInfoNorm]  = { col_gray4, col_DeepPink,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
+
+    // Apple
+    [SchemeNorm] = { col_AppleFG, col_gray1, col_gray2 },
+    [SchemeSel]  = { col_AppleFG, col_cyan,  col_yellow  },
+    [SchemeStatus]  = { col_AppleFG, col_AppleBG,  "#000000"  },             // Statusbar right {text,background,not used but cannot be empty}
+    [SchemeTagsSel]  = { col_AppleFG, col_AppleBG,  "#000000"  },            // Tagbar left selected {text,background,not used but cannot be empty}
+    [SchemeTagsNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },    // Tagbar left unselected {text,background,not used but cannot be empty}
+    [SchemeInfoSel]  = { col_AppleFG, col_AppleBG,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
+    [SchemeInfoNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
+
+
 };
 
 /* tagging */
 /* static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }; */
 /* static const char *tags[] = { "➊", "➋", "➌", "➍", "➎", "➏", "➐", "➑", "➒" }; */
 /* static const char *tags[] = { "☹", "♨", "♺", "♿", "⚒", "⚓", "⚕", "⚗", "i⚛ }; */
-static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
+/* static const char *tags[] = { "", "", "", "", "", "", "", "", "" }; */
+static const char *tags[] = { "", "Finder", "File", "Edit", "View", "Settings", "Go", "Window", "Help"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -59,11 +74,17 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 #include "fibonacci.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
- 	{ "[@]",      spiral },
- 	{ "[\\]",     dwindle },
+	// { "[]=",      tile },    /* first entry is default */
+	// { "><>",      NULL },    /* no layout function means floating behavior */
+	// { "[M]",      monocle },
+ 	// { "[@]",      spiral },
+ 	// { "[\\]",     dwindle },
+
+    { "",      tile },
+    { "",      NULL },
+    { "",      monocle },
+    { "",      spiral },
+    { "",      dwindle },
 };
 
 /* key definitions */
