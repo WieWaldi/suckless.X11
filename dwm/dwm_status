@@ -16,7 +16,7 @@ print_mem_used() {
 print_datetime() {
     locdate="$(date "+%A %d.%m.%Y")"
     loctime="$(date "+%H:%M")"
-    usctime="$(TZ=US/Central date "+%H:%M")"
+    # usctime="$(TZ=US/Central date "+%H:%M")"
     # datetime="$(date "+%a %d %b  %H:%M")"
     # printf " ${locdate}  ${loctime}  ${usctime}"
     printf " ${locdate}  ${loctime}"
@@ -39,7 +39,6 @@ while true; do
     print_cpu_used() {
         printf " ${cpu_used}%%"
     }
-
 
     xsetroot -name "$(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
 
