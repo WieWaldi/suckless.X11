@@ -22,7 +22,7 @@ function Install_CentOS_7 {
     yum install -y vim git wget ftp make automake gcc gcc-c++ kernel-devel patch net-tools bind-utils epel-release
     yum install -y xorg-x11-xinit xorg-x11-apps xorg-x11-xbitmaps xorg-x11-utils xterm xclip
     yum install -y xorg-x11-drv-evdev xorg-x11-drv-synaptics xorg-x11-fonts-misc.noarch libXrandr-devel libX11-devel libXft-devel libXScrnSaver-devel
-    yum install -y libXinerama-devel imsettings ncurses-term ncurses-devel
+    yum install -y libXinerama-devel imsettings ncurses-term ncurses-devel imlib2-devel libexif-devel giflib-devel
     yum install -y gcr-devel mesa-libEGL mesa-libGL mesa-dri-drivers dbus-x11 dbus-devel
     yum install -y webkitgtk4-devel glib2-devel gcr-devel mesa-dri-drivers xorg-x11-utils libconfig-devel pango-devel gtk2-devel
     yum install -y "gstreamer*"
@@ -35,7 +35,7 @@ function Install_CentOS_8() {
     yum install -y vim git wget ftp make automake gcc gcc-c++ kernel-devel patch net-tools bind-utils epel-release
     yum install -y xorg-x11-xinit xorg-x11-apps xorg-x11-xbitmaps xorg-x11-utils xterm xclip
     yum install -y xorg-x11-drv-evdev xorg-x11-drv-synaptics xorg-x11-fonts-misc.noarch libXrandr-devel libX11-devel libXft-devel libXScrnSaver-devel
-    yum install -y libXinerama-devel imsettings ncurses-term ncurses-devel
+    yum install -y libXinerama-devel imsettings ncurses-term ncurses-devel imlib2-devel libexif-devel giflib-devel
     yum install -y gcr-devel mesa-libEGL mesa-libGL mesa-dri-drivers dbus-x11 dbus-devel
     yum install -y webkitgtk4-devel glib2-devel gcr-devel mesa-dri-drivers xorg-x11-utils libconfig-devel pango-devel gtk2-devel
     yum install -y "gstreamer*"
