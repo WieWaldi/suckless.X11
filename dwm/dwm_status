@@ -28,6 +28,10 @@ print_battery() {
     printf " ${bcapacity}%%"
 }
 
+print_appleicons() {
+    printf "    "
+}
+
 while true; do
     # get new cpu idle and total usage
     eval $(awk '/^cpu /{print "cpu_idle_now=" $5 "; cpu_total_now=" $2+$3+$4+$5 }' /proc/stat)
@@ -40,7 +44,7 @@ while true; do
         printf " ${cpu_used}%%"
     }
 
-    xsetroot -name "$(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
+    xsetroot -name "$(print_appleicons) $(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
 
     # reset old rates
     cpu_idle_old=$cpu_idle_now
