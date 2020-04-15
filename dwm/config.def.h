@@ -7,7 +7,7 @@ static const unsigned int snap              = 32;       /* snap pixel */
 static const int showbar                    = 1;        /* 0 means no bar */
 static const int topbar                     = 1;        /* 0 means bottom bar */
 static const char *fonts[]                  = { "FiraMono Nerd Font:size=11" };
-static const char dmenufont[]               = "FiraMono Nerd Font:size=10";
+static const char dmenufont[]               = "FiraMono Nerd Font:size=12";
 static const char col_gray1[]               = "#222222";
 static const char col_gray2[]               = "#444444";
 static const char col_gray3[]               = "#bbbbbb";
@@ -89,6 +89,7 @@ static const Layout layouts[] = {
 
 /* key definitions */
 #define MODKEY Mod1Mask
+#define MONKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -100,14 +101,16 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_DeepPink, "-nf", col_gray3, "-sb", col_DarkMagenta, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
-static const char *slock[]    = { "slock_wrapper", NULL };
+static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-p", "Яцп ТЋїѕ Ѕћїт:",  "-nb", col_DeepPink, "-nf", col_gray3, "-sb", col_DarkMagenta, "-sf", col_gray4, NULL };
+static const char *dmenusystem[]        = { "dmenu_system", "-i", "-fn", dmenufont, "-p", "ЩЋдт тѳ dѳ", "-nb", col_DeepPink, "-nf", col_gray3, "-sb", col_DarkMagenta, "-sf", col_gray4, NULL };
+static const char *termcmd[]            = { "st", NULL };
+static const char *slock[]              = { "slock_wrapper", NULL };
 // static const char *slock[]    = { "slock -m \"$(/bin/cat ~/.slocktext)\"", NULL };
 
 #include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ MONKEY,                       XK_s,      spawn,          {.v = dmenusystem } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = slock } },
