@@ -8,6 +8,7 @@ BINDIR ?= $(PREFIX)/bin
 MANDIR ?= $(PREFIX)/share/man/man1
 APPDIR ?= $(PREFIX)/share/applications
 ICODIR ?= $(PREFIX)/share/icons/hicolor/
+CNFDIR ?= $(HOME)/.config
 
 PACKAGES = x11 xcomposite xfixes xdamage xrender xext xrandr
 LIBS = -lm -lrt
@@ -153,6 +154,7 @@ docs: $(MANPAGES) $(MANPAGES_HTML)
 install: $(BINS) docs
 	@install -d "$(DESTDIR)$(BINDIR)" "$(DESTDIR)$(MANDIR)" "$(DESTDIR)$(APPDIR)"
 	@install -m755 $(BINS) "$(DESTDIR)$(BINDIR)"/
+	@install -m644 compton.conf "$(DESTDIR)$(CNFDIR)"/
 ifneq "$(MANPAGES)" ""
 	@install -m644 $(MANPAGES) "$(DESTDIR)$(MANDIR)"/
 endif
