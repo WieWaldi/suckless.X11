@@ -30,22 +30,33 @@ declare -a sucklesstools=(
 declare -a otherstuff=(
     "feh"
     "compton"
+    "sxiv"
     )
 
 function Display_Warning() {
     clear && cat ${cdir}/setup-warning.txt
 }
 
+function Test_Create_Dir() {
+    if [ ! -d "${backupdir}" ]; then
+        mkdir -p ${backupdir}
+    fi
+    if [ ! -d "~/tmp" ]; then
+        mkdir -p ~/tmp
+    fi
+    if [ ! -d "~/.config" ]; then
+        mkdir -p ~/.config
+    fi
+}
+
 function Install_X11files() {
-    mkdir -p $backupdir
-    mkdir -p ~/tmp
     for i in "${X11files[@]}"
     do
-        if [ -f ~/$i ]; then
-            printf "\n Moving $i to $backupdir"
-            mv ~/$i $backupdir
+        if [ -f ~/${i} ]; then
+            printf "\n Moving ${i} to ${backupdir}"
+            mv ~/${i} ${backupdir}
         fi
-        printf "\n Creating $i"
+        printf "\n Creating ${i}"
         /bin/cp -r ${cdir}/${i} ~
     done
     cp -r ${cdir}/.local/share/fonts ~/.local/share
@@ -56,7 +67,7 @@ function Suckless_Install() {
     for i in "${sucklesstools[@]}"
     do
         cd ${cdir}/${i}
-        $make install
+        ${make} install
     done
 }
 
@@ -65,7 +76,7 @@ function Suckless_Clean() {
     for i in "${sucklesstools[@]}"
     do
         cd ${cdir}/${i}
-        $make clean
+        ${make} clean
     done
 }
 
@@ -73,8 +84,8 @@ function OtherStuff_Install() {
     for i in "${otherstuff[@]}"
     do
         cd ${cdir}/${i}
-        $make
-        $make install
+        ${make}
+        ${make} install
     done
 }
 
@@ -83,7 +94,7 @@ function OtherStuff_Clean() {
     for i in "${otherstuff[@]}"
     do
         cd ${cdir}/${i}
-        $make clean
+        ${make} clean
     done
 }
 
@@ -92,8 +103,9 @@ while true; do
     Display_Warning
     printf "\n\n Go ahead? (Yes|No) >> "
     read antwoord
-    case $antwoord in
+    case ${antwoord} in
         [yY] | [yY][Ee][Ss] )
+            Test_Create_Dir
             Install_X11files
             Suckless_Install
             Suckless_Clean
