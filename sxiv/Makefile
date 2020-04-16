@@ -3,7 +3,7 @@ version = 26
 srcdir = .
 VPATH = $(srcdir)
 
-PREFIX = /usr/local
+PREFIX = $(HOME)/.local
 MANPREFIX = $(PREFIX)/share/man
 
 # autoreload backend: inotify/nop
@@ -61,7 +61,7 @@ version.h: Makefile .git/index
 .git/index:
 
 clean:
-	rm -f *.o sxiv
+	rm -f *.o sxiv config.h version.h
 
 install: all
 	@echo "INSTALL bin/sxiv"
