@@ -7,9 +7,9 @@
 # |                       lassmichinruhe@rz-amper.de                        |
 # +-------------------------------------------------------------------------+
 
-backupdir=~/Backup.X11files.$$
+backupdir="~/Backup.X11files.$$"
 cdir=$(pwd)
-make=/bin/make        
+make="/bin/make -j 4"
 
 declare -a X11files=(
     ".Xresources"
@@ -25,6 +25,11 @@ declare -a sucklesstools=(
     "surf"
     "tabbed"
     "lsw"
+    )
+
+declare -a otherstuff=(
+    "feh"
+    "compton"
     )
 
 function Display_Warning() {
@@ -51,7 +56,7 @@ function Suckless_Install() {
     for i in "${sucklesstools[@]}"
     do
         cd ${cdir}/${i}
-        $make install clean
+        $make install
     done
 }
 
@@ -64,6 +69,25 @@ function Suckless_Clean() {
     done
 }
 
+function OtherStuff_Install() {
+    for i in "${otherstuff[@]}"
+    do
+        cd ${cdir}/${i}
+        $make
+        $make install
+    done
+}
+
+function OtherStuff_Clean() {
+    printf "\n Cleaning up.\n"
+    for i in "${otherstuff[@]}"
+    do
+        cd ${cdir}/${i}
+        $make clean
+    done
+}
+
+
 while true; do
     Display_Warning
     printf "\n\n Go ahead? (Yes|No) >> "
@@ -73,6 +97,8 @@ while true; do
             Install_X11files
             Suckless_Install
             Suckless_Clean
+            OtherStuff_Install
+            OtherStuff_Clean
             printf "\n I'm done\n\n"
             break
             ;;
