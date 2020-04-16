@@ -3,7 +3,7 @@
 
 CC ?= gcc
 
-PREFIX ?= ~
+PREFIX ?= $(HOME)/.local
 BINDIR ?= $(PREFIX)/bin
 MANDIR ?= $(PREFIX)/share/man/man1
 APPDIR ?= $(PREFIX)/share/applications
