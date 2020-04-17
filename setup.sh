@@ -27,6 +27,11 @@ declare -a sucklesstools=(
     "lsw"
     )
 
+declare -a naelstrof=(
+    "slop"
+    "maim"
+    )
+
 declare -a otherstuff=(
     "feh"
     "compton"
@@ -98,6 +103,23 @@ function OtherStuff_Clean() {
     done
 }
 
+function naelstrof_Install() {
+    for i in "${naelstrof[@]}"
+    do
+        cd ${cdir}/${i}
+        ${make}
+        ${make} install
+    done
+}
+
+function naelstrof_Clean() {
+    printf "\n Cleaning up.\n"
+    for i in "${naelstrof[@]}"
+    do
+        cd ${cdir}/${i}
+        ${make} clean
+    done
+}
 
 while true; do
     Display_Warning
@@ -111,6 +133,8 @@ while true; do
             Suckless_Clean
             OtherStuff_Install
             OtherStuff_Clean
+            naelstrof_Install
+            naelstrof_Clean
             printf "\n I'm done\n\n"
             break
             ;;
