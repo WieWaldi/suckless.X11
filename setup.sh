@@ -36,6 +36,7 @@ declare -a otherstuff=(
     "feh"
     "compton"
     "sxiv"
+    "xdotool"
     )
 
 function Display_Warning() {
