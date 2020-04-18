@@ -52,6 +52,12 @@ function Test_Create_Dir() {
     if [ ! -d "~/.config" ]; then
         mkdir -p ~/.config
     fi
+    if [ ! -d "~/.local/lib" ]; then
+        mkdir -p ~/.local/lib
+    fi
+    if [ ! -d "~/.local/lib64" ]; then
+        mkdir -p ~/.local/lib64
+    fi
 }
 
 function Install_X11files() {
