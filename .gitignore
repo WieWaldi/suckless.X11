@@ -1,7 +1,6 @@
 # Just ignore it
 
 # General
-*.h
 *.o
 *.so*
 *.1
