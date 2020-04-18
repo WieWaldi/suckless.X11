@@ -1,5 +1,15 @@
 # Just ignore it
 
+# General
+*.h
+*.o
+*.so*
+*.1
+
+#xdotool
+xdotool/xdo_version.h
+xdotool/xdotool
+
 # slop
 slop/CMakeCache.txt
 slop/CMakeFiles/
@@ -19,3 +29,4 @@ maim/Makefile
 maim/cmake_install.cmake
 maim/CMakeCache.txt
 maim/bin/maim
+
