@@ -1,0 +1,21 @@
+# Just ignore it
+
+# slop
+slop/CMakeCache.txt
+slop/CMakeFiles/
+slop/Makefile
+slop/bin/
+slop/cmake_install.cmake
+slop/libslopy.so
+slop/.vscode
+slop/libslopy.so*
+slop/install_manifest.txt
+
+
+# maim
+maim/src/cmdline.h
+maim/CMakeFiles/*
+maim/Makefile
+maim/cmake_install.cmake
+maim/CMakeCache.txt
+maim/bin/maim

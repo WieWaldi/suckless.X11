@@ -117,7 +117,7 @@ function naelstrof_Clean() {
     for i in "${naelstrof[@]}"
     do
         cd ${cdir}/${i}
-        ${make} clean
+        git clean -fdX
     done
 }
 
