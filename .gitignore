@@ -5,7 +5,10 @@
 *.so*
 *.1
 
-#xdotool
+# suckless.org
+sselp/sselp
+
+# xdotool
 xdotool/xdo_version.h
 xdotool/xdotool
 
