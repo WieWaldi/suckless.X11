@@ -29,3 +29,19 @@ maim/cmake_install.cmake
 maim/CMakeCache.txt
 maim/bin/maim
 
+#dunst
+dunst/*.o
+dunst/*.d
+dunst/*.gcda
+dunst/*.gcno
+dunst/*.gcov
+dunst/core
+dunst/vgcore.*
+dunst/docs/dunst.1
+dunst/docs/internal/coverage
+dunst/docs/internal/html
+dunst/dunst
+dunst/dunstify
+dunst/dunst.systemd.service
+dunst/org.knopwob.dunst.service
+dunst/test/test
