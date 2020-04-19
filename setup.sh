@@ -22,6 +22,7 @@ declare -a sucklesstools=(
     "dmenu"
     "st"
     "slock"
+    "sselp"
     "surf"
     "tabbed"
     "lsw"

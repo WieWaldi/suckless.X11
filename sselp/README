@@ -1,0 +1,24 @@
+sselp - simple print selection
+==============================
+Prints X selection to standard out.
+
+
+Requirements
+------------
+In order to build sselp you need the Xlib header files.
+
+
+Installation
+------------
+Edit config.mk to match your local setup (sselp is installed into
+the /usr/local namespace by default).
+
+Afterwards enter the following command to build and install sselp
+(if necessary as root):
+
+    make clean install
+
+
+Running sselp
+-------------
+Simply invoke the 'sselp' command.
