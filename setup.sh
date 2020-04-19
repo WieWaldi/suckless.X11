@@ -44,21 +44,12 @@ function Display_Warning() {
 }
 
 function Test_Create_Dir() {
-    if [ ! -d "${backupdir}" ]; then
-        mkdir -p ${backupdir}
-    fi
-    if [ ! -d "~/tmp" ]; then
-        mkdir -p ~/tmp
-    fi
-    if [ ! -d "~/.config" ]; then
-        mkdir -p ~/.config
-    fi
-    if [ ! -d "~/.local/lib" ]; then
-        mkdir -p ~/.local/lib
-    fi
-    if [ ! -d "~/.local/lib64" ]; then
-        mkdir -p ~/.local/lib64
-    fi
+    [ ! -d "${backupdir}" ] && mkdir -p ${backupdir}
+    [ ! -d "~/tmp" ] && mkdir -p ~/tmp
+    [ ! -d "~/.config" ] && mkdir -p ~/.config
+    [ ! -d "~/.local/lib" ] && mkdir -p ~/.local/lib
+    [ ! -d "~/.local/lib64" ] && mkdir -p ~/.local/lib64
+    [ ! -d "~/Screenshots" ] && mkdir -p ~/Screenshots
 }
 
 function Install_X11files() {
