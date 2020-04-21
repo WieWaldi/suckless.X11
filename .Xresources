@@ -1,47 +1,84 @@
-!! XTerm related
-XTerm.vt100.scrollBar:          false
-XTerm.vt100.faceName:           FiraMono Nerd Font:size=12:antialias=true
+!================================ Common =======================================
+!-- Solarized Color Theme
+!-- https://github.com/altercation/solarized/blob/master/xresources/solarized
+!-- Common
+#define S_yellow        #b58900
+#define S_orange        #cb4b16
+#define S_red           #dc322f
+#define S_magenta       #d33682
+#define S_violet        #6c71c4
+#define S_blue          #268bd2
+#define S_cyan          #2aa198
+#define S_green         #859900
+#define S_base03        #002b36
+#define S_base02        #073642
+#define S_base01        #586e75
+#define S_base00        #657b83
+#define S_base0         #839496
+#define S_base1         #93a1a1
+#define S_base2         #eee8d5
+#define S_base3         #fdf6e3
+
+
+!================================ st relatd ====================================
+st.font:                FiraMono Nerd Font:size=10:antialias=true
+st.borderpx:            10
+st.termname:            st-256color
+st.shell:               /bin/sh
+st.cursorColor:         #00ff00
+st.cursorColorRev:      #0000ff
+st.color0:              S_base02
+st.color1:              S_red
+st.color2:              S_green
+st.color3:              S_yellow
+st.color4:              S_blue
+st.color5:              S_magenta
+st.color6:              S_cyan
+st.color7:              S_base2
+st.color9:              S_orange
+st.color8:              S_base03
+st.color10:             S_base01
+st.color11:             S_base00
+st.color12:             S_base0
+st.color13:             S_violet
+st.color14:             S_base1
+st.color15:             S_base3
+
+!-- Change Theme here - Light/Dark
+!-- Dark
+! st.background:          S_base03
+! st.foreground:          S_base0
+!-- Light
+st.background:          S_base3
+st.foreground:          S_base00
+
+
+!================================ xterm related ================================
+XTerm.vt100.scrollBar:  false
+XTerm.vt100.faceName:   FiraMono Nerd Font:size=12:antialias=true
 !! XTerm.vt100.font:               7x13
-XTerm.vt100.background:         #fdf6e3
-XTerm.vt100.foreground:         #657b83
+XTerm.vt100.background: S_base03
+XTerm.vt100.foreground: S_base0
+XTerm.color0:           S_base02
+XTerm.color1:           S_red
+XTerm.color2:           S_green
+XTerm.color3:           S_yellow
+XTerm.color4:           S_blue
+XTerm.color5:           S_magenta
+XTerm.color6:           S_cyan
+XTerm.color7:           S_base2
+XTerm.color9:           S_orange
+XTerm.color8:           S_base03
+XTerm.color10:          S_base01
+XTerm.color11:          S_base00
+XTerm.color12:          S_base0
+XTerm.color13:          S_violet
+XTerm.color14:          S_base1
+XTerm.color15:          S_base3
 
-!! suckless st related
-!! st.font:                        Fira Mono Regular:size=12:antialias=false
-!! st.font:                        Monaco:size=12:antialias=true
-!! st.font:                        GoMono NF:size=10:antialias=true
-st.font:                        FiraMono Nerd Font:size=10:antialias=true
-st.background:                  #00ff00
-st.foreground:                  #ff0000
 
-!! black dark/light
-*color0:                        #073642
-!! *color0:                     #fdf6e3
-*color8:                        #002b36
 
-!! red dark/light
-*color1:                        #dc322f
-*color9:                        #cb4b16
 
-!! green dark/light
-*color2:                        #859900
-*color10:                       #586e75
 
-!! yellow dark/light
-*color3:                        #b58900
-*color11:                       #657b83
 
-!! blue dark/light
-*color4:                        #268bd2
-*color12:                       #839496
 
-!! magenta dark/light
-*color5:                        #d33682
-*color13:                       #6c71c4
-
-!! cyan dark/light
-*color6:                        #2aa198
-*color14:                       #93a1a1
-
-!! white dark/light
-*color7:                        #eee8d5
-*color15:                       #fdf6e3
