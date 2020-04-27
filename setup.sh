@@ -48,8 +48,10 @@ function Test_Create_Dir() {
     [ ! -d "${backupdir}" ] && mkdir -p ${backupdir}
     [ ! -d "${HOME}/tmp" ] && mkdir -p ${HOME}/tmp
     [ ! -d "${HOME}/.config" ] && mkdir -p ${HOME}/.config
+    [ ! -d "${HOME}/.config/dunst" ] && mkdir -p ${HOME}/.config/dunst
     [ ! -d "${HOME}/.local/lib" ] && mkdir -p ${HOME}/.local/lib
     [ ! -d "${HOME}/.local/lib64" ] && mkdir -p ${HOME}/.local/lib64
+    [ ! -d "${HOME}/Downloads" ] && mkdir -p ${HOME}/Downloads
     [ ! -d "${HOME}/Screenshots" ] && mkdir -p ${HOME}/Screenshots
 }
 
@@ -65,6 +67,7 @@ function Install_X11files() {
     done
     cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
     cp -r ${cdir}/compton/compton.conf ${HOME}/.config
+    cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
     fc-cache
 }
 
