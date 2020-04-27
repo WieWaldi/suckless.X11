@@ -7,7 +7,7 @@
 # |                       lassmichinruhe@rz-amper.de                        |
 # +-------------------------------------------------------------------------+
 
-backupdir="~/Backup.X11files.$$"
+backupdir="${HOME}/Backup.X11files.$$"
 cdir=$(pwd)
 make="/bin/make -j 4"
 
@@ -46,24 +46,25 @@ function Display_Warning() {
 
 function Test_Create_Dir() {
     [ ! -d "${backupdir}" ] && mkdir -p ${backupdir}
-    [ ! -d "~/tmp" ] && mkdir -p ~/tmp
-    [ ! -d "~/.config" ] && mkdir -p ~/.config
-    [ ! -d "~/.local/lib" ] && mkdir -p ~/.local/lib
-    [ ! -d "~/.local/lib64" ] && mkdir -p ~/.local/lib64
-    [ ! -d "~/Screenshots" ] && mkdir -p ~/Screenshots
+    [ ! -d "${HOME}/tmp" ] && mkdir -p ${HOME}/tmp
+    [ ! -d "${HOME}/.config" ] && mkdir -p ${HOME}/.config
+    [ ! -d "${HOME}/.local/lib" ] && mkdir -p ${HOME}/.local/lib
+    [ ! -d "${HOME}/.local/lib64" ] && mkdir -p ${HOME}/.local/lib64
+    [ ! -d "${HOME}/Screenshots" ] && mkdir -p ${HOME}/Screenshots
 }
 
 function Install_X11files() {
     for i in "${X11files[@]}"
     do
-        if [ -f ~/${i} ]; then
+        if [ -f ${HOME}/${i} ]; then
             printf "\n Moving ${i} to ${backupdir}"
-            mv ~/${i} ${backupdir}
+            mv ${HOME}/${i} ${backupdir}
         fi
         printf "\n Creating ${i}"
-        /bin/cp -r ${cdir}/${i} ~
+        /bin/cp -r ${cdir}/${i} ${HOME}
     done
-    cp -r ${cdir}/.local/share/fonts ~/.local/share
+    cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
+    cp -r ${cdir}/compton/compton.conf ${HOME}/.config
     fc-cache
 }
 
