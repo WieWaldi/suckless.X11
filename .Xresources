@@ -2,107 +2,131 @@
 !-- Solarized Color Theme
 !-- https://github.com/altercation/solarized/blob/master/xresources/solarized
 !-- Common
-#define S_yellow        #b58900
-#define S_orange        #cb4b16
-#define S_red           #dc322f
-#define S_magenta       #d33682
-#define S_violet        #6c71c4
-#define S_blue          #268bd2
-#define S_cyan          #2aa198
-#define S_green         #859900
-#define S_base03        #002b36
-#define S_base02        #073642
-#define S_base01        #586e75
-#define S_base00        #657b83
-#define S_base0         #839496
-#define S_base1         #93a1a1
-#define S_base2         #eee8d5
-#define S_base3         #fdf6e3
+#define S_yellow                                #b58900
+#define S_orange                                #cb4b16
+#define S_red                                   #dc322f
+#define S_magenta                               #d33682
+#define S_violet                                #6c71c4
+#define S_blue                                  #268bd2
+#define S_cyan                                  #2aa198
+#define S_green                                 #859900
+#define S_base03                                #002b36
+#define S_base02                                #073642
+#define S_base01                                #586e75
+#define S_base00                                #657b83
+#define S_base0                                 #839496
+#define S_base1                                 #93a1a1
+#define S_base2                                 #eee8d5
+#define S_base3                                 #fdf6e3
 
 
 !================================ st relatd ====================================
-st*font:                FiraMono Nerd Font:size=10:antialias=true
-st*borderpx:            10
-st*termname:            st-256color
-st*shell:               /bin/sh
-st*cursorColor:         #00ff00
-st*cursorColorRev:      #0000ff
-st*color0:              S_base02
-st*color1:              S_red
-st*color2:              S_green
-st*color3:              S_yellow
-st*color4:              S_blue
-st*color5:              S_magenta
-st*color6:              S_cyan
-st*color7:              S_base2
-st*color9:              S_orange
-st*color8:              S_base03
-st*color10:             S_base01
-st*color11:             S_base00
-st*color12:             S_base0
-st*color13:             S_violet
-st*color14:             S_base1
-st*color15:             S_base3
+! st*font:                                        FiraMono Nerd Font:size=10:antialias=true
+st*font:                                        GoMono Nerd Font:size=10:antialias=true
+st*borderpx:                                    0
+st*termname:                                    st-256color
+st*shell:                                       /bin/sh
+st*cursorColor:                                 #00ff00
+st*cursorColorRev:                              #0000ff
+st*color0:                                      S_base02
+st*color1:                                      S_red
+st*color2:                                      S_green
+st*color3:                                      S_yellow
+st*color4:                                      S_blue
+st*color5:                                      S_magenta
+st*color6:                                      S_cyan
+st*color7:                                      S_base2
+st*color9:                                      S_orange
+st*color8:                                      S_base03
+st*color10:                                     S_base01
+st*color11:                                     S_base00
+st*color12:                                     S_base0
+st*color13:                                     S_violet
+st*color14:                                     S_base1
+st*color15:                                     S_base3
 
 !-- Change Theme here - Light/Dark
 !-- Dark
-! st.background:          S_base03
-! st.foreground:          S_base0
+! st.background:                                  S_base03
+! st.foreground:                                  S_base0
 !-- Light
-st.background:          S_base3
-st.foreground:          S_base00
+st.background:                                  S_base3
+st.foreground:                                  S_base00
 
 
 !================================ xterm related ================================
-XTerm*cursorColor:      #00ff00
-XTerm*termName:         xterm-256color
-XTerm.vt100.scrollBar:  false
-XTerm.vt100.faceName:   FiraMono Nerd Font:size=10:antialias=true
-XTerm.vt100.background: S_base03
-XTerm.vt100.foreground: S_base0
-XTerm*color0:           S_base02
-XTerm*color1:           S_red
-XTerm*color2:           S_green
-XTerm*color3:           S_yellow
-XTerm*color4:           S_blue
-XTerm*color5:           S_magenta
-XTerm*color6:           S_cyan
-XTerm*color7:           S_base2
-XTerm*color9:           S_orange
-XTerm*color8:           S_base03
-XTerm*color10:          S_base01
-XTerm*color11:          S_base00
-XTerm*color12:          S_base0
-XTerm*color13:          S_violet
-XTerm*color14:          S_base1
-XTerm*color15:          S_base3
+! XTerm.vt100.faceName:                           FiraMono Nerd Font:size=10:antialias=true
+XTerm*termName:                                 xterm-256color
+XTerm*cursorColor:                              #00ff00
+XTerm*pointerShape:                             hand2
+XTerm.vt100.scrollBar:                          false
+XTerm.vt100.faceName:                           GoMono Nerd Font:size=10:antialias=true
+XTerm.vt100.background:                         S_base03
+XTerm.vt100.foreground:                         S_base0
+XTerm*allowBoldFonts:                           false
+XTerm*internalBorder:                           0
+XTerm*mainMenu*backgroundPixmap:                gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm*mainMenu*foreground:                      white
+XTerm*vtMenu*backgroundPixmap:                  gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm*vtMenu*foreground:                        white
+XTerm*fontMenu*backgroundPixmap:                gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm*fontMenu*foreground:                      white
+XTerm*tekMenu*backgroundPixmap:                 gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm*tekMenu*foreground:                       white
+XTerm*color0:                                   S_base02
+XTerm*color1:                                   S_red
+XTerm*color2:                                   S_green
+XTerm*color3:                                   S_yellow
+XTerm*color4:                                   S_blue
+XTerm*color5:                                   S_magenta
+XTerm*color6:                                   S_cyan
+XTerm*color7:                                   S_base2
+XTerm*color9:                                   S_orange
+XTerm*color8:                                   S_base03
+XTerm*color10:                                  S_base01
+XTerm*color11:                                  S_base00
+XTerm*color12:                                  S_base0
+XTerm*color13:                                  S_violet
+XTerm*color14:                                  S_base1
+XTerm*color15:                                  S_base3
 
 
-!================================ urxvt related ================================
-URxvt*cursorColor:      #00ff00
-URxvt*termName:        rxvt-256color
-URxvt*scrollBar:  false
-URxvt*font:   xft:FiraMono Nerd Font:size=10:antialias=true
-URxvt*depth: 32
-URxvt*background: S_base03
-URxvt*foreground: S_base0
-URxvt*color0:           S_base02
-URxvt*color1:           S_red
-URxvt*color2:           S_green
-URxvt*color3:           S_yellow
-URxvt*color4:           S_blue
-URxvt*color5:           S_magenta
-URxvt*color6:           S_cyan
-URxvt*color7:           S_base2
-URxvt*color9:           S_orange
-URxvt*color8:           S_base03
-URxvt*color10:          S_base01
-URxvt*color11:          S_base00
-URxvt*color12:          S_base0
-URxvt*color13:          S_violet
-URxvt*color14:          S_base1
-URxvt*color15:          S_base3
 
+!================================ uxterm related ===============================
+! UXTerm.vt100.faceName:                           FiraMono Nerd Font:size=10:antialias=true
+UXTerm*termName:                                xterm-256color
+UXTerm*cursorColor:                             #00ff00
+UXTerm*pointerShape:                            hand2
+UXTerm.vt100.scrollBar:                         false
+UXTerm.vt100.faceName:                          GoMono Nerd Font:size=10:antialias=true
+UXTerm.vt100.background:                        S_base03
+UXTerm.vt100.foreground:                        S_base0
+UXTerm*allowBoldFonts:                          false
+UXTerm*internalBorder:                          0
+UXTerm*mainMenu*backgroundPixmap:               gradient:vertical?dimension=600&start=gray10&end=gray40
+UXTerm*mainMenu*foreground:                     white
+UXTerm*vtMenu*backgroundPixmap:                 gradient:vertical?dimension=600&start=gray10&end=gray40
+UXTerm*vtMenu*foreground:                       white
+UXTerm*fontMenu*backgroundPixmap:               gradient:vertical?dimension=600&start=gray10&end=gray40
+UXTerm*fontMenu*foreground:                     white
+UXTerm*tekMenu*backgroundPixmap:                gradient:vertical?dimension=600&start=gray10&end=gray40
+UXTerm*tekMenu*foreground:                      white
+UXTerm*color0:                                  S_base02
+UXTerm*color1:                                  S_red
+UXTerm*color2:                                  S_green
+UXTerm*color3:                                  S_yellow
+UXTerm*color4:                                  S_blue
+UXTerm*color5:                                  S_magenta
+UXTerm*color6:                                  S_cyan
+UXTerm*color7:                                  S_base2
+UXTerm*color9:                                  S_orange
+UXTerm*color8:                                  S_base03
+UXTerm*color10:                                 S_base01
+UXTerm*color11:                                 S_base00
+UXTerm*color12:                                 S_base0
+UXTerm*color13:                                 S_violet
+UXTerm*color14:                                 S_base1
+UXTerm*color15:                                 S_base3
 
 
 
