@@ -58,6 +58,8 @@ dist: distclean
 	rm -rf surf-$(VERSION)
 
 install: all
+	mkdir -p $(HOME).config/surf
+	cp -f bookmarks $(HOME).config/surf
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp -f surf $(DESTDIR)$(PREFIX)/bin
 	cp -f surf-open.sh $(DESTDIR)$(PREFIX)/bin
