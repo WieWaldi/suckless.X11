@@ -13,7 +13,7 @@
 [[ -f ${HOME}/.Xresources ]] && xrdb -merge -I$HOME ${HOME}/.Xresources
 # /bin/xsetroot -fg black -bg white -bitmap /usr/include/X11/bitmaps/root_weave
 # /bin/xrandr --output Virtual-1 --mode 1912x980
-/bin/xrandr --output Virtual-1 --mode 1920x1080
+# /bin/xrandr --output Virtual-1 --mode 1920x1080
 # /bin/xrandr --output Virtual-1 --mode 1440x900
 # /bin/xrandr --output DP-3 --rotate left
 # /bin/xset +fp ${HOME}/.local/share/fonts
