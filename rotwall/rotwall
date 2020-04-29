@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | rotwall (rotate wallpapers)                                             |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+if [ $# -ne 2 ]; then
+    printf "usage: rotwall <directory> <seconds>\n\n"
+    exit 1
+fi
+
+shopt -s nullglob
+WALLPAPER=(${1}/*)
+
+while true; do
+    for i in "${WALLPAPER[@]}"
+    do
+        feh --bg-fill ${i}
+        sleep ${2}
+    done
+done
+exit 0
+
