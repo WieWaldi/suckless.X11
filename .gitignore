@@ -3,7 +3,6 @@
 # General
 *.o
 *.so*
-*.1
 
 # suckless.org
 sselp/sselp
