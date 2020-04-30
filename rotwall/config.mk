@@ -1,0 +1,4 @@
+# rotwall
+VERSION = 0.1
+
+PREFIX = ${HOME}/.local
