@@ -106,7 +106,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-p", "Яцп ТЋїѕ Ѕћїт:",  "-nb", col_DeepPink, "-nf", col_gray3, "-sb", col_DarkMagenta, "-sf", col_gray4, NULL };
-static const char *dmenusystem[]        = { "dmenu_system", "-i", "-fn", dmenufont, "-p", "ЩЋдт тѳ dѳ", "-nb", col_DeepPink, "-nf", col_gray3, "-sb", col_DarkMagenta, "-sf", col_gray4, NULL };
+static const char *dmenusystem[]        = { "dwm_system", "-i", "-fn", dmenufont, "-p", "ЩЋдт тѳ dѳ", "-nb", col_DeepPink, "-nf", col_gray3, "-sb", col_DarkMagenta, "-sf", col_gray4, NULL };
 static const char *termcmd[]            = { "st", NULL };
 static const char *slock[]              = { "slock_wrapper", NULL };
 static const char *volumeup[]           = { "dwm_volumectrl", "up", NULL };
