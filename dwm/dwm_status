@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # +-------------------------------------------------------------------------+
 # | dwm_status                                                              |
 # +-------------------------------------------------------------------------+
-# | Copyright © 2019 Waldemar Schroeer                                      |
+# | Copyright © 2020 Waldemar Schroeer                                      |
 # |                  waldemar.schroeer(at)rz-amper.de                       |
 # +-------------------------------------------------------------------------+
 
@@ -28,25 +28,26 @@ print_battery() {
     printf " ${bcapacity}%%"
 }
 
-print_appleicons() {
-    printf "    "
-}
-
 print_volume() {
     var="$(amixer sget Master | grep -F 'Left:')"
     case $var in
         *'[on]')
-            volume="$(amixer sget Master | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
-            
+            # volume="$(amixer sget Master | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
+            volume="$(echo ${var} | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
+            if [ "${volume}" -le 50 ]; then
+                printf " ${volume}%%"
+            elif [ "${volume}" -le 100 ]; then
+                printf " ${volume}%%"
+            fi
+        ;;       
         *'[off]')
+            printf " [M]"
+        ;;
     esac
+}
 
-    if [ "${volume}" -le 50 ]; then
-        printf " ${volume}%%"
-    fi
-    if [ "${volume}" -le 100 ]; then
-        printf " ${volume}%%"
-    fi
+print_appleicons() {
+    printf "    "
 }
 
 while true; do
@@ -61,7 +62,7 @@ while true; do
         printf " ${cpu_used}%%"
     }
 
-    xsetroot -name "$(print_appleicons) $(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
+    xsetroot -name "$(print_volume) $(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
 
     # reset old rates
     cpu_idle_old=$cpu_idle_now
