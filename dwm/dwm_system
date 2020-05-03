@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | ~/.local/bin/dmenu_system                                               |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HOME}/.local/lib64:${HOME}/.local/lib
+antwoord="$( printf "Lock\nShutdown\nReboot\nExit\nScreenshot - Desktop\nScreenshot - active window\nScreenshot - selection" | dmenu "$@" )"
+maim="/home/wiewaldi/.local/bin/maim -m 10"
+date=$(date +%Y-%m-%d-%H-%M-%S)
+log="${HOME}/tmp/dwm.log"
+scrnsht="${HOME}/Screenshots/${date}.jpg"
+
+case ${antwoord} in
+    Lock)
+        notify-send 'Info' 'Locking screen in 5 seconds.'
+        sleep 5
+        ~/.local/bin/slock_wrapper &
+        ;;
+    Shutdown)
+        notify-send 'Info' 'Shutting down in 5 seconds.'
+        sleep 5
+        poweroff
+        ;;
+    Reboot)
+        notify-send 'Info' 'Rebooting in 5 second.'
+        sleep 5
+        reboot
+        ;;
+    Exit)
+        notify-send "Info" "Quitting all apps\nand pissing off in 5 seconds."
+        sleep 5
+        pkill dwm
+        ;;
+    "Screenshot - Desktop")
+        ${maim} ${scrnsht}
+        echo ${scrnsht} | tr -d '\n' | xclip -sel p
+        notify-send 'Info' "Screenshot of whole fucking Desktop taken.\n${scrnsht}"
+        ;;
+    "Screenshot - active window")
+        activewindow=$(xdotool getactivewindow)
+        ${maim} -i $activewindow ${scrnsht}
+        echo ${scrnsht} | tr -d '\n' | xclip -sel p
+        notify-send 'Info' "Screenshot of active window taken.\n${scrnsht}"
+        ;;
+    "Screenshot - selection")
+        ${maim} -s ${scrnsht}
+        echo ${scrnsht} | tr -d '\n' | xclip -sel p
+        notify-send 'Info' "Screenshot of selection taken.\n${scrnsht}"
+        ;;
+esac
+
+exit 0
