@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # +-------------------------------------------------------------------------+
-# | Name of the Script                                                      |
+# | dwm_status                                                              |
 # +-------------------------------------------------------------------------+
 # | Copyright © 2019 Waldemar Schroeer                                      |
 # |                  waldemar.schroeer(at)rz-amper.de                       |
@@ -30,6 +30,23 @@ print_battery() {
 
 print_appleicons() {
     printf "    "
+}
+
+print_volume() {
+    var="$(amixer sget Master | grep -F 'Left:')"
+    case $var in
+        *'[on]')
+            volume="$(amixer sget Master | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
+            
+        *'[off]')
+    esac
+
+    if [ "${volume}" -le 50 ]; then
+        printf " ${volume}%%"
+    fi
+    if [ "${volume}" -le 100 ]; then
+        printf " ${volume}%%"
+    fi
 }
 
 while true; do
