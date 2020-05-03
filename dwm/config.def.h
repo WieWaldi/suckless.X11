@@ -1,5 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 
+/* include */
+#include <X11/XF86keysym.h>
+#include "fibonacci.c"
+#include "movestack.c"
+
 /* appearance */
 static const unsigned int borderpx          = 2;        /* border pixel of windows */
 static const unsigned int gappx             = 5;        /* gaps between windows */
@@ -21,23 +26,23 @@ static const char col_AppleBG[]             = "#c0cae4";
 static const char col_AppleFG[]             = "#101531";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-    // My Theme
-    // [SchemeNorm] = { col_gray4, col_gray1, col_gray2 },
-    // [SchemeSel]  = { col_gray4, col_cyan,  col_yellow  },
-    // [SchemeStatus]  = { col_gray4, col_DeepPink,  "#000000"  },             // Statusbar right {text,background,not used but cannot be empty}
-    // [SchemeTagsSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // Tagbar left selected {text,background,not used but cannot be empty}
-    // [SchemeTagsNorm]  = { col_MediumPurple, col_DeepPink,  "#000000"  },    // Tagbar left unselected {text,background,not used but cannot be empty}
-    // [SchemeInfoSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
-    // [SchemeInfoNorm]  = { col_gray4, col_DeepPink,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
+	/* My Theme */
+    [SchemeNorm] = { col_gray4, col_gray1, col_gray2 },
+    [SchemeSel]  = { col_gray4, col_cyan,  col_yellow  },
+    [SchemeStatus]  = { col_gray4, col_DeepPink,  "#000000"  },             // Statusbar right {text,background,not used but cannot be empty}
+    [SchemeTagsSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // Tagbar left selected {text,background,not used but cannot be empty}
+    [SchemeTagsNorm]  = { col_MediumPurple, col_DeepPink,  "#000000"  },    // Tagbar left unselected {text,background,not used but cannot be empty}
+    [SchemeInfoSel]  = { col_gray4, col_DeepPink,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
+    [SchemeInfoNorm]  = { col_gray4, col_DeepPink,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
 
-    // Apple
-    [SchemeNorm] = { col_AppleFG, col_gray1, col_gray2 },
-    [SchemeSel]  = { col_AppleFG, col_cyan,  col_yellow  },
-    [SchemeStatus]  = { col_AppleFG, col_AppleBG,  "#000000"  },             // Statusbar right {text,background,not used but cannot be empty}
-    [SchemeTagsSel]  = { col_AppleFG, col_AppleBG,  "#000000"  },            // Tagbar left selected {text,background,not used but cannot be empty}
-    [SchemeTagsNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },    // Tagbar left unselected {text,background,not used but cannot be empty}
-    [SchemeInfoSel]  = { col_AppleFG, col_AppleBG,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
-    [SchemeInfoNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
+	/* Apple */
+    // [SchemeNorm] = { col_AppleFG, col_gray1, col_gray2 },
+    // [SchemeSel]  = { col_AppleFG, col_cyan,  col_yellow  },
+    // [SchemeStatus]  = { col_AppleFG, col_AppleBG,  "#000000"  },             // Statusbar right {text,background,not used but cannot be empty}
+    // [SchemeTagsSel]  = { col_AppleFG, col_AppleBG,  "#000000"  },            // Tagbar left selected {text,background,not used but cannot be empty}
+    // [SchemeTagsNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },    // Tagbar left unselected {text,background,not used but cannot be empty}
+    // [SchemeInfoSel]  = { col_AppleFG, col_AppleBG,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
+    // [SchemeInfoNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
 
 
 };
@@ -71,7 +76,6 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
-#include "fibonacci.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	// { "[]=",      tile },    /* first entry is default */
@@ -105,9 +109,12 @@ static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-fn", 
 static const char *dmenusystem[]        = { "dmenu_system", "-i", "-fn", dmenufont, "-p", "ЩЋдт тѳ dѳ", "-nb", col_DeepPink, "-nf", col_gray3, "-sb", col_DarkMagenta, "-sf", col_gray4, NULL };
 static const char *termcmd[]            = { "st", NULL };
 static const char *slock[]              = { "slock_wrapper", NULL };
+static const char *volumeup[]           = { "dwm_volumectrl", "up", NULL };
+static const char *volumedown[]         = { "dwm_volumectrl", "down", NULL };
+static const char *volumemute[]         = { "dwm_volumectrl", "mute", NULL };
+
 // static const char *slock[]    = { "slock -m \"$(/bin/cat ~/.slocktext)\"", NULL };
 
-#include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MONKEY,                       XK_s,      spawn,          {.v = dmenusystem } },
@@ -142,6 +149,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
+	{ 0,            XF86XK_AudioLowerVolume,   spawn,          {.v = volumedown } },
+	{ 0,            XF86XK_AudioRaiseVolume,   spawn,          {.v = volumeup } },
+	{ 0,            XF86XK_AudioMute,          spawn,          {.v = volumemute } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
