@@ -10,6 +10,7 @@
 backupdir="${HOME}/Backup.X11files.$$"
 cdir=$(pwd)
 make="/bin/make -j 4"
+cmake="/bin/cmake"
 
 declare -a X11files=(
     ".Xresources"
@@ -111,7 +112,7 @@ function naelstrof_Install() {
     for i in "${naelstrof[@]}"
     do
         cd ${cdir}/${i}
-        ${make}
+        ${cmake} -DCMAKE_INSTALL_PREFIX="~/.local" ./
         ${make} install
     done
 }
