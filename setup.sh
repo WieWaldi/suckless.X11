@@ -39,6 +39,7 @@ declare -a otherstuff=(
     "compton"
     "sxiv"
     "xdotool"
+    "rotwall"
     )
 
 function Display_Warning() {

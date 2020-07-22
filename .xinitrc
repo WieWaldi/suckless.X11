@@ -16,16 +16,19 @@
 # /bin/xrandr --output Virtual-1 --mode 1920x1080
 # /bin/xrandr --output Virtual-1 --mode 1440x900
 # /bin/xrandr --output DP-3 --rotate left
+
 # /bin/xset +fp ${HOME}/.local/share/fonts
 # /bin/xset fp rehash
 # /bin/xset -b # disable bell
 # /bin/xset s off
 # /bin/xset -dpms
 
+
 # Set my background
 # ---------------------------------------------------------------------------
-# ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/background/funeral.jpg &
-${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/background/HotDog.jpg &
+# ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/wallpapers/funeral.jpg &
+${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/wallpapers/1920x1080_HotDog.jpg
+
 
 # Start notification service
 # ---------------------------------------------------------------------------
@@ -34,6 +37,7 @@ ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/background/HotDog.jpg &
 
 # Start my stuff
 # ---------------------------------------------------------------------------
+amixer -q -D pulse sset Master 25%
 # ${HOME}/.local/bin/compton &
 # ${HOME}/.local/bin/tabbed -r 2 ${HOME}/.local/bin/st -w '' &
 ${HOME}/.local/bin/st -e /bin/htop &
@@ -44,4 +48,5 @@ ${HOME}/.local/bin/st &
 # Start window manager
 # ---------------------------------------------------------------------------
 ${HOME}/.local/bin/dwm_status &
+${HOME}/.local/bin/rotwall ${HOME}/.local/share/wallpapers 300 &
 exec ${HOME}/.local/bin/dwm 2> ${HOME}/tmp/dwm.log

@@ -46,6 +46,8 @@ install: all
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm_status
 	cp -f dwm_system ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm_system
+	cp -f dwm_volumectrl ${DESTDIR}${PREFIX}/bin
+	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm_volumectrl
 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1
@@ -55,6 +57,7 @@ uninstall:
 		${DESTDIR}${PREFIX}/bin/dwm_wrapper\
 		${DESTDIR}${PREFIX}/bin/dwm_status\
 		${DESTDIR}${PREFIX}/bin/dwm_system\
+		${DESTDIR}${PREFIX}/bin/dwm_volumectrl\
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 
 .PHONY: all options clean dist install uninstall
