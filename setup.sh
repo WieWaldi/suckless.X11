@@ -68,7 +68,7 @@ function Install_X11files() {
         /bin/cp -r ${cdir}/${i} ${HOME}
     done
     cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
-    cp -r ${cdir}/.local/share/background ${HOME}/.local/share
+    cp -r ${cdir}/.local/share/wallpapers ${HOME}/.local/share
     cp -r ${cdir}/compton/compton.conf ${HOME}/.config
     cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
     fc-cache
