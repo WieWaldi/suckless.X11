@@ -60,15 +60,17 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class                instance        title                   tags mask     isfloating    monitor */
-    { "Gimp",               NULL,           NULL,                   0,            True,         -1 },
-    { "Xfce4-terminal",     NULL,           NULL,                   0,            False,        -1 },
-    { "VirtualBox",         "VirtualBox",   NULL,                   0,            False,        -1 },
-    { "Firefox",            "Navigator",    NULL,                   1 << 8,       False,        -1 },
-    { "Firefox",            "Browser",      "Firefox Preferences",  1 << 8,       True,         -1 },
-    { "Thunderbird",        NULL,           NULL,                   1 << 7,       False,        -1 },
-    { "Thunderbird",        "Msgcompose",   NULL,                   1 << 7,       True,         -1 },
-    { "Wfica",              NULL,           NULL,                   1 << 6,       True,         -1 },
-    { "xfreerdp",           NULL,           NULL,                   1 << 4,       True,         -1 },
+	/* class                instance        title                   tags mask     iscentered    isfloating   monitor */
+    { "Gimp",               NULL,           NULL,                   0,            0,            1,          -1 },
+    { "Xfce4-terminal",     NULL,           NULL,                   0,            0,            0,          -1 },
+    { "VirtualBox",         "VirtualBox",   NULL,                   0,            0,            0,          -1 },
+    { "Firefox",            "Navigator",    NULL,                   1 << 8,       0,            0,          -1 },
+    { "Firefox",            "Browser",      "Firefox Preferences",  1 << 8,       0,            1,          -1 },
+    { "Thunderbird",        NULL,           NULL,                   1 << 7,       0,            0,          -1 },
+    { "Thunderbird",        "Msgcompose",   NULL,                   1 << 7,       0,            1,          -1 },
+    { "Wfica",              NULL,           NULL,                   1 << 6,       0,            1,          -1 },
+    { "xfreerdp",           NULL,           NULL,                   1 << 4,       0,            1,          -1 },
+    { "Google-chrome",      NULL,           NULL,                   0,            0,            1,          -1 },
 };
 
 /* layout(s) */
