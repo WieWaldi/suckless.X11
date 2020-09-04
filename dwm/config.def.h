@@ -59,18 +59,21 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class                instance        title                   tags mask     isfloating    monitor */
-	/* class                instance        title                   tags mask     iscentered    isfloating   monitor */
-    { "Gimp",               NULL,           NULL,                   0,            0,            1,          -1 },
-    { "Xfce4-terminal",     NULL,           NULL,                   0,            0,            0,          -1 },
-    { "VirtualBox",         "VirtualBox",   NULL,                   0,            0,            0,          -1 },
-    { "Firefox",            "Navigator",    NULL,                   1 << 8,       0,            0,          -1 },
-    { "Firefox",            "Browser",      "Firefox Preferences",  1 << 8,       0,            1,          -1 },
-    { "Thunderbird",        NULL,           NULL,                   1 << 7,       0,            0,          -1 },
-    { "Thunderbird",        "Msgcompose",   NULL,                   1 << 7,       0,            1,          -1 },
-    { "Wfica",              NULL,           NULL,                   1 << 6,       0,            1,          -1 },
-    { "xfreerdp",           NULL,           NULL,                   1 << 4,       0,            1,          -1 },
-    { "Google-chrome",      NULL,           NULL,                   0,            0,            1,          -1 },
+	/* class                instance                                title                   tags mask     iscentered    isfloating   monitor */
+    { "Gimp",               NULL,                                   NULL,                   0,            0,            1,          -1 },
+    { "XTerm",              "xterm",                                "xterm",                0,            0,            1,          -1 },
+    { "Xfce4-terminal",     NULL,                                   NULL,                   0,            0,            0,          -1 },
+    { "VirtualBox",         "VirtualBox",                           NULL,                   0,            0,            0,          -1 },
+    { "Firefox",            "Navigator",                            NULL,                   1 << 8,       0,            0,          -1 },
+    { "Teams",              NULL,                                   NULL,                   1 << 6,       0,            0,          -1 },
+    { "Firefox",            "Browser",                              "Firefox Preferences",  1 << 8,       0,            1,          -1 },
+    { "Thunderbird",        NULL,                                   NULL,                   1 << 7,       0,            0,          -1 },
+    { "Thunderbird",        "Msgcompose",                           NULL,                   1 << 7,       0,            1,          -1 },
+    { "Wfica",              "Wfica",                                "EDC Win 10  Desktop",  1 << 5,       0,            0,          -1 },
+    { "Citrix",             "citrix",                               "Citrix Workspace",     0,            1,            1,          -1 },
+    { "xfreerdp",           NULL,                                   NULL,                   1 << 4,       0,            1,          -1 },
+    { NULL,                 "outlook.office365.com",                NULL,                   0,            1,            1,           1 },
+    { NULL,                 "google-chrome",                        NULL,                   1 << 8,       0,            0,          -1 },
 };
 
 /* layout(s) */
