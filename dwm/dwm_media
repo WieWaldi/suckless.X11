@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | dwm_media (wrapper to start mplayer)                                    |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+mplayer=/bin/mplayer
+st=~/.local/bin/st
+url=$1
+antwoord="$( printf "Bayern 2\nBayern 3\nBayern 5" | dmenu "$@" )"
+
+# mplayer http://br-br2-sued.cast.addradio.de/br/br2/sued/mp3/mid
+
+case ${antwoord} in
+    "Bayern 2")
+    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://br-br2-sued.cast.addradio.de/br/br2/sued/mp3/mid &
+    ;;
+    "Bayern 3")
+    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://br-br3-live.cast.addradio.de/br/br3/live/mp3/mid &
+    ;;
+    "Bayern 5")
+    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://br-b5aktuell-live.cast.addradio.de/br/b5aktuell/live/mp3/mid &
+    ;;
+
+esac
+
+
+exit 0 
