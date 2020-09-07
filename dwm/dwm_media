@@ -10,7 +10,7 @@
 mplayer=/bin/mplayer
 st=~/.local/bin/st
 url=$1
-antwoord="$( printf "Bayern 2\nBayern 3\nBayern 5" | dmenu "$@" )"
+antwoord="$( printf "Bayern 2\nBayern 3\nBayern 5\nDEFJAY\nMDR Aktuell\nMDR Jump\nMDR Jump in the Mix" | dmenu "$@" )"
 
 # mplayer http://br-br2-sued.cast.addradio.de/br/br2/sued/mp3/mid
 
@@ -23,6 +23,18 @@ case ${antwoord} in
     ;;
     "Bayern 5")
     ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://br-b5aktuell-live.cast.addradio.de/br/b5aktuell/live/mp3/mid &
+    ;;
+    "DEFJAY")
+    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://sc1.netstreamer.net:8040 &
+    ;;
+    "MDR Aktuell")
+    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor -playlist http://avw.mdr.de/streams/284340-0_mp3_high.m3u
+    ;;
+    "MDR Jump")
+    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor -playlist http://avw.mdr.de/streams/284320-0_mp3_high.m3u
+    ;;
+    "MDR Jump in the Mix")
+    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor -playlist http://avw.mdr.de/streams/284321-2_mp3_high.m3u
     ;;
 
 esac
