@@ -15,18 +15,19 @@
 # /bin/xrandr --output Virtual-1 --mode 1912x980
 # /bin/xrandr --output Virtual-1 --mode 1920x1080
 # /bin/xrandr --output Virtual-1 --mode 1440x900
-# /bin/xrandr --output DP-3 --rotate left
+# /bin/xrandr --output DVI-D-1 --rotate left
+# /bin/xrandr --output DVI-I-0 --mode 848x480
 
-# /bin/xset +fp ${HOME}/.local/share/fonts
-# /bin/xset fp rehash
-# /bin/xset -b # disable bell
-# /bin/xset s off
-# /bin/xset -dpms
+
+/bin/xset +fp ${HOME}/.local/share/fonts
+/bin/xset fp rehash
+/bin/xset -b # disable bell
+/bin/xset s off
+/bin/xset -dpms
 
 
 # Set my background
 # ---------------------------------------------------------------------------
-# ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/wallpapers/funeral.jpg &
 ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/wallpapers/1920x1080_HotDog.jpg
 
 
@@ -38,11 +39,12 @@ ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/wallpapers/1920x1080_HotD
 # Start my stuff
 # ---------------------------------------------------------------------------
 amixer -q -D pulse sset Master 25%
-# ${HOME}/.local/bin/compton &
-# ${HOME}/.local/bin/tabbed -r 2 ${HOME}/.local/bin/st -w '' &
-${HOME}/.local/bin/st -e /bin/htop &
+# ${HOME}/.local/bin/xclickroot -r ${HOME}/.local/bin/xmenu.sh &
+${HOME}/.local/bin/compton &
 ${HOME}/.local/bin/st &
 ${HOME}/.local/bin/st &
+/bin/xeyes &
+/bin/xclock &
 
 
 # Start window manager

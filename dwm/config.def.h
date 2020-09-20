@@ -6,8 +6,8 @@
 #include "movestack.c"
 
 /* appearance */
-static const unsigned int borderpx          = 2;        /* border pixel of windows */
-static const unsigned int gappx             = 5;        /* gaps between windows */
+static const unsigned int borderpx          = 0;        /* border pixel of windows */
+static const unsigned int gappx             = 15;        /* gaps between windows */
 static const unsigned int snap              = 0;       /* snap pixel */
 static const int showbar                    = 1;        /* 0 means no bar */
 static const int topbar                     = 1;        /* 0 means bottom bar */
@@ -56,8 +56,13 @@ static const char *tags[] = { "", "", "", "", "", "", "", "
 
 static const Rule rules[] = {
 	/* class                instance                                title                   tags mask     iscentered    isfloating   monitor */
+    { "mpv",                NULL,                                   NULL,                   0,            1,            1,          -1 },
     { "Gimp",               NULL,                                   NULL,                   0,            0,            1,          -1 },
-    { "XTerm",              "xterm",                                "xterm",                0,            0,            1,          -1 },
+    { "XTerm",              "xterm",                                "xterm",                0,            1,            1,          -1 },
+    { "XEyes",              "xeyes",                                "xeyes",                0,            0,            1,          -1 },
+    { "XClock",             "xclock",                               "xclock",               0,            0,            1,          -1 },
+    { "Xmessage",           "xmessage",                             "xmessage",             0,            1,            1,          -1 },
+    { "Gnome-calculator",   "gnome-calculator",                     "Calculator",           0,            1,            1,          -1 },
     { "Xfce4-terminal",     NULL,                                   NULL,                   0,            0,            0,          -1 },
     { "Krasses Radio",      NULL,                                   NULL,                   1 << 1,       1,            1,          -1 },
     { "VirtualBox",         "VirtualBox",                           NULL,                   0,            0,            0,          -1 },
@@ -69,6 +74,7 @@ static const Rule rules[] = {
     { "Wfica",              "Wfica",                                "EDC Win 10  Desktop",  1 << 5,       0,            0,          -1 },
     { "Citrix",             "citrix",                               "Citrix Workspace",     1 << 1,       1,            1,          -1 },
     { "xfreerdp",           NULL,                                   NULL,                   1 << 4,       0,            1,          -1 },
+    { "Vmrc",               "vmrc",                                 NULL,                   0,            1,            1,          -1 },
     { NULL,                 "outlook.office365.com",                NULL,                   0,            1,            1,           1 },
     { NULL,                 "google-chrome",                        NULL,                   1 << 8,       0,            0,          -1 },
 };
@@ -77,13 +83,12 @@ static const Rule rules[] = {
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-
 static const Layout layouts[] = {
-    { "",      tile },
-    { "",      NULL },
-    { "",      monocle },
-    { "",      spiral },
-    { "",      dwindle },
+    { "   ",      tile },
+    { "   ",      NULL },
+    { "   ",      monocle },
+    { "   ",      spiral },
+    { "   ",      dwindle },
 };
 
 /* key definitions */
@@ -165,6 +170,7 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,              Button1,        spawn,          {.v = xmenu } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
