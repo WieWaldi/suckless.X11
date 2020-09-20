@@ -19,10 +19,9 @@
 #define S_base2                                 #eee8d5
 #define S_base3                                 #fdf6e3
 
-
 !================================ st relatd ====================================
 ! st*font:                                        FiraMono Nerd Font:size=10:antialias=true
-st*font:                                        GoMono Nerd Font:size=10:antialias=true
+st*font:                                        GoMono Nerd Font:size=16:antialias=true
 st*borderpx:                                    0
 st*termname:                                    st-256color
 st*shell:                                       /bin/sh
@@ -44,7 +43,6 @@ st*color12:                                     S_base0
 st*color13:                                     S_violet
 st*color14:                                     S_base1
 st*color15:                                     S_base3
-
 !-- Change Theme here - Light/Dark
 !-- Dark
 ! st.background:                                  S_base03
@@ -53,8 +51,7 @@ st*color15:                                     S_base3
 st.background:                                  S_base3
 st.foreground:                                  S_base00
 
-
-!================================ xterm related ================================
+!================================ XTerm related ================================
 ! XTerm.vt100.faceName:                           FiraMono Nerd Font:size=10:antialias=true
 XTerm*termName:                                 xterm-256color
 XTerm*cursorColor:                              #00ff00
@@ -90,9 +87,7 @@ XTerm*color13:                                  S_violet
 XTerm*color14:                                  S_base1
 XTerm*color15:                                  S_base3
 
-
-
-!================================ uxterm related ===============================
+!================================ UXTerm related ===============================
 ! UXTerm.vt100.faceName:                           FiraMono Nerd Font:size=10:antialias=true
 UXTerm*termName:                                xterm-256color
 UXTerm*cursorColor:                             #00ff00
@@ -128,7 +123,48 @@ UXTerm*color13:                                 S_violet
 UXTerm*color14:                                 S_base1
 UXTerm*color15:                                 S_base3
 
+!================================ XEyes related ================================
+XEyes.geometry:                                 75x75-2130+50
+XEyes*foreground:                               #000000
+XEyes*background:                               #ffffff
+XEyes*outline:                                  #101010
+XEyes*center:                                   #ffffff
 
+!================================ XMenu related ================================
+xmenu.font:                                     FiraMono Nerd Font:size=14:antialias=true
+xmenu.background:                               #5f005f
+xmenu.foreground:                               #bbbbbb
+xmenu.selbackground:                            #8700af
+xmenu.selforeground:                            #eeeeee
+xmenu.border:                                   #8700af
+xmenu.separator:                                #af87d7
+xmenu.gap:                                      10
+xmenu.width:                                    100
+xmenu.height:                                   48
+xmenu.borderWidth:                              1
+xmenu.separatorWidth:                           30
 
+!================================ XClock related ===============================
+.XClock.geometry:                               75x75-2130+150
+.XClock.Clock.analog:                           true
+.XClock.Clock.strftime:                         (%A)\040%F\040%T
+! .XClock.Clock.update:                         1
+! .XClock.Clock.render:                         false
+.XClock.Clock.font:                             -sony-fixed-*-*-*-*-24-*-*-*-*-*-*-*
+.XClock.Clock.background:                       #ffffff
+.XClock.Clock.foreground:                       #000000
 
+!================================ Xmessage related =============================
+.Xmessage.form.message.scrollVertical:          never
+.Xmessage.form.message.scrollHorizontal:        never
+! .Xmessage.form.message.background:              black
+! .Xmessage.geometry:                             -0-0
+! .Xmessage.form.background:                      black
+! .Xmessage.form.Command.font:                    -sony-fixed-*-*-*-*-24-*-*-*-*-*-*-*
+! .Xmessage.form.message.font:                    -sony-fixed-*-*-*-*-24-*-*-*-*-*-*-*
+.Xmessage*font:                                 -sony-fixed-*-*-*-*-24-*-*-*-*-*-*-*
+! .Xmessage.form.Command.foreground:              #9d9d9d
+! .Xmessage.form.Command.background:              black
+.Xmessage.form.Command.shapeStyle:              Rectangle
 
+!================================ Koniec =======================================
