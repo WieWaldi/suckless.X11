@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | Name of the Script                                                      |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+xprop | awk '
+    /^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
+    /^WM_NAME/{sub(/.* =/, "title:"); print}' | xmessage -default okay -file -
+
+exit 0
+
