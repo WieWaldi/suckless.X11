@@ -7,7 +7,6 @@
 # |                    lassmichinruhe@rz-amper.de                           |
 # +-------------------------------------------------------------------------+
 
-
 # General X11 related stuff
 # ---------------------------------------------------------------------------
 [[ -f ${HOME}/.Xresources ]] && xrdb -merge -I$HOME ${HOME}/.Xresources
@@ -18,23 +17,19 @@
 # /bin/xrandr --output DVI-D-1 --rotate left
 # /bin/xrandr --output DVI-I-0 --mode 848x480
 
-
 /bin/xset +fp ${HOME}/.local/share/fonts
 /bin/xset fp rehash
 /bin/xset -b # disable bell
 /bin/xset s off
 /bin/xset -dpms
 
-
 # Set my background
 # ---------------------------------------------------------------------------
 ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/wallpapers/1920x1080_HotDog.jpg
 
-
 # Start notification service
 # ---------------------------------------------------------------------------
 /usr/local/bin/dunst & > /dev/null 2>&1 &
-
 
 # Start my stuff
 # ---------------------------------------------------------------------------
@@ -45,7 +40,6 @@ ${HOME}/.local/bin/st &
 ${HOME}/.local/bin/st &
 /bin/xeyes &
 /bin/xclock &
-
 
 # Start window manager
 # ---------------------------------------------------------------------------
