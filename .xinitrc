@@ -34,6 +34,7 @@ ${HOME}/.local/bin/feh --bg-scale ${HOME}/.local/share/wallpapers/1920x1080_HotD
 # Start my stuff
 # ---------------------------------------------------------------------------
 amixer -q -D pulse sset Master 25%
+# /bin/amixer -q sset 'Master' 25%
 # ${HOME}/.local/bin/xclickroot -r ${HOME}/.local/bin/xmenu.sh &
 ${HOME}/.local/bin/compton &
 ${HOME}/.local/bin/st &
