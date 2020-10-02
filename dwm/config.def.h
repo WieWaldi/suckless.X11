@@ -71,7 +71,7 @@ static const Rule rules[] = {
     { "Firefox",            "Browser",                              "Firefox Preferences",  1 << 8,       0,            1,          -1 },
     { "Thunderbird",        NULL,                                   NULL,                   1 << 7,       0,            0,          -1 },
     { "Thunderbird",        "Msgcompose",                           NULL,                   1 << 7,       0,            1,          -1 },
-    { "Wfica",              "Wfica",                                "EDC Win 10  Desktop",  1 << 5,       0,            0,          -1 },
+    { "Wfica",              NULL,                                   NULL,                   1 << 5,       0,            0,          -1 },
     { "Citrix",             "citrix",                               "Citrix Workspace",     1 << 1,       1,            1,          -1 },
     { "xfreerdp",           NULL,                                   NULL,                   1 << 4,       0,            1,          -1 },
     { "Vmrc",               "vmrc",                                 NULL,                   0,            1,            1,          -1 },
