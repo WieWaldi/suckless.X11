@@ -43,8 +43,6 @@ static const char *colors[][3]      = {
     // [SchemeTagsNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },           // Tagbar left unselected {text,background,not used but cannot be empty}
     // [SchemeInfoSel]  = { col_AppleFG, col_AppleBG,  "#000000"  },            // infobar middle  selected {text,background,not used but cannot be empty}
     // [SchemeInfoNorm]  = { col_AppleFG, col_AppleBG,  "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
-
-
 };
 
 /* tagging */
@@ -56,25 +54,27 @@ static const char *tags[] = { "", "", "", "", "", "", "", "
 
 static const Rule rules[] = {
 	/* class                instance                                title                   tags mask     iscentered    isfloating   monitor */
-    { "mpv",                NULL,                                   NULL,                   0,            1,            1,          -1 },
-    { "Gimp",               NULL,                                   NULL,                   0,            0,            1,          -1 },
-    { "XTerm",              "xterm",                                "xterm",                0,            1,            1,          -1 },
-    { "XEyes",              "xeyes",                                "xeyes",                0,            0,            1,          -1 },
-    { "XClock",             "xclock",                               "xclock",               0,            0,            1,          -1 },
-    { "Xmessage",           "xmessage",                             "xmessage",             0,            1,            1,          -1 },
-    { "Gnome-calculator",   "gnome-calculator",                     "Calculator",           0,            1,            1,          -1 },
-    { "Xfce4-terminal",     NULL,                                   NULL,                   0,            0,            0,          -1 },
-    { "Krasses Radio",      NULL,                                   NULL,                   1 << 1,       1,            1,          -1 },
-    { "VirtualBox",         "VirtualBox",                           NULL,                   0,            0,            0,          -1 },
+    { "Citrix",             "citrix",                               "Citrix Workspace",     1 << 1,       1,            1,          -1 },
+    { "Deadbeef",           "deadbeef",                             "DeaDBeeF-1.8.4",       0,            1,            1,          -1 },
     { "Firefox",            "Navigator",                            NULL,                   1 << 8,       0,            0,          -1 },
-    { "Teams",              NULL,                                   NULL,                   1 << 6,       0,            0,          -1 },
     { "Firefox",            "Browser",                              "Firefox Preferences",  1 << 8,       0,            1,          -1 },
+    { "Gimp",               NULL,                                   NULL,                   0,            0,            1,          -1 },
+    { "Gnome-calculator",   "gnome-calculator",                     "Calculator",           0,            1,            1,          -1 },
+    { "Krasses Radio",      NULL,                                   NULL,                   1 << 1,       1,            1,          -1 },
+    { "mpv",                NULL,                                   NULL,                   0,            1,            1,          -1 },
+    { "Teams",              NULL,                                   NULL,                   1 << 6,       0,            0,          -1 },
     { "Thunderbird",        NULL,                                   NULL,                   1 << 7,       0,            0,          -1 },
     { "Thunderbird",        "Msgcompose",                           NULL,                   1 << 7,       0,            1,          -1 },
+    { "VirtualBox",         "VirtualBox",                           NULL,                   0,            0,            0,          -1 },
     { "Wfica",              NULL,                                   NULL,                   1 << 5,       0,            0,          -1 },
-    { "Citrix",             "citrix",                               "Citrix Workspace",     1 << 1,       1,            1,          -1 },
-    { "xfreerdp",           NULL,                                   NULL,                   1 << 4,       0,            1,          -1 },
     { "Vmrc",               "vmrc",                                 NULL,                   0,            1,            1,          -1 },
+    { "XClock",             "xclock",                               "xclock",               0,            0,            1,          -1 },
+    { "XEyes",              "xeyes",                                "xeyes",                0,            0,            1,          -1 },
+    { "Xfce4-terminal",     NULL,                                   NULL,                   0,            0,            0,          -1 },
+    { "xfreerdp",           NULL,                                   NULL,                   1 << 4,       0,            1,          -1 },
+    { "Xmessage",           "xmessage",                             "xmessage",             0,            1,            1,          -1 },
+    { "Xsensors",           "xsensors",                             NULL,                   0,            1,            1,          -1 },
+    { "XTerm",              "xterm",                                "xterm",                0,            1,            1,          -1 },
     { NULL,                 "outlook.office365.com",                NULL,                   0,            1,            1,           1 },
     { NULL,                 "google-chrome",                        NULL,                   1 << 8,       0,            0,          -1 },
 };
