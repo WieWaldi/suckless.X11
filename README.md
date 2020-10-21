@@ -42,12 +42,12 @@ dragon
 
 
 ### Desktop Manager
-   dnf install -y sddm
-   ! create /usr/share/xsessions/dwm.desktop
-   systemctl set-default graphical
+   dnf install -y sddm  
+   ! create /usr/share/xsessions/dwm.desktop  
+   systemctl set-default graphical  
 
 
 ### Applications
 1. cava
 
-   ./configure --prefix=$HOME/.local
+   ./configure --prefix=$HOME/.local  
