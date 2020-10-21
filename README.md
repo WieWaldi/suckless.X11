@@ -2,7 +2,7 @@
 WieWaldi's fork of suckless.org dynamic window manager and other suckless implementations.
 Yes, the name of this repository may be kinda missleading since it doesn't contain
 suckless implementations only but other stuff as well.
-This repo targets specially and only a minimal CentOS 7 installation.
+This repo targets specially and only a minimal CentOS 7/8 installation.
 
 ## Requirements
 A [detailed setup instruction](http://www.rz-amper.de/wiki/index.php/CentOS_7.x_from_Scratch)
@@ -26,3 +26,27 @@ chmod u+s slock
 ```
 
 
+## ToDo
+### Additional packets to put in prepare.sh
+
+libdrm-devel
+libpciaccess-devel
+libxcb-devel
+jq
+fftw-devel
+iniparser
+alsa-lib-devel
+pulseaudio-libs-devel
+deadbeef
+dragon
+
+
+### Desktop Manager ==
+    dnf install -y sddm
+    ! create /usr/share/xsessions/dwm.desktop
+    systemctl set-default graphical
+
+
+### Applications
+1. cava ==
+   ./configure --prefix=$HOME/.local
