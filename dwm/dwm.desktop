@@ -1,0 +1,5 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=WieWaldi's X11
+Comment=Starts suckless Dynamic Window Manager
+Exec=~/.xinitrc
