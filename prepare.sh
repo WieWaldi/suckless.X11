@@ -28,9 +28,10 @@ function Install_CentOS_7 {
     yum install -y libXinerama-devel imsettings ncurses-term ncurses-devel imlib2-devel libexif-devel giflib-devel glm-devel glew-devel libjpeg-turbo-devel
     yum install -y gcr-devel mesa-libEGL mesa-libGL mesa-dri-drivers dbus-x11 dbus-devel
     yum install -y webkitgtk4-devel glib2-devel gcr-devel mesa-dri-drivers xorg-x11-utils libconfig-devel pango-devel gtk2-devel
-    yum install -y libdrm-devel libpciaccess-devel libxcb-devel jq fftw-devel iniparser alsa-lib-devel pulseaudio-libs-devel deadbeef dragon
+    dnf install -y libdrm-devel libpciaccess-devel libxcb-devel jq fftw-devel iniparser alsa-lib-devel pulseaudio-libs-devel libglvnd-devel elfutils-libelf-devel
     yum install -y "gstreamer*"
     yum install -y ntp ntpdate
+    dnf install -y sddm
 }
 
 function Install_CentOS_8() {
@@ -41,9 +42,10 @@ function Install_CentOS_8() {
     dnf install -y libXinerama-devel imsettings ncurses-term ncurses-devel imlib2-devel libexif-devel giflib-devel glm-devel glew-devel libjpeg-turbo-devel
     dnf install -y gcr-devel mesa-libEGL mesa-libGL mesa-dri-drivers dbus-x11 dbus-devel
     dnf install -y webkitgtk4-devel glib2-devel gcr-devel mesa-dri-drivers xorg-x11-utils libconfig-devel pango-devel gtk2-devel
-    dnf install -y libdrm-devel libpciaccess-devel libxcb-devel jq fftw-devel iniparser alsa-lib-devel pulseaudio-libs-devel deadbeef dragon
+    dnf install -y libdrm-devel libpciaccess-devel libxcb-devel jq fftw-devel iniparser alsa-lib-devel pulseaudio-libs-devel libglvnd-devel elfutils-libelf-devel
     dnf install -y "gstreamer*"
     dnf install -y chrony
+    dnf install -y sddm
 }
 
 function Install_GoogleChrome() {
@@ -104,12 +106,12 @@ else
 
             if [[ "${version}" = "7" ]]; then
                 printf "\n This is CentOS Linux Version 7.\n"
-                DisableSELINUX
+                Disable_SELINUX
                 Copy_Files
                 Install_CentOS_7
             elif [[ "${version}" == "8" ]]; then
                 printf "\n This is CentOS Linux Version 8.\n"
-                DisableSELINUX
+                Disable_SELINUX
                 Copy_Files
                 Install_CentOS_8
             fi
