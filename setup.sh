@@ -40,6 +40,7 @@ declare -a otherstuff=(
     "sxiv"
     "xdotool"
     "rotwall"
+    "xmenu"
     )
 
 function Display_Warning() {
