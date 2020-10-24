@@ -9,6 +9,9 @@
 
 cdir=$(pwd)
 
+function Disable_SELINUX () {
+    sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
+}
 function Display_Warning () {
     /bin/clear
     /bin/cat ${cdir}/prepare-warning.txt
