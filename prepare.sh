@@ -102,10 +102,12 @@ else
 
             if [[ "${version}" = "7" ]]; then
                 printf "\n This is CentOS Linux Version 7.\n"
+                DisableSELINUX
                 Copy_Files
                 Install_CentOS_7
             elif [[ "${version}" == "8" ]]; then
                 printf "\n This is CentOS Linux Version 8.\n"
+                DisableSELINUX
                 Copy_Files
                 Install_CentOS_8
             fi
