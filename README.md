@@ -51,3 +51,7 @@ dragon
 1. cava
 
    ./configure --prefix=$HOME/.local  
+
+### X.org
+    /usr/share/icons/ComixCursors-Blue
+
