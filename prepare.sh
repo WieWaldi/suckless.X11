@@ -19,6 +19,7 @@ function Display_Warning () {
 
 function Copy_Files {
     cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d
+    cp ${cdir}/etc/sddm.conf /etc
     cp ${cdir}/dwm/dwm.desktop /usr/share/xsessions
 }
 
