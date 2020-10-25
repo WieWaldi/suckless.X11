@@ -15,6 +15,7 @@ cmake="/bin/cmake"
 declare -a X11files=(
     ".Xresources"
     ".xinitrc"
+    ".xsession"
     ".slocktext"
     )
 
@@ -41,6 +42,7 @@ declare -a otherstuff=(
     "xdotool"
     "rotwall"
     "xmenu"
+    "xmerge"
     )
 
 function Display_Warning() {

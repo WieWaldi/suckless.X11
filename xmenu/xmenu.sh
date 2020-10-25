@@ -28,7 +28,7 @@ Office
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-libreoffice-math.png		LibreOffice Math			/bin/libreoffice --math
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-libreoffice-writer.png		LibreOffice Writer			/bin/libreoffice --writer
 System Application
-	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Compton (start)				${HOME}/.local/bin/compton
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Compton (start)				/bin/dbus-launch ${HOME}/.local/bin/compton
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Compton (kill)				/bin/pkill compton
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-gear.png					X.org Client Properties		${HOME}/.local/bin/xclientprop.sh
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xsensors.png				XSensors					/bin/xsensors
