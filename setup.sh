@@ -41,6 +41,7 @@ declare -a otherstuff=(
     "sxiv"
     "xdotool"
     "rotwall"
+    "xclickroot"
     "xmenu"
     "xmerge"
     )
