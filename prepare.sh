@@ -19,10 +19,11 @@ function Display_Warning () {
 
 function Copy_Files {
     cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d
+    cp ${cdir}/dwm/dwm.desktop /usr/share/xsessions
 }
 
-function Install_CentOS_7 {
-    yum install -y vim git wget ftp make cmake automake gcc gcc-c++ kernel-devel kernel-headers patch net-tools bind-utils epel-release asciidoc perl
+function Install_CentOS_7 () {
+    yum install -y vim git wget ftp make cmake automake gcc gcc-c++ kernel-devel kernel-headers patch net-tools bind-utils epel-release asciidoc perl htop
     yum install -y xorg-x11-xinit xorg-x11-apps xorg-x11-xbitmaps xorg-x11-utils xterm xclip
     yum install -y xorg-x11-drv-evdev xorg-x11-drv-synaptics xorg-x11-fonts-misc.noarch libXrandr-devel libX11-devel libXft-devel libXScrnSaver-devel libcurl-devel libXt-devel libXtst-devel
     yum install -y libXinerama-devel imsettings ncurses-term ncurses-devel imlib2-devel libexif-devel giflib-devel glm-devel glew-devel libjpeg-turbo-devel
@@ -34,9 +35,9 @@ function Install_CentOS_7 {
     dnf install -y sddm
 }
 
-function Install_CentOS_8() {
+function Install_CentOS_8 () {
     dnf config-manager --enable PowerTools
-    dnf install -y vim git wget ftp make cmake automake gcc gcc-c++ kernel-devel kernel-headers patch net-tools bind-utils epel-release asciidoc perl
+    dnf install -y vim git wget ftp make cmake automake gcc gcc-c++ kernel-devel kernel-headers patch net-tools bind-utils epel-release asciidoc perl htop
     dnf install -y xorg-x11-xinit xorg-x11-apps xorg-x11-xbitmaps xorg-x11-utils xterm xclip
     dnf install -y xorg-x11-drv-evdev xorg-x11-drv-synaptics xorg-x11-fonts-misc.noarch libXrandr-devel libX11-devel libXft-devel libXScrnSaver-devel libcurl-devel libXt-devel libXtst-devel
     dnf install -y libXinerama-devel imsettings ncurses-term ncurses-devel imlib2-devel libexif-devel giflib-devel glm-devel glew-devel libjpeg-turbo-devel
