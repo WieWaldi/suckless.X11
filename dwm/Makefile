@@ -40,8 +40,8 @@ install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
-	cp -f dwm_wrapper ${DESTDIR}${PREFIX}/bin
-	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm_wrapper
+	cp -f dwm_xsession ${DESTDIR}${PREFIX}/bin
+	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm_xsession
 	cp -f dwm_status ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm_status
 	cp -f dwm_system ${DESTDIR}${PREFIX}/bin
@@ -56,7 +56,7 @@ install: all
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
-		${DESTDIR}${PREFIX}/bin/dwm_wrapper\
+		${DESTDIR}${PREFIX}/bin/dwm_xsession\
 		${DESTDIR}${PREFIX}/bin/dwm_status\
 		${DESTDIR}${PREFIX}/bin/dwm_system\
 		${DESTDIR}${PREFIX}/bin/dwm_volumectrl\
