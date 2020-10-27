@@ -20,7 +20,8 @@ function Display_Warning () {
 function Copy_Files {
     cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d
     cp ${cdir}/etc/sddm.conf /etc
-    cp ${cdir}/dwm/dwm.desktop /usr/share/xsessions
+    cp ${cdir}/X.org.files/dwm.desktop /usr/share/xsessions
+    cp ${cdir}/X.org.files/xinit-compat.desktop /usr/share/xsessions
 }
 
 function Install_CentOS_7 () {

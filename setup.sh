@@ -46,11 +46,11 @@ declare -a otherstuff=(
     "xmerge"
     )
 
-function Display_Warning() {
+Display_Warning() {
     clear && cat ${cdir}/setup-warning.txt
 }
 
-function Test_Create_Dir() {
+Create_Dir() {
     [ ! -d "${backupdir}" ] && mkdir -p ${backupdir}
     [ ! -d "${HOME}/tmp" ] && mkdir -p ${HOME}/tmp
     [ ! -d "${HOME}/.config" ] && mkdir -p ${HOME}/.config
@@ -61,7 +61,7 @@ function Test_Create_Dir() {
     [ ! -d "${HOME}/Screenshots" ] && mkdir -p ${HOME}/Screenshots
 }
 
-function Install_X11files() {
+Install_X11files() {
     for i in "${X11files[@]}"
     do
         if [ -f ${HOME}/${i} ]; then
@@ -69,16 +69,21 @@ function Install_X11files() {
             mv ${HOME}/${i} ${backupdir}
         fi
         printf "\n Creating ${i}"
-        /bin/cp -r ${cdir}/${i} ${HOME}
+        /bin/cp -r ${cdir}/X.org.files/${i} ${HOME}
     done
     cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
     cp -r ${cdir}/.local/share/wallpapers ${HOME}/.local/share
+    cp -r ${cdir}/.local/share/icons ${HOME}/.local/icons
     cp -r ${cdir}/compton/compton.conf ${HOME}/.config
     cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
+    cp -r ${cdir}/X.org.files/dwm_xsession ${HOME}/.local/bin
+    chmod 755 ${HOME}/.local/bin/dwm_xsession
+    cp -r ${cdir}/X.org.files/.xsession
+    chmod 755 ${HOME}/.local/bin/.xsession
     fc-cache
 }
 
-function Suckless_Install() {
+Suckless_Install() {
     for i in "${sucklesstools[@]}"
     do
         cd ${cdir}/${i}
@@ -86,7 +91,7 @@ function Suckless_Install() {
     done
 }
 
-function Suckless_Clean() {
+Suckless_Clean() {
     printf "\n Cleaning up.\n"
     for i in "${sucklesstools[@]}"
     do
@@ -95,7 +100,7 @@ function Suckless_Clean() {
     done
 }
 
-function OtherStuff_Install() {
+OtherStuff_Install() {
     for i in "${otherstuff[@]}"
     do
         cd ${cdir}/${i}
@@ -104,7 +109,7 @@ function OtherStuff_Install() {
     done
 }
 
-function OtherStuff_Clean() {
+OtherStuff_Clean() {
     printf "\n Cleaning up.\n"
     for i in "${otherstuff[@]}"
     do
@@ -113,7 +118,7 @@ function OtherStuff_Clean() {
     done
 }
 
-function naelstrof_Install() {
+naelstrof_Install() {
     for i in "${naelstrof[@]}"
     do
         cd ${cdir}/${i}
@@ -122,7 +127,7 @@ function naelstrof_Install() {
     done
 }
 
-function naelstrof_Clean() {
+naelstrof_Clean() {
     printf "\n Cleaning up.\n"
     for i in "${naelstrof[@]}"
     do
@@ -137,7 +142,7 @@ while true; do
     read antwoord
     case ${antwoord} in
         [yY] | [yY][Ee][Ss] )
-            Test_Create_Dir
+            Create_Dir
             Install_X11files
             Suckless_Install
             Suckless_Clean
