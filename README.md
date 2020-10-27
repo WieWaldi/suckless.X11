@@ -55,3 +55,9 @@ dragon
 ### X.org
     /usr/share/icons/ComixCursors-Blue
 
+### Colors
+These colors are used mostly.¬
+Deep Pink           #5f005f¬
+Dark Magenta        #8700af¬
+Medium Purple       #af87d7¬
+
