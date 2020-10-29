@@ -44,9 +44,9 @@ install_CentOS_8 () {
     echo -e "\nInstalling Repository: Extra Packages for Enterprise Linux 8"
     dnf install -y epel-release >> ${logfile}
     echo -e "\nInstalling Repository: RPM Fusion for EL 8 - Free - Updates"
-    dnf install y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm >> ${logfile}
+    dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm >> ${logfile}
     echo -e "\nInstalling Repository: RPM Fusion for EL 8 - Nonfree - Updates"
-    dnf install y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm >> ${logfile}
+    dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm >> ${logfile}
 
     IFS=$'\r\n' GLOBIGNORE='*' command eval  'packages=($(cat ./packages.CentOS8))'
     echo -e "\nInstalling the following packages:"
