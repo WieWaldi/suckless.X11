@@ -19,7 +19,7 @@ git
 glew-devel
 glib2-devel
 glm-devel
-gstreamer*"
+gstreamer*
 gtk2-devel
 htop
 imlib2-devel
