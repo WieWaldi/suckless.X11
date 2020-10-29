@@ -2,6 +2,7 @@
 
 # General
 ToDo
+prepare.log
 *.o
 *.so*
 
