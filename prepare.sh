@@ -18,7 +18,7 @@ display_Warning () {
     /bin/cat ${cdir}/prepare-warning.txt
 }
 
-copy_Files {
+copy_Files () {
     cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d
     cp ${cdir}/etc/sddm.conf /etc
     cp ${cdir}/X.org.files/dwm.desktop /usr/share/xsessions
