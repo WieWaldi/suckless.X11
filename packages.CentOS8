@@ -5,6 +5,7 @@ asciidoc
 automake
 bind-utils
 chrony
+cifs-utils
 cmake
 dbus-devel
 dbus-x11
@@ -60,6 +61,8 @@ pulseaudio-libs-devel
 pulseaudio-libs-glib2
 pulseaudio-module-x11
 pulseaudio-utils
+samba-client
+samba-common
 sddm
 tar
 vim
