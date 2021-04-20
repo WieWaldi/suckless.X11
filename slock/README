@@ -17,9 +17,6 @@ Afterwards enter the following command to build and install slock
 (if necessary as root):
 
     make clean install
-    su - root
-    chown root:root slock
-    chmod u+s slock
 
 
 Running slock

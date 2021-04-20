@@ -61,13 +61,15 @@ version.h: Makefile .git/index
 .git/index:
 
 clean:
-	rm -f *.o sxiv config.h version.h
+	rm -f *.o sxiv version.h
 
 install: all
 	@echo "INSTALL bin/sxiv"
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp sxiv $(DESTDIR)$(PREFIX)/bin/
+	cp sxiv_bulk $(DESTDIR)$(PREFIX)/bin/
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/sxiv
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/sxiv_bulk
 	@echo "INSTALL sxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
 	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(version)!g" sxiv.1 \

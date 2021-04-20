@@ -1,0 +1,34 @@
+Xssstate
+========
+This  is  a  simple utility to get the state of the X screensaver exten‐
+sion.  These states include the idle time, the screensaver state and the
+time how long to wait until the screensaver should be active.
+
+The values for the states in X can be changed using xset(1).
+
+Turn off the screensaver:
+
+	% xset s 0
+
+Turn on the screensaver after 60 seconds inactivity:
+
+	% xset s 60
+
+Force the screensaver to be active:
+
+	% xset s blank
+
+For more options, see xset(1).
+
+
+Example script
+--------------
+In  xsidle.sh is an example script how to use this for a background ser‐
+vice that will control your screensaver. This  can  be  used  to  invoke
+slock(1) using following command:
+
+	% xsidle.sh slock &
+
+This should be useful in your $HOME/.xinitrc file.
+
+Have fun! 

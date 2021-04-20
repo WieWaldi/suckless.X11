@@ -1,7 +1,7 @@
 +-------------------------------------------------------------------------+
-| WieWaldi's suckless.X11                                                 |
+| WieWaldi's suckless.CentOS                                              |
 +-------------------------------------------------------------------------+
-| Copyright © 2019 Waldemar Schroeer                                      |
+| Copyright © 2020 Waldemar Schroeer                                      |
 |                  waldemar.schroeer(at)rz-amper.de                       |
 +-------------------------------------------------------------------------+
 |                                                                         |

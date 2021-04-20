@@ -20,14 +20,17 @@ declare -a X11files=(
     )
 
 declare -a sucklesstools=(
-    "dwm"
     "dmenu"
-    "st"
+    "dwm"
+    "dwm-helper"
+    "lsw"
     "slock"
     "sselp"
+    "st"
+    "stw"
     "surf"
     "tabbed"
-    "lsw"
+    "xssstate"
     )
 
 declare -a naelstrof=(
@@ -73,11 +76,9 @@ Install_X11files() {
     done
     cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
     cp -r ${cdir}/.local/share/wallpapers ${HOME}/.local/share
-    cp -r ${cdir}/.local/share/icons ${HOME}/.local/icons
+    cp -r ${cdir}/.local/share/icons ${HOME}/.local/share
     cp -r ${cdir}/compton/compton.conf ${HOME}/.config
     cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
-    cp -r ${cdir}/X.org.files/dwm_xsession ${HOME}/.local/bin
-    chmod 755 ${HOME}/.local/bin/dwm_xsession
     cp -r ${cdir}/X.org.files/.xsession
     chmod 755 ${HOME}/.local/bin/.xsession
     fc-cache

@@ -69,6 +69,7 @@ typedef enum {
 	KioskMode,
 	LoadImages,
 	MediaManualPlay,
+	Notifications,
 	Plugins,
 	PreferredLanguages,
 	RunInFullscreen,
@@ -673,7 +674,8 @@ gettogglestats(Client *c)
 	togglestats[8] = curconfig[FrameFlattening].val.i ? 'F' : 'f';
 	togglestats[9] = curconfig[Certificate].val.i ?     'X' : 'x';
 	togglestats[10] = curconfig[StrictTLS].val.i ?      'T' : 't';
-	togglestats[11] = '\0';
+	togglestats[11] = curconfig[Notifications].val.i ?  'L' : 'l';
+	togglestats[12] = '\0';
 }
 
 void
@@ -821,6 +823,9 @@ setparameter(Client *c, int refresh, ParamName p, const Arg *a)
 	case MediaManualPlay:
 		webkit_settings_set_media_playback_requires_user_gesture(s, a->i);
 		break;
+	case Notifications:
+		refresh = 0;
+		return;
 	case Plugins:
 		webkit_settings_set_enable_plugins(s, a->i);
 		break;
@@ -1024,6 +1029,7 @@ newwindow(Client *c, const Arg *a, int noembed)
 	cmd[i++] = curconfig[Geolocation].val.i ?     "-G" : "-g" ;
 	cmd[i++] = curconfig[LoadImages].val.i ?      "-I" : "-i" ;
 	cmd[i++] = curconfig[KioskMode].val.i ?       "-K" : "-k" ;
+	cmd[i++] = curconfig[Notifications].val.i ?   "-L" : "-l" ;
 	cmd[i++] = curconfig[Style].val.i ?           "-M" : "-m" ;
 	cmd[i++] = curconfig[Inspector].val.i ?       "-N" : "-n" ;
 	cmd[i++] = curconfig[Plugins].val.i ?         "-P" : "-p" ;
@@ -1281,8 +1287,11 @@ createview(WebKitWebView *v, WebKitNavigationAction *a, Client *c)
 		 * by user gesture, so inverse the logic here
 		 */
 /* instead of this, compare destination uri to mouse-over uri for validating window */
-		if (webkit_navigation_action_is_user_gesture(a))
+		if (webkit_navigation_action_is_user_gesture(a)) {
+			Arg aa = {.v = webkit_uri_request_get_uri(webkit_navigation_action_get_request(a))};
+			newwindow(c, &aa, 1);
 			return NULL;
+		}
 	case WEBKIT_NAVIGATION_TYPE_LINK_CLICKED: /* fallthrough */
 	case WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED: /* fallthrough */
 	case WEBKIT_NAVIGATION_TYPE_BACK_FORWARD: /* fallthrough */
@@ -1609,6 +1618,8 @@ permissionrequested(WebKitWebView *v, WebKitPermissionRequest *r, Client *c)
 		else if (webkit_user_media_permission_is_for_video_device(
 		         WEBKIT_USER_MEDIA_PERMISSION_REQUEST(r)))
 			param = AccessWebcam;
+	} else if (WEBKIT_IS_NOTIFICATION_PERMISSION_REQUEST(r)) {
+		param = Notifications;
 	} else {
 		return FALSE;
 	}
@@ -2139,6 +2150,14 @@ main(int argc, char *argv[])
 		defconfig[KioskMode].val.i = 1;
 		defconfig[KioskMode].prio = 2;
 		break;
+	case 'l':
+		defconfig[Notifications].val.i = 0;
+		defconfig[Notifications].prio = 2;
+		break;
+	case 'L':
+		defconfig[Notifications].val.i = 1;
+		defconfig[Notifications].prio = 2;
+		break;
 	case 'm':
 		defconfig[Style].val.i = 0;
 		defconfig[Style].prio = 2;
@@ -2208,7 +2227,11 @@ main(int argc, char *argv[])
 	if (argc > 0)
 		arg.v = argv[0];
 	else
+	#ifdef HOMEPAGE
+		arg.v = HOMEPAGE;
+	#else
 		arg.v = "about:blank";
+	#endif
 
 	setup();
 	c = newclient(NULL);

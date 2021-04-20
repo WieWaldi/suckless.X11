@@ -18,7 +18,7 @@ WALLPAPER=(${1}/*)
 while true; do
     for i in "${WALLPAPER[@]}"
     do
-        feh --bg-fill ${i}
+        feh --no-fehbg --bg-fill ${i}
         sleep ${2}
     done
 done

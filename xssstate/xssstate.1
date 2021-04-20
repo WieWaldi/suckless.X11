@@ -1,0 +1,44 @@
+.TH XSSSTATE 1 xssstate\-VERSION
+.SH NAME
+xssstate \- display X screensaver state 
+.SH SYNOPSIS
+.B xssstate 
+.RB [ \-i ]
+.RB [ \-s ]
+.RB [ \-t ]
+.RB [ \-v ]
+.SH DESCRIPTION
+.B xssstate
+will display the state of the X screensaver extension. See below what can be
+gathered.
+.SH OPTIONS
+.TP
+.B \-i
+show the idle time of X11, in milliseconds.
+.TP
+.B \-s
+show the current state of the X screensaver. There is
+.B "on"
+for the screensaver being active at the moment,
+.B "off"
+for the screensaver being off and
+.B "disabled"
+for the screensaver being disabled.
+.TP
+.B \-t
+will show the time that needs to be waited until the screensaver should be
+activated, in milliseconds.
+.TP
+.B \-v
+show version information
+.SH AUTHORS
+See the LICENSE file for the authors.
+.SH LICENSE
+See the LICENSE file for the terms of redistribution.
+.SH SEE ALSO
+.BR slock (1)
+.BR xlock (1)
+.BR xss (1)
+.SH BUGS
+Please report them.
+

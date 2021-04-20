@@ -51,6 +51,8 @@ install_CentOS_8 () {
     echo -e "\nInstalling the following packages:"
     echo ${packages[@]}
     dnf install -y ${packages[@]} >> ${logfile} 2>&1
+    systemctl enable sddm
+    systemctl set-default graphical
 }
 
 install_GoogleChrome() {

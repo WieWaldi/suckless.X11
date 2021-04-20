@@ -10,6 +10,7 @@ Applications
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-alsamixer.png				Alsa Mixer					/bin/xterm -fa 'FiraMono Nerd Font' -fs 6 -e /bin/alsamixer
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-cava.png					Audio Visualizer			/bin/xterm -fa 'FiraMono Nerd Font' -fs 6 -e ${HOME}/.local/bin/cava
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calc.png					Calculator					/bin/gnome-calculator
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png						CMatrix						${HOME}/.local/bin/cool-retro-term -p Vintage -T CMatrix -e cmatrix
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-citrix.png					Citrix						${HOME}/.local/bin/citrix
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-deadbeef.png				DeadBeef					/bin/deadbeef
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-dragonplayer.png			DragonPlayer				/bin/dragon
@@ -35,6 +36,7 @@ System Application
 
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal (xterm)			/bin/xterm
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png							Terminal (st)				${HOME}/.local/bin/st
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar				/bin/cal -m -n 3 | /bin/xmessage -default okay -file -
 
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-shutdown.png					Shutdown					/sbin/poweroff
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-reboot.png						Reboot						/sbin/reboot

@@ -19,9 +19,44 @@
 #define S_base2                                 #eee8d5
 #define S_base3                                 #fdf6e3
 
+!================================ dwm relatd ===================================
+dwm.mfact:                                      0.55
+dwm.borderpx:                                   0
+dwm.gappx:                                      3
+dwm.snap:                                       10
+dwm.resizehints:                                1
+dwm.nmaster:                                    1
+dwm.showbar:                                    1
+dwm.topbar:                                     1
+dwm.vertpad:                                    3
+dwm.sidepad:                                    3
+dwm.normfgcolor:                                #bbbbbb
+dwm.normbgcolor:                                #222222
+dwm.normbordercolor:                            #444444
+dwm.selfgcolor:                                 #eeeeee
+dwm.selbgcolor:                                 #005577
+dwm.selbordercolor:                             #005577
+dwm.statusfgcolor:                              #eeeeee
+dwm.statusbgcolor:                              #5f005f
+dwm.tagselfgcolor:                              #eeeeee
+dwm.tagselbgcolor:                              #5f005f
+dwm.tagnormfgcolor:                             #af87d7
+dwm.tagnormbgcolor:                             #5f005f
+dwm.infoselfgcolor:                             #eeeeee
+dwm.infoselbgcolor:                             #5f005f
+dwm.infonormfgcolor:                            #eeeeee
+dwm.infonormbgcolor:                            #5f005f
+
+!================================ dmneu related ================================
+dmenu.font:                                     FiraMono Nerd Font:size=8:antialias=true
+dmenu.background:                               #5f005f
+dmenu.foreground:                               #bbbbbb
+dmenu.selbackground:                            #8700af
+dmenu.selforeground:                            #eeeeee
+
 !================================ st relatd ====================================
-! st*font:                                        FiraMono Nerd Font:size=10:antialias=true
-st*font:                                        GoMono Nerd Font:size=16:antialias=true
+st*font:                                        GoMono Nerd Font:size=10:antialias=true
+st*alpha:                                       0.95
 st*borderpx:                                    0
 st*termname:                                    st-256color
 st*shell:                                       /bin/sh
@@ -45,14 +80,25 @@ st*color14:                                     S_base1
 st*color15:                                     S_base3
 !-- Change Theme here - Light/Dark
 !-- Dark
-! st.background:                                  S_base03
-! st.foreground:                                  S_base0
+!st.background:                                 S_base03
+!st.foreground:                                 S_base0
 !-- Light
 st.background:                                  S_base3
 st.foreground:                                  S_base00
 
+!================================ slock relatd =================================
+slock.color0:                                   #8700af
+slock.color1:                                   #dc322f
+slock.color3:                                   #550000
+slock.color4:                                   #af87d7
+slock.fontname:                                 10x20
+slock.fontcolor:                                #afafaf
+
+!================================ Xcursor relatd ===============================
+Xcursor.theme:                                  ComixCursors-Blue
+Xcursor.size:                                   16
+
 !================================ XTerm related ================================
-! XTerm.vt100.faceName:                           FiraMono Nerd Font:size=10:antialias=true
 XTerm*termName:                                 xterm-256color
 XTerm*cursorColor:                              #00ff00
 XTerm*pointerShape:                             hand2
@@ -88,7 +134,6 @@ XTerm*color14:                                  S_base1
 XTerm*color15:                                  S_base3
 
 !================================ UXTerm related ===============================
-! UXTerm.vt100.faceName:                           FiraMono Nerd Font:size=10:antialias=true
 UXTerm*termName:                                xterm-256color
 UXTerm*cursorColor:                             #00ff00
 UXTerm*pointerShape:                            hand2
@@ -131,7 +176,7 @@ XEyes*outline:                                  #101010
 XEyes*center:                                   #ffffff
 
 !================================ XMenu related ================================
-xmenu.font:                                     FiraMono Nerd Font:size=14:antialias=true
+xmenu.font:                                     FiraMono Nerd Font:size=10:antialias=true
 xmenu.background:                               #5f005f
 xmenu.foreground:                               #bbbbbb
 xmenu.selbackground:                            #8700af
@@ -140,7 +185,7 @@ xmenu.border:                                   #8700af
 xmenu.separator:                                #af87d7
 xmenu.gap:                                      10
 xmenu.width:                                    100
-xmenu.height:                                   48
+xmenu.height:                                   28
 xmenu.borderWidth:                              1
 xmenu.separatorWidth:                           30
 
@@ -166,5 +211,20 @@ xmenu.separatorWidth:                           30
 ! .Xmessage.form.Command.foreground:              #9d9d9d
 ! .Xmessage.form.Command.background:              black
 .Xmessage.form.Command.shapeStyle:              Rectangle
+
+!================================ herbe ========================================
+herbe.background_color:                         #3e3e3e
+herbe.border_color:                             #ececec
+herbe.font_color:                               #ececec
+herbe.font_pattern:                             monospace:size=10
+herbe.line_spacing:                             5
+herbe.padding:                                  15
+herbe.width:                                    450
+herbe.border_size:                              2
+herbe.pos_x:                                    30
+herbe.pos_y:                                    60
+! 0 = TOP_LEFT, 1 = TOP_RIGHT, 2 = BOTTOM_LEFT, 3 = BOTTOM_RIGHT
+herbe.corner:                                   2
+herbe.duration:                                 5
 
 !================================ Koniec =======================================

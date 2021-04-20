@@ -2,4 +2,4 @@
 Encoding=UTF-8
 Name=WieWaldi's X11
 Comment=Starts suckless Dynamic Window Manager
-Exec=~/.local/bin/dwm_xsession
+Exec=~/.local/bin/dwm-xsession

@@ -43,7 +43,6 @@ surf: $(OBJ) $(COBJ)
 clean:
 	rm -f surf $(OBJ) $(COBJ)
 	rm -f libsurf-webext.so $(WEBEXTOBJ)
-	rm -f config.h
 
 distclean: clean
 	rm -f config.h surf-$(VERSION).tar.gz
@@ -59,7 +58,9 @@ dist: distclean
 
 install: all
 	mkdir -p $(HOME)/.config/surf
+	mkdir -p $(HOME)/.config/surf/styles
 	cp -f bookmarks $(HOME)/.config/surf
+	cp -f default.css $(HOME)/.config/surf/styles
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp -f surf $(DESTDIR)$(PREFIX)/bin
 	cp -f surf-open.sh $(DESTDIR)$(PREFIX)/bin

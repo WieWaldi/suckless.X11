@@ -1,0 +1,99 @@
+.TH STW 1 stw
+.SH NAME
+stw \- simple X text window
+.SH SYNOPSIS
+.B stw
+.RB [ \-t ]
+.RB [ \-x
+.IR pos ]
+.RB [ \-y
+.IR pos ]
+.RB [ \-X
+.IR pos ]
+.RB [ \-Y
+.IR pos ]
+.RB [ \-a
+.IR align ]
+.RB [ \-f
+.IR foreground ]
+.RB [ \-b
+.IR background ]
+.RB [ \-F
+.IR font ]
+.RB [ \-B
+.IR borderpx ]
+.RB [ \-p
+.IR period ]
+.RB [ \-A
+.IR alpha ]
+.IR command
+.RI [ arg ...]
+.SH DESCRIPTION
+.B stw
+is a simple X text window.
+.SH OPTIONS
+.TP
+.BI \-t
+place window on top
+.TP
+.BI \-x " pos"
+window x position
+.TP
+.BI \-y " pos"
+window y position
+.TP
+.BI \-X " pos"
+window X position
+.TP
+.BI \-Y " pos"
+window Y position
+.TP
+.BI \-a " align"
+text alignment.
+Must be one of {lrc} for left, right and centered
+.TP
+.BI \-f " foreground"
+foreground window color in hex or as a color name
+.TP
+.BI \-b " background"
+background window color in hex or as a color name
+.TP
+.BI \-F " font"
+text font in format, supported by fontconfig
+.TP
+.BI \-B " borderpx"
+gap between window border and text in pixels
+.TP
+.BI \-p " period"
+period between command runs in seconds. 0 will completely disable subcommand restarts and -1 will make them instant. In any case a click on a window will still immediately restart subcommand
+.TP
+.BI \-A " alpha"
+window background alpha value
+.TP
+.I command [arg...]
+command will be started with provided arguments and it's output
+will be displayed in the window
+
+.SH POSITION
+Use -x, -y options to position stw window corner. -X, -Y options to position window relative to width and height. For example you can use
+
+    -x 50% -y 50% -X -50% -Y -50%
+
+to position stw in the center of the screen.
+
+.SH EXAMPLES
+
+Show current date in the center of the screen:
+
+    $ stw -p 1 -x 50% -y 50% -X -50% -Y -50% -F monospace:size=20 date
+
+Show updated packages:
+
+    $ stw -p 0 sh -c 'xbps-install -nSu | cut -d" " -f1 | head -n 20'
+
+.SH AUTHORS
+See the LICENSE file for the authors.
+.SH LICENSE
+See the LICENSE file for the terms of redistribution.
+.SH SEE ALSO
+.BR watch (1)

@@ -6,8 +6,21 @@ prepare.log
 *.o
 *.so*
 
-# suckless.org
-sselp/sselp
+dwm/config.h
+dwm/dwm
+st/config.h
+st/st
+dmenu/config.h
+dmenu/dmenu
+dunst/config.h
+slock/config.h
+slock/slock
+surf/config.h
+surf/surf
+stw/stw
+sxiv/config.h
+tabbed/config.h
+xmenu/config.h
 
 # xdotool
 xdotool/xdo_version.h
@@ -32,6 +45,7 @@ maim/Makefile
 maim/cmake_install.cmake
 maim/CMakeCache.txt
 maim/bin/maim
+maim/install_manifest.txt
 
 #dunst
 dunst/*.o

@@ -6,6 +6,7 @@
 
 #include <ctype.h>
 #include <errno.h>
+#include <math.h>
 #include <grp.h>
 #include <pwd.h>
 #include <stdarg.h>
@@ -15,19 +16,26 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <X11/extensions/Xrandr.h>
+#include <X11/extensions/Xinerama.h>
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/XKBlib.h>
+#include <X11/Xresource.h>
 
 #include "arg.h"
 #include "util.h"
 
 char *argv0;
 
+/* global count to prevent repeated error messages */
+int count_error = 0;
+
 enum {
 	INIT,
 	INPUT,
 	FAILED,
+	CAPS,
 	NUMCOLS
 };
 
@@ -43,6 +51,19 @@ struct xrandr {
 	int evbase;
 	int errbase;
 };
+
+/* Xresources preferences */
+enum resource_type {
+	STRING = 0,
+	INTEGER = 1,
+	FLOAT = 2
+};
+
+typedef struct {
+	char *name;
+	enum resource_type type;
+	void *dst;
+} ResourcePref;
 
 #include "config.h"
 
@@ -62,23 +83,58 @@ die(const char *errstr, ...)
 #include <linux/oom.h>
 
 static void
+dontkillme(void)
+{
+	FILE *f;
+	const char oomfile[] = "/proc/self/oom_score_adj";
+
+	if (!(f = fopen(oomfile, "w"))) {
+		if (errno == ENOENT)
+			return;
+		die("slock: fopen %s: %s\n", oomfile, strerror(errno));
+	}
+	fprintf(f, "%d", OOM_SCORE_ADJ_MIN);
+	if (fclose(f)) {
+		if (errno == EACCES)
+			die("slock: unable to disable OOM killer. "
+			    "Make sure to suid or sgid slock.\n");
+		else
+			die("slock: fclose %s: %s\n", oomfile, strerror(errno));
+	}
+}
+#endif
+
+static void
 writemessage(Display *dpy, Window win, int screen)
 {
-	int len, line_len, width, height, i, j, k, tab_replace, tab_size;
+	int len, line_len, width, height, s_width, s_height, i, j, k, tab_replace, tab_size;
 	XGCValues gr_values;
 	XFontStruct *fontinfo;
 	XColor color, dummy;
+	XineramaScreenInfo *xsi;
 	GC gc;
-	fontinfo = XLoadQueryFont(dpy, text_size);
+	fontinfo = XLoadQueryFont(dpy, font_name);
+
+	if (fontinfo == NULL) {
+		if (count_error == 0) {
+			fprintf(stderr, "slock: Unable to load font \"%s\"\n", font_name);
+			fprintf(stderr, "slock: Try listing fonts with 'slock -f'\n");
+			count_error++;
+		}
+		return;
+	}
+
 	tab_size = 8 * XTextWidth(fontinfo, " ", 1);
 
 	XAllocNamedColor(dpy, DefaultColormap(dpy, screen),
-			 text_color, &color, &dummy);
+		 text_color, &color, &dummy);
 
 	gr_values.font = fontinfo->fid;
 	gr_values.foreground = color.pixel;
 	gc=XCreateGC(dpy,win,GCFont+GCForeground, &gr_values);
 
+	/*  To prevent "Uninitialized" warnings. */
+	xsi = NULL;
 
 	/*
 	 * Start formatting and drawing text
@@ -102,8 +158,17 @@ writemessage(Display *dpy, Window win, int screen)
 	if (line_len == 0)
 		line_len = len;
 
-	height = DisplayHeight(dpy, screen)*3/7 - (k*20)/3;
-	width  = (DisplayWidth(dpy, screen) - XTextWidth(fontinfo, message, line_len))/2;
+	if (XineramaIsActive(dpy)) {
+		xsi = XineramaQueryScreens(dpy, &i);
+		s_width = xsi[0].width;
+		s_height = xsi[0].height;
+	} else {
+		s_width = DisplayWidth(dpy, screen);
+		s_height = DisplayHeight(dpy, screen);
+	}
+
+	height = s_height*3/7 - (k*20)/3;
+	width  = (s_width - XTextWidth(fontinfo, message, line_len))/2;
 
 	/* Look for '\n' and print the text between them. */
 	for (i = j = k = 0; i <= len; i++) {
@@ -123,30 +188,13 @@ writemessage(Display *dpy, Window win, int screen)
 			}
 		}
 	}
+
+	/* xsi should not be NULL anyway if Xinerama is active, but to be safe */
+	if (XineramaIsActive(dpy) && xsi != NULL)
+			XFree(xsi);
 }
 
 
-static void
-dontkillme(void)
-{
-	FILE *f;
-	const char oomfile[] = "/proc/self/oom_score_adj";
-
-	if (!(f = fopen(oomfile, "w"))) {
-		if (errno == ENOENT)
-			return;
-		die("slock: fopen %s: %s\n", oomfile, strerror(errno));
-	}
-	fprintf(f, "%d", OOM_SCORE_ADJ_MIN);
-	if (fclose(f)) {
-		if (errno == EACCES)
-			die("slock: unable to disable OOM killer. "
-			    "Make sure to suid or sgid slock.\n");
-		else
-			die("slock: fclose %s: %s\n", oomfile, strerror(errno));
-	}
-}
-#endif
 
 static const char *
 gethash(void)
@@ -195,15 +243,19 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 {
 	XRRScreenChangeNotifyEvent *rre;
 	char buf[32], passwd[256], *inputhash;
-	int num, screen, running, failure, oldc;
-	unsigned int len, color;
+	int caps, num, screen, running, failure, oldc;
+	unsigned int len, color, indicators;
 	KeySym ksym;
 	XEvent ev;
 
 	len = 0;
+	caps = 0;
 	running = 1;
 	failure = 0;
 	oldc = INIT;
+
+	if (!XkbGetIndicatorState(dpy, XkbUseCoreKbd, &indicators))
+		caps = indicators & 1;
 
 	while (running && !XNextEvent(dpy, &ev)) {
 		if (ev.type == KeyPress) {
@@ -244,6 +296,9 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 				if (len)
 					passwd[--len] = '\0';
 				break;
+			case XK_Caps_Lock:
+				caps = !caps;
+				break;
 			default:
 				if (num && !iscntrl((int)buf[0]) &&
 				    (len + num < sizeof(passwd))) {
@@ -252,7 +307,7 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 				}
 				break;
 			}
-			color = len ? INPUT : ((failure || failonclear) ? FAILED : INIT);
+			color = len ? (caps ? CAPS : INPUT) : (failure || failonclear ? FAILED : INIT);
 			if (running && oldc != color) {
 				for (screen = 0; screen < nscreens; screen++) {
 					XSetWindowBackground(dpy,
@@ -363,10 +418,61 @@ lockscreen(Display *dpy, struct xrandr *rr, int screen)
 	return NULL;
 }
 
+int
+resource_load(XrmDatabase db, char *name, enum resource_type rtype, void *dst)
+{
+	char **sdst = dst;
+	int *idst = dst;
+	float *fdst = dst;
+
+	char fullname[256];
+	char fullclass[256];
+	char *type;
+	XrmValue ret;
+
+	snprintf(fullname, sizeof(fullname), "%s.%s", "slock", name);
+	snprintf(fullclass, sizeof(fullclass), "%s.%s", "Slock", name);
+	fullname[sizeof(fullname) - 1] = fullclass[sizeof(fullclass) - 1] = '\0';
+
+	XrmGetResource(db, fullname, fullclass, &type, &ret);
+	if (ret.addr == NULL || strncmp("String", type, 64))
+		return 1;
+
+	switch (rtype) {
+	case STRING:
+		*sdst = ret.addr;
+		break;
+	case INTEGER:
+		*idst = strtoul(ret.addr, NULL, 10);
+		break;
+	case FLOAT:
+		*fdst = strtof(ret.addr, NULL);
+		break;
+	}
+	return 0;
+}
+
+void
+config_init(Display *dpy)
+{
+	char *resm;
+	XrmDatabase db;
+	ResourcePref *p;
+
+	XrmInitialize();
+	resm = XResourceManagerString(dpy);
+	if (!resm)
+		return;
+
+	db = XrmGetStringDatabase(resm);
+	for (p = resources; p < resources + LEN(resources); p++)
+		resource_load(db, p->name, p->type, p->dst);
+}
+
 static void
 usage(void)
 {
-	die("usage: slock [-v] [-m message] [cmd [arg ...]]\n");
+	die("usage: slock [-v] [-f] [-m message] [cmd [arg ...]]\n");
 }
 
 int
@@ -379,7 +485,9 @@ main(int argc, char **argv) {
 	gid_t dgid;
 	const char *hash;
 	Display *dpy;
-	int s, nlocks, nscreens;
+	int i, s, nlocks, nscreens;
+	int count_fonts;
+	char **font_names;
 
 	ARGBEGIN {
 	case 'v':
@@ -388,6 +496,14 @@ main(int argc, char **argv) {
 	case 'm':
 		message = EARGF(usage());
 		break;
+	case 'f':
+		if (!(dpy = XOpenDisplay(NULL)))
+			die("slock: cannot open display\n");
+		font_names = XListFonts(dpy, "*", 10000 /* list 10000 fonts*/, &count_fonts);
+		for (i=0; i<count_fonts; i++) {
+			fprintf(stderr, "%s\n", *(font_names+i));
+		}
+		return 0;
 	default:
 		usage();
 	} ARGEND
@@ -423,6 +539,8 @@ main(int argc, char **argv) {
 		die("slock: setgid: %s\n", strerror(errno));
 	if (setuid(duid) < 0)
 		die("slock: setuid: %s\n", strerror(errno));
+
+	config_init(dpy);
 
 	/* check for Xrandr support */
 	rr.active = XRRQueryExtension(dpy, &rr.evbase, &rr.errbase);
