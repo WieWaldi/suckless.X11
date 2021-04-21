@@ -49,7 +49,7 @@ get_Distribution () {
         exit 1
 
     elif [[ "${os}" = "FreeBSD" ]]; then
-        echo -e "Error: I'm so sorry, but SunOS/Solaris is currently not supported"
+        echo -e "Warning: Support for FreeBSD is currently ridimentary."
         exit 1
 
     fi
