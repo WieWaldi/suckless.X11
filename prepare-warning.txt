@@ -15,4 +15,7 @@
 |    - Arch                                                               |
 |    - CentOS 7/8                                                         |
 |    - Fedora 31/32/33                                                    |
+|                                                                         |
+|   Please don't try to run this script on anything other than these      |
+|   mentioned distribution.                                               |
 +-------------------------------------------------------------------------+
