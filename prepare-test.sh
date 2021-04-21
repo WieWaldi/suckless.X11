@@ -33,7 +33,7 @@ display_Warning () {
 }
 
 get_User () {
-    if ! [[ $(/bin/id -u) = 0 ]]; then
+    if ! [[ $(id -u) = 0 ]]; then
         printf "\n This script must be run as root.\n\n" 
         exit 1
     fi
