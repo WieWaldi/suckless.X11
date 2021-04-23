@@ -16,7 +16,7 @@ display_Warning () {
     /bin/clear
     /bin/cat ${cdir}/prepare-warning.txt
     while true; do
-        printf "\n\nDo you want to proceed? (Yes|No) >>"
+        printf "\n\nDo you want to proceed? (Yes|No) >> "
         read antwoord
         case ${antwoord} in
             [yY] | [yY][Ee][Ss] )

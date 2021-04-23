@@ -73,8 +73,7 @@ pulseaudio-libs-devel
 pulseaudio-libs-glib2
 pulseaudio-module-x11
 pulseaudio-utils
-python38
-python38-devel
+python3
 samba-client
 samba-common
 sddm
