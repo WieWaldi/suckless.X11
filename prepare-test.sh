@@ -75,7 +75,7 @@ get_GoogleChrome () {
                 InstallGoogleChrome=yes
                 break
             ;;
-            [nN] | [n|N][O|o] )
+            [nN] | [nN][Oo] )
                 InstallGoogleChrome=no
                 break
             ;;
@@ -95,7 +95,7 @@ get_VirtualBox () {
                 InstallVirtualBox=yes
                 break
             ;;
-            [nN] | [n|N][O|o] )
+            [nN] | [nN][Oo] )
                 InstallVirtualBox=no
                 break
             ;;
@@ -108,61 +108,73 @@ get_VirtualBox () {
 
 install_GoogleChrome() {
     echo -e "\nInstalling Repository: google-chrome"
-    # cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d
-    # yum install -y google-chrome-stable >> ${logfile} 2>&1
+    cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d
+    dnf install -y google-chrome-stable >> ${logfile} 2>&1
 }
 
 install_VirtualBox() {
     echo -e "\nInstalling Repository: VirtualBox"
-    # cp ${cdir}/etc/yum.repos.d/virtualbox.repo /etc/yum.repos.d
-    # yum install -y VirtualBox-6.0 >> ${logfile} 2>&1
+    cp ${cdir}/etc/yum.repos.d/virtualbox.repo /etc/yum.repos.d
+    dnf install -y VirtualBox-6.0 >> ${logfile} 2>&1
 }
 
 disable_SELINUX () {
     echo "Disabling SELinux."
-    # sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
+    sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
 }
 
 copy_Files () {
     echo "Copying files."
-    # cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d
-    # cp ${cdir}/etc/sddm.conf /etc
-    # cp ${cdir}/X.org.files/dwm.desktop /usr/share/xsessions
-    # cp ${cdir}/X.org.files/xinit-compat.desktop /usr/share/xsessions
+    cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d
+    cp ${cdir}/etc/sddm.conf /etc
+    cp ${cdir}/X.org.files/dwm.desktop /usr/share/xsessions
+    cp ${cdir}/X.org.files/xinit-compat.desktop /usr/share/xsessions
 }
 
 install_Fedora3x () {
     echo "Fedora"
+    echo "Installing Repository: RPM Fusion for Fedora - Free - Updates"
+    dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm >> ${logfile} 2>&1
+    echo "Installing Repository: RPM Fusion for Fedora - Nonfree - Updates"
+    dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm >> ${logfile} 2>&1
+    IFS=$'\r\n' GLOBIGNORE='*' command eval  'packages=($(cat ./packages.Fedora3x))'
+    echo "Installing the following packages:"
+    echo ${packages[@]}
+    dnf install -y ${packages[@]} >> ${logfile} 2>&1
+    systemctl enable sddm
+    systemctl set-default graphical.target
 }
  
 install_CentOS_7 () {
-    echo -e "\nInstalling Repository: Extra Packages for Enterprise Linux 7"
-    # yum install -y epel-release >> ${logfile} 2>&1
-    echo -e "\nInstalling Repository: RPM Fusion for EL 8 - Free - Updates"
-    # yum localinstall -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm >> ${logfile} 2>&1
-    echo -e "\nInstalling Repository: RPM Fusion for EL 8 - Nonfree - Updates"
-    # yum localinstall -y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm >> ${logfile} 2>&1
+    echo "Installing Repository: Extra Packages for Enterprise Linux 7"
+    yum install -y epel-release >> ${logfile} 2>&1
+    echo "Installing Repository: RPM Fusion for EL 8 - Free - Updates"
+    yum localinstall -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm >> ${logfile} 2>&1
+    echo -e "Installing Repository: RPM Fusion for EL 8 - Nonfree - Updates"
+    yum localinstall -y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm >> ${logfile} 2>&1
     IFS=$'\r\n' GLOBIGNORE='*' command eval  'packages=($(cat ./packages.CentOS7))'
-    echo -e "\nInstalling the following packages:"
+    echo "Installing the following packages:"
     echo ${packages[@]}
-    # yum install -y ${packages[@]} >> ${logfile} 2>&1
+    yum install -y ${packages[@]} >> ${logfile} 2>&1
+    systemctl enable sddm
+    systemctl set-default graphical.target
 }
 
 install_CentOS_8 () {
-    echo -e "\nInstalling Repository: CentOS-8 - PowerTools"
-    # dnf config-manager --enable PowerTools >> ${logfile} 2>&1
-    echo -e "\nInstalling Repository: Extra Packages for Enterprise Linux 8"
-    # dnf install -y epel-release >> ${logfile} 2>&1
-    echo -e "\nInstalling Repository: RPM Fusion for EL 8 - Free - Updates"
-    # dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm >> ${logfile} 2>&1
-    echo -e "\nInstalling Repository: RPM Fusion for EL 8 - Nonfree - Updates"
-    # dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm >> ${logfile} 2>&1
+    echo "Installing Repository: CentOS-8 - PowerTools"
+    dnf config-manager --enable PowerTools >> ${logfile} 2>&1
+    echo "Installing Repository: Extra Packages for Enterprise Linux 8"
+    dnf install -y epel-release >> ${logfile} 2>&1
+    echo "Installing Repository: RPM Fusion for EL 8 - Free - Updates"
+    dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm >> ${logfile} 2>&1
+    echo "Installing Repository: RPM Fusion for EL 8 - Nonfree - Updates"
+    dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm >> ${logfile} 2>&1
     IFS=$'\r\n' GLOBIGNORE='*' command eval  'packages=($(cat ./packages.CentOS8))'
-    echo -e "\nInstalling the following packages:"
+    echo "Installing the following packages:"
     echo ${packages[@]}
-    # dnf install -y ${packages[@]} >> ${logfile} 2>&1
-    # systemctl enable sddm
-    # systemctl set-default graphical
+    dnf install -y ${packages[@]} >> ${logfile} 2>&1
+    systemctl enable sddm
+    systemctl set-default graphical.target
 }
 
 # +----- Main --------------------------------------------------------------+
@@ -178,22 +190,22 @@ if [[ "${os}" = "Linux" ]]; then
     case ${distribution} in
         "Fedora" )
             if [[ "${version}" != 3* ]]; then
-                echo -e "Error: This is not a supported version of CentOS"
+                echo -e "Error: This is not a supported version of Fedora"
                 exit 1
             fi
             get_GoogleChrome
             get_VirtualBox
             disable_SELINUX
             copy_Files
-            install_Fedora
+            install_Fedora3x
             if [[ "${InstallGoogleChrome}" = "yes" ]]; then
                 echo "Installing Google Chrome as well."
-                # install_GoogleChrome
+                install_GoogleChrome
             fi
 
             if [[ "${InstallVirtualBox}" = "yes" ]]; then
                 echo "Installing VirtualBox as well."
-                # install_VirtualBox
+                install_VirtualBox
             fi
         ;;
         "CentOS Linux" )
@@ -211,20 +223,21 @@ if [[ "${os}" = "Linux" ]]; then
                 install_CentOS_8
             fi
             if [[ "${InstallGoogleChrome}" = "yes" ]]; then
-                echo "\n Installing Google Chrome as well.\n"
-                # install_GoogleChrome
+                echo "Installing Google Chrome as well.\n"
+                install_GoogleChrome
             fi
 
             if [[ "${InstallVirtualBox}" = "yes" ]]; then
-                echo "\n Installing VirtualBox as well.\n"
-                # install_VirtualBox
+                echo "Installing VirtualBox as well.\n"
+                install_VirtualBox
             fi
         ;;
         "Arch Linux" )
             echo "Arch Linux"
         ;;
         * )
-            echo "Somethings wrong"
+            echo "This seems to be an unsupported Linux distribution."
+            exit 1
         ;;
     esac
 elif [[ "${os}" = "AIX" ]]; then
@@ -245,7 +258,7 @@ elif [[ "${os}" = "FreeBSD" ]]; then
 fi
 
 
-echo "\n I'm done.\n\n"
+echo -e "I'm done.\n\n"
 exit 0
 
 

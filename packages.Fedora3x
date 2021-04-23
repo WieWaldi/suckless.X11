@@ -5,11 +5,11 @@ alsa-utils
 asciidoc
 automake
 bind-utils
+chrony
 cifs-utils
 cmake
 dbus-devel
 dbus-x11
-dnf
 elfutils-libelf-devel
 exiv2
 ffmpegthumbnailer
@@ -64,8 +64,6 @@ ncurses-devel
 ncurses-term
 net-tools
 ninja-build
-ntp
-ntpdate
 pango-devel
 patch
 pavucontrol
@@ -83,6 +81,7 @@ sddm
 tar
 thunar
 uthash-devel
+vifm
 vim
 webkitgtk4-devel
 wget
