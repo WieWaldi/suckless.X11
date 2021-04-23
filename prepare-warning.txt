@@ -1,5 +1,5 @@
 +-------------------------------------------------------------------------+
-| WieWaldi's suckless.CentOS                                              |
+| WieWaldi's suckless.X11 prepare.sh                                      |
 +-------------------------------------------------------------------------+
 | Copyright © 2020 Waldemar Schroeer                                      |
 |                  waldemar.schroeer(at)rz-amper.de                       |
