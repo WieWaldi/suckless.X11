@@ -127,7 +127,7 @@ enable_SDDM () {
     statusdm="$(systemctl is-active display-manager.service)"
     if [[ "${statusdm}" = "active" ]]; then
         echo "Disabling current Display Manager."
-        systemctl disable-manager.service
+        systemctl disable display-manager.service
     fi
     echo "Enabling SDDM."
     systemctl enable sddm.service
