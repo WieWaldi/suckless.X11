@@ -141,7 +141,6 @@ copy_Files () {
 }
 
 install_Fedora3x () {
-    echo "Fedora"
     echo "Installing Repository: RPM Fusion for Fedora - Free - Updates"
     dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm >> ${logfile} 2>&1
     echo "Installing Repository: RPM Fusion for Fedora - Nonfree - Updates"
