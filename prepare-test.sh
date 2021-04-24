@@ -128,8 +128,9 @@ enable_SDDM () {
         echo "Disabling current Display Manager."
         systemctl disable-manager.service
     fi
-    systemctl enable sddm.service
     echo "Enabling SDDM."
+    systemctl enable sddm.service
+    systemctl set-default graphical.target
 }
 
 copy_Files () {
@@ -149,8 +150,6 @@ install_Fedora3x () {
     echo "Installing the following packages:"
     echo ${packages[@]}
     dnf install -y ${packages[@]} >> ${logfile} 2>&1
-    systemctl enable sddm
-    systemctl set-default graphical.target
 }
  
 install_CentOS_7 () {
@@ -164,8 +163,6 @@ install_CentOS_7 () {
     echo "Installing the following packages:"
     echo ${packages[@]}
     yum install -y ${packages[@]} >> ${logfile} 2>&1
-    systemctl enable sddm
-    systemctl set-default graphical.target
 }
 
 install_CentOS_8 () {
@@ -181,8 +178,6 @@ install_CentOS_8 () {
     echo "Installing the following packages:"
     echo ${packages[@]}
     dnf install -y ${packages[@]} >> ${logfile} 2>&1
-    systemctl enable sddm
-    systemctl set-default graphical.target
 }
 
 # +----- Main --------------------------------------------------------------+
@@ -206,6 +201,7 @@ if [[ "${os}" = "Linux" ]]; then
             disable_SELINUX
             copy_Files
             install_Fedora3x
+            enable_SDDM
             if [[ "${InstallGoogleChrome}" = "yes" ]]; then
                 echo "Installing Google Chrome as well."
                 install_GoogleChrome
@@ -225,6 +221,7 @@ if [[ "${os}" = "Linux" ]]; then
             get_VirtualBox
             disable_SELINUX
             copy_Files
+            enable_SDDM
             if [[ "${version}" = "7" ]]; then
                 install_CentOS_7
             elif [[ "${version}" = "8" ]]; then
