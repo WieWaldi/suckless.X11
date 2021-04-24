@@ -107,13 +107,13 @@ get_VirtualBox () {
 }
 
 install_GoogleChrome() {
-    echo -e "\nInstalling Repository: google-chrome"
+    echo "Installing Repository: google-chrome"
     cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d
     dnf install -y google-chrome-stable >> ${logfile} 2>&1
 }
 
 install_VirtualBox() {
-    echo -e "\nInstalling Repository: VirtualBox"
+    echo "Installing Repository: VirtualBox"
     cp ${cdir}/etc/yum.repos.d/virtualbox.repo /etc/yum.repos.d
     dnf install -y VirtualBox-6.0 >> ${logfile} 2>&1
 }
@@ -121,6 +121,15 @@ install_VirtualBox() {
 disable_SELINUX () {
     echo "Disabling SELinux."
     sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
+}
+
+enable_SDDM () {
+    if [[ "$(systemctl is-active display-manager.service)" = "active" ]]; then
+        echo "Disabling current Display Manager."
+        systemctl disable-manager.service
+    fi
+    systemctl enable sddm.service
+    echo "Enabling SDDM."
 }
 
 copy_Files () {
