@@ -124,7 +124,8 @@ disable_SELINUX () {
 }
 
 enable_SDDM () {
-    if [[ "$(systemctl is-active display-manager.service)" = "active" ]]; then
+    statusdm="$(systemctl is-active display-manager.service)"
+    if [[ "${statusdm}" = "active" ]]; then
         echo "Disabling current Display Manager."
         systemctl disable-manager.service
     fi
