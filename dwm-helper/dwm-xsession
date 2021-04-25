@@ -11,6 +11,12 @@
 # ---------------------------------------------------------------------------
 PATH=$PATH:~/.local/bin
 
+export XDG_CONFIG_DIRS=/etc/xdg
+export XDG_DATA_DIRS=/usr/local/share:/usr/share
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_CACHE_HOME=$HOME/.cache
+export XDG_CONFIG_HOME=$HOME/.config
+
 # X11 related stuff
 # ---------------------------------------------------------------------------
 [[ -f ${HOME}/.Xresources ]] && xrdb -merge -I$HOME ${HOME}/.Xresources
@@ -27,21 +33,6 @@ PATH=$PATH:~/.local/bin
 /bin/xset -dpms
 /bin/xrandr --dpi 96
 
-# Start notification service
-# ---------------------------------------------------------------------------
-# /usr/local/bin/dunst & > /dev/null 2>&1 &
-
-# Start my stuff
-# ---------------------------------------------------------------------------
-# amixer -q -D pulse sset Master 25%
-# ${HOME}/.local/bin/st &
-# ${HOME}/.local/bin/st &
-
-
 # Start window manager
 # ---------------------------------------------------------------------------
-# ${HOME}/.local/bin/xclickroot -r ${HOME}/.local/bin/xmenu.sh &
-# /bin/dbus-launch ${HOME}/.local/bin/compton &
-# ${HOME}/.local/bin/dwm_status &
-# ${HOME}/.local/bin/rotwall ${HOME}/.local/share/wallpapers 300 &
 exec ${HOME}/.local/bin/dwm 2> ${HOME}/tmp/dwm.log
