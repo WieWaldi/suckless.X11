@@ -13,7 +13,7 @@
 /usr/local/bin/dunst & > /dev/null 2>&1 &
 amixer -q -D pulse sset Master 25%
 ${HOME}/.local/bin/xclickroot -r ${HOME}/.local/bin/xmenu.sh &
-/bin/dbus-launch ${HOME}/.local/bin/compton &
+/bin/dbus-launch ${HOME}/.local/bin/picom --experimental-backends &
 ${HOME}/.local/bin/dwm-status &
 ${HOME}/.local/bin/rotwall ${HOME}/.local/share/wallpapers 300 &
 
