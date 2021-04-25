@@ -28,8 +28,8 @@ dwm.resizehints:                                1
 dwm.nmaster:                                    1
 dwm.showbar:                                    1
 dwm.topbar:                                     1
-dwm.vertpad:                                    3
-dwm.sidepad:                                    3
+dwm.vertpad:                                    0
+dwm.sidepad:                                    0
 dwm.normfgcolor:                                #bbbbbb
 dwm.normbgcolor:                                #222222
 dwm.normbordercolor:                            #444444
@@ -48,7 +48,7 @@ dwm.infonormfgcolor:                            #eeeeee
 dwm.infonormbgcolor:                            #5f005f
 
 !================================ dmneu related ================================
-dmenu.font:                                     FiraMono Nerd Font:size=8:antialias=true
+dmenu.font:                                     FiraMono Nerd Font:size=10:antialias=true
 dmenu.background:                               #5f005f
 dmenu.foreground:                               #bbbbbb
 dmenu.selbackground:                            #8700af
