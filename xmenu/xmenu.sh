@@ -31,6 +31,8 @@ Office
 System Application
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Compton (start)				/bin/dbus-launch ${HOME}/.local/bin/compton
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Compton (kill)				/bin/pkill compton
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Picom (start)				${HOME}/.local/bin/picom --experimental-backends
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Picom (kill)				/bin/pkill picom
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-gear.png					X.org Client Properties		${HOME}/.local/bin/xclientprop.sh
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xsensors.png				XSensors					/bin/xsensors
 
