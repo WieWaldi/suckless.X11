@@ -47,6 +47,13 @@ clear_Logfile () {
     fi
 }
 
+get_Hostname () {
+    while true; do
+        printf "\nHostname: >> "
+        read gethostname
+    done
+}
+
 get_OperatingSystem () {
     os=$(uname -s)
     kernel=$(uname -r)
@@ -151,6 +158,8 @@ install_Fedora3x () {
     echo "Installing the following packages:"
     echo ${packages[@]}
     dnf install -y ${packages[@]} >> ${logfile} 2>&1
+    echo "Setting hostname to: ${gethostname}"
+    hostnamectl set-hostname ${gethostname}
 }
  
 install_CentOS_7 () {
@@ -199,6 +208,7 @@ if [[ "${os}" = "Linux" ]]; then
             fi
             get_GoogleChrome
             get_VirtualBox
+            get_Hostname
             disable_SELINUX
             copy_Files
             install_Fedora3x
