@@ -11,7 +11,7 @@ mplayer=/bin/mplayer
 mpv=/bin/mpv
 st=~/.local/bin/st
 url=$1
-antwoord="$( printf "Bayern 2\nBayern 3\nBayern 5\nDEFJAY\nMDR Aktuell\nMDR Jump\nMDR Jump in the Mix\nZDF\nZDF neo\nZDF info\nIPCam cam1 (HD)\nIPCam cam1 (SD)\n" | dmenu "$@" )"
+antwoord="$( printf "Bayern 2\nBayern 3\nBayern 5\nDEFJAY\nMDR Aktuell\nMDR Jump\nMDR Jump in the Mix\nARD (SD)\nARD (HD)\nARTE (SD)\nARTE (HD)\nZDF (SD)\nZDF (HD)\nZDF neo (SD)\nZDF neo (HD)\nZDF info (SD)\nZDF info (HD)\nIPCam cam1 (HD)\nIPCam cam1 (SD)\n" | dmenu "$@" )"
 
 case ${antwoord} in
     "Bayern 2")
@@ -35,20 +35,41 @@ case ${antwoord} in
     "MDR Jump in the Mix")
     ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor -playlist http://avw.mdr.de/streams/284321-2_mp3_high.m3u
     ;;
-    "ZDF")
-    ${mpv} https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8 &
+    "ARD (SD)")
+    ${mpv} --vid=5 https://mcdn.daserste.de/daserste/de/master.m3u8
     ;;
-    "ZDF neo")
-    ${mpv} https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8 &
+    "ARD (HD)")
+    ${mpv} --vid=1 https://mcdn.daserste.de/daserste/de/master.m3u8
     ;;
-    "ZDF info")
-    ${mpv} https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8 &
+    "ARTE (SD)")
+    ${mpv} --vid=1 https://artelive-lh.akamaihd.net/i/artelive_de@393591/master.m3u8
+    ;;
+    "ARTE (HD)")
+    ${mpv} --vid=9 https://artelive-lh.akamaihd.net/i/artelive_de@393591/master.m3u8
+    ;;
+    "ZDF (SD)")
+    ${mpv} --vid=1 https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8 &
+    ;;
+    "ZDF (HD)")
+    ${mpv} --vid=7 https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8 &
+    ;;
+    "ZDF neo (SD)")
+    ${mpv} --vid=1 https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8 &
+    ;;
+    "ZDF neo (HD)")
+    ${mpv} --vid=7 https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8 &
+    ;;
+    "ZDF info (SD)")
+    ${mpv} --vid=1 https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8 &
+    ;;
+    "ZDF info (HD)")
+    ${mpv} --vid=7 https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8 &
     ;;
     "IPCam cam1 (HD)")
-    ${mpv} rtsp://cam1.domain.de:554/1 &
+    ${mpv} rtsp://cam1.rz-amper.de:554/1 &
     ;;
     "IPCam cam1 (SD)")
-    ${mpv} rtsp://cam1.domain.de:554/2 &
+    ${mpv} rtsp://cam1.rz-amper.de:554/2 &
     ;;
 
 esac
