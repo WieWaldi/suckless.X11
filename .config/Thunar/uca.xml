@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<unique-id>1605351240673408-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Example for a custom action</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon></icon>
+	<name>Extract Here (Zip)</name>
+	<unique-id>1605449324332100-1</unique-id>
+	<command>unzip %n</command>
+	<description></description>
+	<patterns>*.zip</patterns>
+	<other-files/>
+</action>
+<action>
+	<icon></icon>
+	<name>Decompress (gzip)</name>
+	<unique-id>1605449423109305-2</unique-id>
+	<command>gunzip %n</command>
+	<description></description>
+	<patterns>*.tar.gz</patterns>
+	<other-files/>
+</action>
+<action>
+	<icon></icon>
+	<name>Extract Here (tar)</name>
+	<unique-id>1605449622240623-3</unique-id>
+	<command>tar -xf %n</command>
+	<description></description>
+	<patterns>*.tar</patterns>
+	<other-files/>
+</action>
+<action>
+	<icon></icon>
+	<name>UnRAR Here</name>
+	<unique-id>1605816024487188-1</unique-id>
+	<command>unrar x %n</command>
+	<description></description>
+	<patterns>*.rar</patterns>
+	<other-files/>
+</action>
+</actions>
