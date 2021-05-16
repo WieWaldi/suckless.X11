@@ -87,6 +87,7 @@ suckless.org applications have been patched already.
   - st-alpha-0.8.2.diff
   - st-blinking_cursor-20200531-a2a7044.diff
   - st-bold-is-not-bright-20190127-3be4cf1.diff
+  - st-boxdraw_v2-0.8.3.diff
   - st-iso14755-0.8.3.diff
   - st-iso14755-20180911-67d0cb6.diff
   - st-scrollback-20200419-72e3f6c.diff
