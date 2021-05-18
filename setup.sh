@@ -8,7 +8,7 @@
 # +-------------------------------------------------------------------------+
 
 backupdir="${HOME}/Backup.X11files.$$"
-cdir=$(pwd)
+cdir="$(dirname "$(readlink -f "${0}")")"
 make="/bin/make -j 4"
 cmake="/bin/cmake"
 
