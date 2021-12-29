@@ -37,6 +37,7 @@ System Application
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xsensors.png				XSensors					/bin/xsensors
 
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal (xterm)			/bin/xterm
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal/Login (xterm)		/bin/xterm -ls
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png							Terminal (st)				${HOME}/.local/bin/st
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar				/bin/cal -m -n 3 | /bin/xmessage -default okay -file -
 
