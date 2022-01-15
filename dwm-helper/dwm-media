@@ -1,78 +1,81 @@
 #!/usr/bin/env bash
 #
-# +-------------------------------------------------------------------------+
-# | dwm_media (wrapper to start mplayer)                                    |
-# +-------------------------------------------------------------------------+
-# | Copyright © 2019 Waldemar Schroeer                                      |
-# |                  waldemar.schroeer(at)rz-amper.de                       |
-# +-------------------------------------------------------------------------+
+# +----------------------------------------------------------------------------+
+# | dwm_media (wrapper to start mplayer)                                       |
+# +----------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
 
 mplayer=/bin/mplayer
 mpv=/bin/mpv
 st=~/.local/bin/st
 url=$1
-antwoord="$( printf "Bayern 2\nBayern 3\nBayern 5\nDEFJAY\nMDR Aktuell\nMDR Jump\nMDR Jump in the Mix\nARD (SD)\nARD (HD)\nARTE (SD)\nARTE (HD)\nZDF (SD)\nZDF (HD)\nZDF neo (SD)\nZDF neo (HD)\nZDF info (SD)\nZDF info (HD)\nIPCam cam1 (HD)\nIPCam cam1 (SD)\n" | dmenu "$@" )"
+antwoord="$( printf " Kill MPlayer\nBayern 2\nBayern 3\nBayern 5\nDEFJAY\nMDR Aktuell\nMDR Jump\nMDR Jump in the Mix\nARD (SD)\nARD (HD)\nARTE (SD)\nARTE (HD)\nZDF (SD)\nZDF (HD)\nZDF neo (SD)\nZDF neo (HD)\nZDF info (SD)\nZDF info (HD)\nIPCam cam1 (HD)\nIPCam cam1 (SD)\n" | dmenu "$@" )"
 
 case ${antwoord} in
+    " Kill MPlayer")
+        pkill mplayer
+        ;;
+    "Test")
+        ${mplayer} -playlist http://avw.mdr.de/streams/284321-2_mp3_high.m3u > /dev/null 2>&1
+        ;;
     "Bayern 2")
-    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://br-br2-sued.cast.addradio.de/br/br2/sued/mp3/mid &
-    ;;
+        ${mplayer} http://br-br2-sued.cast.addradio.de/br/br2/sued/mp3/mid > /dev/null 2>&1
+        ;;
     "Bayern 3")
-    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://br-br3-live.cast.addradio.de/br/br3/live/mp3/mid &
-    ;;
+        ${mplayer} http://br-br3-live.cast.addradio.de/br/br3/live/mp3/mid > /dev/null 2>&1
+        ;;
     "Bayern 5")
-    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://br-b5aktuell-live.cast.addradio.de/br/b5aktuell/live/mp3/mid &
-    ;;
+        ${mplayer} http://br-b5aktuell-live.cast.addradio.de/br/b5aktuell/live/mp3/mid > /dev/null 2>&1
+        ;;
     "DEFJAY")
-    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor http://sc1.netstreamer.net:8040 &
-    ;;
+        ${mplayer} http://sc1.netstreamer.net:8040 > /dev/null 2>&1
+        ;;
     "MDR Aktuell")
-    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor -playlist http://avw.mdr.de/streams/284340-0_mp3_high.m3u
-    ;;
+        ${mplayer} -playlist http://avw.mdr.de/streams/284340-0_mp3_high.m3u > /dev/null 2>&1
+        ;;
     "MDR Jump")
-    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor -playlist http://avw.mdr.de/streams/284320-0_mp3_high.m3u
-    ;;
+        ${mplayer} -playlist http://avw.mdr.de/streams/284320-0_mp3_high.m3u > /dev/null 2>&1
+        ;;
     "MDR Jump in the Mix")
-    ${st} -c "Krasses Radio" -g 50X5 -e ${mplayer} -msgcolor -playlist http://avw.mdr.de/streams/284321-2_mp3_high.m3u
-    ;;
+        ${mplayer} -playlist http://avw.mdr.de/streams/284321-2_mp3_high.m3u > /dev/null 2>&1
+        ;;
     "ARD (SD)")
-    ${mpv} --vid=5 https://mcdn.daserste.de/daserste/de/master.m3u8
-    ;;
+        ${mpv} --vid=5 https://mcdn.daserste.de/daserste/de/master.m3u8
+        ;;
     "ARD (HD)")
-    ${mpv} --vid=1 https://mcdn.daserste.de/daserste/de/master.m3u8
-    ;;
+        ${mpv} --vid=1 https://mcdn.daserste.de/daserste/de/master.m3u8
+        ;;
     "ARTE (SD)")
-    ${mpv} --vid=1 https://artelive-lh.akamaihd.net/i/artelive_de@393591/master.m3u8
-    ;;
+        ${mpv} --vid=1 https://artelive-lh.akamaihd.net/i/artelive_de@393591/master.m3u8
+        ;;
     "ARTE (HD)")
-    ${mpv} --vid=9 https://artelive-lh.akamaihd.net/i/artelive_de@393591/master.m3u8
-    ;;
+        ${mpv} --vid=9 https://artelive-lh.akamaihd.net/i/artelive_de@393591/master.m3u8
+        ;;
     "ZDF (SD)")
-    ${mpv} --vid=1 https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8 &
-    ;;
+        ${mpv} --vid=1 https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8 &
+        ;;
     "ZDF (HD)")
-    ${mpv} --vid=7 https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8 &
-    ;;
+        ${mpv} --vid=7 https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8 &
+        ;;
     "ZDF neo (SD)")
-    ${mpv} --vid=1 https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8 &
-    ;;
+        ${mpv} --vid=1 https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8 &
+        ;;
     "ZDF neo (HD)")
-    ${mpv} --vid=7 https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8 &
-    ;;
+        ${mpv} --vid=7 https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8 &
+        ;;
     "ZDF info (SD)")
-    ${mpv} --vid=1 https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8 &
-    ;;
+        ${mpv} --vid=1 https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8 &
+        ;;
     "ZDF info (HD)")
-    ${mpv} --vid=7 https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8 &
-    ;;
+        ${mpv} --vid=7 https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8 &
+        ;;
     "IPCam cam1 (HD)")
-    ${mpv} rtsp://cam1.rz-amper.de:554/1 &
-    ;;
+        ${mpv} rtsp://cam1.rz-amper.de:554/1 &
+        ;;
     "IPCam cam1 (SD)")
-    ${mpv} rtsp://cam1.rz-amper.de:554/2 &
-    ;;
-
+        ${mpv} rtsp://cam1.rz-amper.de:554/2 &
+        ;;
 esac
-
-
 exit 0 
