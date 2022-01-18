@@ -43,7 +43,7 @@ xdotool="${HOME}/.local/bin/xdotool"
 ScrnSht="$(date +%Y-%m-%d-%H-%M-%S)"
 
 # Which tool to use for locking the screen
-ScreenLock="${HOME}/.local/bin/slock_wrapper &"
+ScreenLock="${HOME}/.local/bin/slock-wrapper &"
 
 # Command to shutdown
 ShutDown="poweroff"
