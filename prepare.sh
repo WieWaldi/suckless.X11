@@ -405,7 +405,7 @@ if [[ "${os}" = "Linux" ]]; then
             RHEL8_DefaultPackages_install
             LogfileLocation
             ;;
-        "Fedora" )
+        "Fedora Linux" )
             if [[ "${version}" != 3* ]]; then
                 echo_Error_Msg "This is not a supported version of Fedora."
                 exit 1
