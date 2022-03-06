@@ -24,6 +24,7 @@ git
 glew-devel
 glib2-devel
 glm-devel
+gpick
 gstreamer*
 gtk2-devel
 htop
@@ -50,6 +51,7 @@ libexif-devel
 libglvnd-devel
 libjpeg-turbo-devel
 libpciaccess-devel
+libpng-devel
 libxcb-devel
 make
 mediainfo
