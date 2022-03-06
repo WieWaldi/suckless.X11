@@ -386,7 +386,8 @@ DefaultPackages_install() {
     echo -n -e "Installing Default Packages.\r"
     if [[ "${InstallDefaultPackages}" = "yes" ]]; then
         IFS=$'\r\n' GLOBIGNORE='*' command eval 'packages=($(cat ./packages.${packagelistext}))'
-        dnf install -y ${packages[@]} >> ${logfile} 2>&1
+#         dnf install -y ${packages[@]} >> ${logfile} 2>&1
+        dnf install ${packages[@]}
         echo_Done
     else
         echo_Skipped
@@ -459,8 +460,7 @@ if [[ "${os}" = "Linux" ]]; then
             SELinux_query
             SUDO_Timeout_query
             SshRootLogin_query
-            RPMFusionFree_query
-            RPMFusionNonFree_query
+            RPMFusion_query
             DefaultPackages_query
             
             echo_title "Prepare"
@@ -471,8 +471,7 @@ if [[ "${os}" = "Linux" ]]; then
             SELinux_disable
             SUDO_Timeout_set
             SshRootLogin_disable
-            RPMFusionFree_enable
-            RPMFusionNonFree_enable
+            RPMFusion_enable
             DefaultPackages_install
             LogfileLocation
             ;;
