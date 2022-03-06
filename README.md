@@ -73,10 +73,15 @@ suckless.org applications have been patched already.
   - dwm-pertag-20200914-61bb8b2.diff
   - dwm-resizecorners-6.2.diff
   - dwm-xresources-6.2.diff
+- **farbfeld** - A lossless image format which is easy to parse, pipe and compress.
 - **feh** — image viewer and cataloguer
 - **lsw** - list windows
 - **maim** - make image
 - **rotwall** - rotate wallpapers
+- **sent** - Simple plaintext presentation tool.
+  - sent-invertedcolors-72d33d4.diff
+  - sent-toggle-scm-20210119-2be4210.diff
+  - sent-options-20190213-72d33d4.diff
 - **slock** — simple X screen locker (Version 1.4) contains the following patches.
   - slock-capscolor-20170106-2d2a21a.diff
   - slock-message-20191002-b46028b.diff
