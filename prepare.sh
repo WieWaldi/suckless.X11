@@ -375,6 +375,24 @@ RHEL8_CodereadyBuilder_enable() {
     fi
 }
 
+SDDM_query() {
+    EnableSDDM="$(antwoord "Enable SDDM instead of GDM? ${YN}")"
+}
+
+SDDM_enable() {
+    if [[ "${EnableSDDM}" = "yes" ]]; then
+        echo -n -e "Disabling GDM."
+        systemctl disable gdm
+        echo_Done
+        echo -n -e "Enabling SDDM."
+        systemctl enable sddm
+        systemctl set-default graphical
+        echo_Done
+    else
+        echo_Skipped
+    fi
+}
+
 DefaultPackages_query() {
     InstallDefaultPackages="$(antwoord "Install default packages? ${YN}")"
 }
