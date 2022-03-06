@@ -126,19 +126,16 @@ get_Distribution() {
         . /etc/os-release
         distribution=$NAME
         version=$VERSION_ID
-        case ${NAME,,} in
-            "red hat"*)
-                packagelistext="RHEL"
+        case ${ID} in
+            rhel|centos)
+                packagelistext="${ID}.${VERSION_ID::1}"
                 ;;
-            "fedora"*)
-                packagelistext="Fedora"
-                ;;
-            "centos"*)
-                packagelistext="CentOS"
+            fedora)
+                packagelistext="${ID}.${VERSION_ID}"
                 ;;
         esac
         echo -e "\nSeems to be:"
-        echo -e "  ${os} ${distribution} ${version} ${kernel} ${architecture}\n" 
+        echo -e "  ${distribution} ${version} ${kernel} ${architecture}\n" 
     else
         echo_Error_Msg "I need /etc/os-release to figure what distribution this is."
         exit 1    
@@ -386,24 +383,7 @@ DefaultPackages_install() {
     echo -n -e "Installing Default Packages.\r"
     if [[ "${InstallDefaultPackages}" = "yes" ]]; then
         IFS=$'\r\n' GLOBIGNORE='*' command eval 'packages=($(cat ./packages.${packagelistext}))'
-#         dnf install -y ${packages[@]} >> ${logfile} 2>&1
-        dnf install ${packages[@]}
-        echo_Done
-    else
-        echo_Skipped
-    fi
-}
-
-Fedora3x_DefaultPackages_query() {
-    InstallDefaultPackages="$(antwoord "Install default packages? ${YN}")"
-}
-
-Fedora3x_DefaultPackages_install() {
-    echo -n -e "Installing Default Packages.\r"
-    if [[ "${InstallDefaultPackages}" = "yes" ]]; then
-        IFS=$'\r\n' GLOBIGNORE='*' command eval  'packages=($(cat ./packages.Fedora3x))'
-#         dnf install -y ${packages[@]} >> ${logfile} 2>&1
-        dnf install ${packages[@]}
+        dnf install -y ${packages[@]} >> ${logfile} 2>&1
         echo_Done
     else
         echo_Skipped
@@ -449,7 +429,7 @@ if [[ "${os}" = "Linux" ]]; then
             RHEL8_DefaultPackages_install
             LogfileLocation
             ;;
-        "Fedora Linux" )
+        "Fedora"|"Fedora Linux" )
             if [[ "${version}" != 3* ]]; then
                 echo_Error_Msg "This is not a supported version of Fedora."
                 exit 1
