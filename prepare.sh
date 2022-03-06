@@ -97,7 +97,7 @@ antwoord() {
 display_Notice() {
     clear
     tput setaf 6
-    cat ${cdir}/notice.txt
+    cat ${cdir}/notice-prepare.txt
     tput sgr0
     proceed="$(antwoord "Do you want to proceed? ${YN}")"
 }
