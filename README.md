@@ -28,7 +28,7 @@ installation.
 Installation is split up in two parts. First you have to run the preparation
 script as root. This will prepare your system by adding needed repositories and
 packages and copying configuration files. During the preparation you will be
-asked if you want to have the Google Chrome repository added.
+asked if you want to have the Google Chrome and VirtualBox repository added.
 
 Then you log in with your user account at the console and run the setup script.
 This will compile and install a bunch of applications. 
@@ -45,6 +45,11 @@ sudo chown root:root ~/.local/bin/slock
 sudo chmod u+s ~/.local/bin/slock
 sudo chown root:root ~/.local/bin/gllock
 sudo chmod u+s ~/.local/bin/gllock
+```
+
+Use the following command to simplify cloning the repository.
+```
+curl https://github.com/WieWaldi/suckless.X11/raw/master/bootstrap.sh | bash
 ```
 
 ## Contents
