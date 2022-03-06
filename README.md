@@ -49,7 +49,7 @@ sudo chmod u+s ~/.local/bin/gllock
 
 Use the following command to simplify cloning the repository.
 ```
-curl https://github.com/WieWaldi/suckless.X11/raw/master/bootstrap.sh | bash
+curl -s https://raw.githubusercontent.com/WieWaldi/suckless.X11/master/bootstrap.sh | bash
 ```
 
 ## Contents
