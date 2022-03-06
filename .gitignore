@@ -4,27 +4,17 @@ ToDo
 prepare.log
 *.o
 *.so*
-
+config.h
 
 #======== suckless =============================================================
-dwm/config.h
 dwm/dwm
-st/config.h
 st/st
-dmenu/config.h
 dmenu/dmenu
-farbfeld/config.h
-slock/config.h
 slock/slock
-gllock/config.h
 gllock/gllock
-sent/config.h
-surf/config.h
+sent/sent
 surf/surf
 stw/stw
-sxiv/config.h
-tabbed/config.h
-xmenu/config.h
 
 #======== xdotool ==============================================================
 xdotool/xdo_version.h
