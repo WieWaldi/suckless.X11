@@ -1,20 +1,24 @@
-# Just ignore it
-
+#======== General ==============================================================
 # General
 ToDo
 prepare.log
 *.o
 *.so*
 
+
+#======== suckless =============================================================
 dwm/config.h
 dwm/dwm
 st/config.h
 st/st
 dmenu/config.h
 dmenu/dmenu
-dunst/config.h
+farbfeld/config.h
 slock/config.h
 slock/slock
+gllock/config.h
+gllock/gllock
+sent/config.h
 surf/config.h
 surf/surf
 stw/stw
@@ -22,11 +26,11 @@ sxiv/config.h
 tabbed/config.h
 xmenu/config.h
 
-# xdotool
+#======== xdotool ==============================================================
 xdotool/xdo_version.h
 xdotool/xdotool
 
-# slop
+#======== slop =================================================================
 slop/CMakeCache.txt
 slop/CMakeFiles/
 slop/Makefile
@@ -38,7 +42,7 @@ slop/libslopy.so*
 slop/install_manifest.txt
 
 
-# maim
+#======== maim =================================================================
 maim/src/cmdline.h
 maim/CMakeFiles/*
 maim/Makefile
@@ -47,7 +51,7 @@ maim/CMakeCache.txt
 maim/bin/maim
 maim/install_manifest.txt
 
-#dunst
+#======== dunst ================================================================
 dunst/*.o
 dunst/*.d
 dunst/*.gcda
