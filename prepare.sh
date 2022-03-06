@@ -462,6 +462,8 @@ if [[ "${os}" = "Linux" ]]; then
             SshRootLogin_query
             RPMFusion_query
             DefaultPackages_query
+            FilesXorg_query
+            SDDM_query
             
             echo_title "Prepare"
             
@@ -473,6 +475,8 @@ if [[ "${os}" = "Linux" ]]; then
             SshRootLogin_disable
             RPMFusion_enable
             DefaultPackages_install
+            FilesXorg_copy
+            SDDM_enable
             LogfileLocation
             ;;
         "CentOS Linux" )
