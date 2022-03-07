@@ -97,6 +97,8 @@ xorg-x11-fonts-misc.noarch
 xorg-x11-xbitmaps
 xorg-x11-xinit
 xprop
+xsensors
+xset
 xsetroot
 xterm
 xvinfo
