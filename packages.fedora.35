@@ -9,6 +9,7 @@ cifs-utils
 cmake
 dbus-devel
 dbus-x11
+dunst
 elfutils-libelf-devel
 exiv2
 ffmpegthumbnailer
@@ -25,6 +26,7 @@ glm-devel
 gpick
 gstreamer*
 gtk2-devel
+gxmessage
 htop
 ImageMagick
 ImageMagick-devel
@@ -51,7 +53,9 @@ libXrandr-devel
 libXScrnSaver-devel
 libXt-devel
 libXtst-devel
+lm_sensors
 luit
+maim
 make
 mediainfo
 mesa-dri-drivers
@@ -68,10 +72,12 @@ pango-devel
 patch
 pavucontrol
 perl
+picom
 python3
 samba-client
 samba-common
 sddm
+slop
 tar
 thunar
 uthash-devel
@@ -91,12 +97,14 @@ xev
 xlsatoms
 xlsclients
 xlsfonts
+xmessage
 xorg-x11-drv-evdev
 xorg-x11-drv-synaptics
 xorg-x11-fonts-misc.noarch
 xorg-x11-xbitmaps
 xorg-x11-xinit
 xprop
+xrandr
 xsensors
 xset
 xsetroot
