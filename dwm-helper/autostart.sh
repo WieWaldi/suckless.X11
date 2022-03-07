@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 #
-# +-------------------------------------------------------------------------+
-# | autostart.sh (for dwm)                                                  |
-# +-------------------------------------------------------------------------+
-# | Copyright © 2019 Waldemar Schroeer                                      |
-# |                  waldemar.schroeer(at)rz-amper.de                       |
-# +-------------------------------------------------------------------------+
+# +----------------------------------------------------------------------------+
+# | autostart.sh (for dwm)                                                     |
+# +----------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
 
+# +----- Autostart ------------------------------------------------------------+
+# /bin/xsetroot -fg black -bg white -bitmap /usr/include/X11/bitmaps/root_weave
 
-# Start my stuff
-# ---------------------------------------------------------------------------
 /usr/local/bin/dunst & > /dev/null 2>&1 &
 amixer -q -D pulse sset Master 25%
 ${HOME}/.local/bin/xclickroot -r ${HOME}/.local/bin/xmenu.sh &
