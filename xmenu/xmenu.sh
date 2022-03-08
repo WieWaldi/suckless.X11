@@ -39,9 +39,12 @@ System Application
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal (xterm)			/bin/xterm
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal/Login (xterm)		/bin/xterm -ls
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png							Terminal (st)				${HOME}/.local/bin/st
-IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar				/bin/cal -m -n 3 | /bin/xmessage -default okay -file -
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png							Terminal/Login (st)			${HOME}/.local/bin/st -e zsh --login
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar (xmessage)	/bin/cal -m -n 3 | /bin/xmessage -default okay -file -
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar (gxmessage)	/bin/cal -m -n 3 | /bin/gxmessage -title "PopUp" -default okay -file -
 
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-shutdown.png					Shutdown					/sbin/poweroff
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-reboot.png						Reboot						/sbin/reboot
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-logout.png						Logout						/bin/pkill -KILL -u $USER
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-logout.png						Logout 2						/bin/killall dwm
 EOF

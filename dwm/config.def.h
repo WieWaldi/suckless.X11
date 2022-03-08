@@ -95,6 +95,7 @@ static const Rule rules[] = {
 	{ "Gimp",               NULL,                                   NULL,                           0,            0,            1,          -1 },
 	{ "Gnome-calculator",   "gnome-calculator",                     "Calculator",                   0,            1,            1,          -1 },
 	{ "gnuplot_qt",         NULL,                                   NULL,                           0,            1,            1,          -1 },
+	{ "Gxmessage",          "gxmessage",                            "PopUp",                        0,            1,            1,          -1 },
 	{ "Krasses Radio",      NULL,                                   NULL,                           1 << 1,       1,            1,          -1 },
 	{ "mpv",                NULL,                                   NULL,                           0,            1,            1,          -1 },
 	{ "Pavucontrol",        "pavucontrol",                          NULL,                           0,            1,            1,          -1 },
