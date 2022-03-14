@@ -1,5 +1,5 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=WieWaldi's X11
-Comment=Starts suckless Dynamic Window Manager
+Name=dwm
+Comment=suckless.org dwm (dynamic window manager for X)
 Exec=~/.local/bin/dwm-xsession
