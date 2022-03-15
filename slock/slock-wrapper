@@ -9,4 +9,4 @@
 
 # ${HOME}/.local/bin/slock -m "$(/bin/cowsay "$(/bin/fortune -a drugs)")" & 2>/dev/null
 
-${HOME}/.local/bin/slock -m "$(/bin/cat ~/.slocktext)" & 2>/dev/null
+${HOME}/.local/bin/slock -m "$(/bin/cat ~/.config/slocktext)" & 2>/dev/null
