@@ -55,6 +55,7 @@ libXScrnSaver-devel
 libXt-devel
 libXtst-devel
 lm_sensors
+lshw
 luit
 maim
 make
