@@ -151,6 +151,7 @@ static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-i", "
 static const char *dmenusystem[]        = { "dwm-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ", NULL };
 static const char *dmenumedia[]         = { "dwm-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio", NULL };
 static const char *termcmd[]            = { "st", NULL };
+static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", NULL };
 static const char *volumeup[]           = { "dwm-volumectrl", "up", NULL };
 static const char *volumedown[]         = { "dwm-volumectrl", "down", NULL };
 static const char *volumemute[]         = { "dwm-volumectrl", "mute", NULL };
@@ -163,6 +164,7 @@ static Key keys[] = {
 		{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 		{ MODKEY,                       XK_s,      spawn,          {.v = dmenusystem } },
 		{ MODKEY,                       XK_r,      spawn,          {.v = dmenumedia } },
+		{ MODKEY,                       XK_backslash,      spawn,          {.v = tmuxcmd } },
 		{ MODKEY,                       XK_b,      togglebar,      {0} },
 		{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 		{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
