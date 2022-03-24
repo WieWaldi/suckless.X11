@@ -7,41 +7,6 @@ prepare.log
 config.h
 test.sh
 
-#======== suckless =============================================================
-dwm/dwm
-st/st
-dmenu/dmenu
-slock/slock
-gllock/gllock
-sent/sent
-surf/surf
-stw/stw
-
-#======== xdotool ==============================================================
-xdotool/xdo_version.h
-xdotool/xdotool
-
-#======== slop =================================================================
-slop/CMakeCache.txt
-slop/CMakeFiles/
-slop/Makefile
-slop/bin/
-slop/cmake_install.cmake
-slop/libslopy.so
-slop/.vscode
-slop/libslopy.so*
-slop/install_manifest.txt
-
-
-#======== maim =================================================================
-maim/src/cmdline.h
-maim/CMakeFiles/*
-maim/Makefile
-maim/cmake_install.cmake
-maim/CMakeCache.txt
-maim/bin/maim
-maim/install_manifest.txt
-
 #======== dunst ================================================================
 dunst/*.o
 dunst/*.d
@@ -58,3 +23,41 @@ dunst/dunstify
 dunst/dunst.systemd.service
 dunst/org.knopwob.dunst.service
 dunst/test/test
+
+#======== maim =================================================================
+maim/src/cmdline.h
+maim/CMakeFiles/*
+maim/Makefile
+maim/cmake_install.cmake
+maim/CMakeCache.txt
+maim/bin/maim
+maim/install_manifest.txt
+
+#======== slop =================================================================
+slop/CMakeCache.txt
+slop/CMakeFiles/
+slop/Makefile
+slop/bin/
+slop/cmake_install.cmake
+slop/libslopy.so
+slop/.vscode
+slop/libslopy.so*
+slop/install_manifest.txt
+
+#======== suckless =============================================================
+dwm/dwm
+st/st
+dmenu/dmenu
+slock/slock
+gllock/gllock
+sent/sent
+surf/surf
+stw/stw
+
+#======== xdotool ==============================================================
+xdotool/xdo_version.h
+xdotool/xdotool
+
+#======== xmenu ================================================================
+xmenu/xmenu
+
