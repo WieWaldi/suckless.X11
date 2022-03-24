@@ -9,7 +9,7 @@
 
 xprop | awk '
     /^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
-    /^WM_NAME/{sub(/.* =/, "title:"); print}' | gxmessage -title "PopUp" -default okay -file -
+    /^WM_NAME/{sub(/.* =/, "title:"); print}' | gxmessage -font "GoMono Nerd Font 24" -title "PopUp" -default okay -file -
 
 exit 0
 
