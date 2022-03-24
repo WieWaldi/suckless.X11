@@ -41,7 +41,7 @@ IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal/Log
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png							Terminal (st)				${HOME}/.local/bin/st
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png							Terminal/Login (st)			${HOME}/.local/bin/st -e zsh --login
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar (xmessage)	/bin/cal -m -n 3 | /bin/xmessage -default okay -file -
-IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar (gxmessage)	/bin/cal -m -n 3 | /bin/gxmessage -title "PopUp" -default okay -file -
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calendar.png					Show Calendar (gxmessage)	/bin/cal -m -n 3 | /bin/gxmessage -font "GoMono Nerd Font 24" -title "PopUp" -default okay -file -
 
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-shutdown.png					Shutdown					/sbin/poweroff
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-reboot.png						Reboot						/sbin/reboot
