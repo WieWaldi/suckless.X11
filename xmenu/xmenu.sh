@@ -8,7 +8,7 @@ Internet
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-whatsapp.png				WhatsApp					${HOME}/.local/bin/surf web.whatsapp.com
 Applications
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-alsamixer.png				Alsa Mixer					/bin/xterm -fa 'FiraMono Nerd Font' -fs 6 -e /bin/alsamixer
-	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-cava.png					Audio Visualizer			/bin/xterm -fa 'FiraMono Nerd Font' -fs 6 -e ${HOME}/.local/bin/cava
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-cava.png					Audio Visualizer			/bin/xterm -fa 'FiraMono Nerd Font' -fs 6 -e /usr/bin/cava
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-calc.png					Calculator					/bin/gnome-calculator
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-st.png						CMatrix						${HOME}/.local/bin/cool-retro-term -p Vintage -T CMatrix -e cmatrix
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-citrix.png					Citrix						${HOME}/.local/bin/citrix
@@ -31,7 +31,7 @@ Office
 System Application
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Compton (start)				/bin/dbus-launch ${HOME}/.local/bin/compton
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Compton (kill)				/bin/pkill compton
-	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Picom (start)				${HOME}/.local/bin/picom --experimental-backends
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Picom (start)				/usr/bin/picom --experimental-backends
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-compton.png				Picom (kill)				/bin/pkill picom
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-gear.png					X.org Client Properties		${HOME}/.local/bin/xclientprop
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xsensors.png				XSensors					/bin/xsensors
