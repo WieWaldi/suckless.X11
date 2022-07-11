@@ -79,7 +79,8 @@ Install_X11files() {
     cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
     cp -r ${cdir}/.local/share/wallpapers ${HOME}/.local/share
     cp -r ${cdir}/.local/share/icons ${HOME}/.local/share
-    cp -r ${cdir}/compton/compton.conf ${HOME}/.config
+    cp -r ${cdir}/.config/compton.conf ${HOME}/.config
+    cp -r ${cdir}/.config/picom.conf ${HOME}/.config
     cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
     cp -r ${cdir}/X.org.files/.xsession
     chmod 755 ${HOME}/.local/bin/.xsession
