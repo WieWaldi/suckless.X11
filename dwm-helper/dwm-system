@@ -15,6 +15,9 @@ declare -a actions=(
     "Fuck things up even worse (Shutdown)"
     "Piss off (Exit from DE)"
     ""
+    "Store Password for edc\a_wschroeer"
+    "Store Password for edc\da_wschroeer"
+    ""
     "Screenshot of Desktop --> JPG"
     "Screenshot of Desktop --> PNG"
     "Screenshot of active window --> JPG"
@@ -28,7 +31,7 @@ declare -a actions=(
 ScrnShtDir="${HOME}/Pictures/Screenshots"
 
 # Location of maim (maim needs the following LD Library Path)
-maim="${HOME}/.local/bin/maim"
+maim="/usr/bin/maim"
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HOME}/.local/lib64:${HOME}/.local/lib
 
 # General maim options
@@ -93,6 +96,12 @@ case ${antwoord} in
         notify-send "Info" "Quitting all apps\nand pissing off in 5 seconds."
         sleep 5
         # ${Exit}
+        ;;
+    "Store Password for edc\a_wschroeer")
+        zenity --entry --title="Store Password" --text="Enter Password for edc\a_wschroeer" > ~/.config/password_store/password_1
+        ;;
+    "Store Password for edc\da_wschroeer")
+        zenity --entry --title="Store Password" --text="Enter Password for edc\a_wschroeer" > ~/.config/password_store/password_2
         ;;
     "Screenshot of Desktop --> JPG")
         checkformaim
