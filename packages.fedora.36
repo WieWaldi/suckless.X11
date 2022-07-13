@@ -58,6 +58,7 @@ libXrandr-devel
 libXScrnSaver-devel
 libXt-devel
 libXtst-devel
+light
 lm_sensors
 lshw
 luit
@@ -101,13 +102,14 @@ xclock
 xcursorgen
 xdpyinfo
 xev
+xinput
 xload
 xlsatoms
 xlsclients
 xlsfonts
 xmessage
 xorg-x11-drv-evdev
-xorg-x11-drv-synaptics
+xorg-x11-drv-synaptics-legacy
 xorg-x11-fonts-misc.noarch
 xorg-x11-xbitmaps
 xorg-x11-xinit
