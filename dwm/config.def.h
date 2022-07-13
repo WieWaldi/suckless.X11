@@ -155,6 +155,8 @@ static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", NULL };
 static const char *volumeup[]           = { "dwm-volumectrl", "up", NULL };
 static const char *volumedown[]         = { "dwm-volumectrl", "down", NULL };
 static const char *volumemute[]         = { "dwm-volumectrl", "mute", NULL };
+static const char *brightnessup[]       = { "dwm-brightness", "up", NULL };
+static const char *brightnessdown[]     = { "dwm-brightness", "down", NULL };
 static const char *xmenu[]              = { "xmenu.sh", NULL };
 
 static Key keys[] = {
@@ -199,6 +201,8 @@ static Key keys[] = {
 		{ 0,            XF86XK_AudioLowerVolume,   spawn,          {.v = volumedown } },
 		{ 0,            XF86XK_AudioRaiseVolume,   spawn,          {.v = volumeup } },
 		{ 0,            XF86XK_AudioMute,          spawn,          {.v = volumemute } },
+		{ 0,            XF86XK_MonBrightnessUp,    spawn,          {.v = brightnessup } },
+		{ 0,            XF86XK_MonBrightnessDown,  spawn,          {.v = brightnessdown } },
 		TAGKEYS(                        XK_1,                      0)
 		TAGKEYS(                        XK_2,                      1)
 		TAGKEYS(                        XK_3,                      2)
