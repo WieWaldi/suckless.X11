@@ -31,6 +31,7 @@ dwm.showbar:                                    1
 dwm.topbar:                                     1
 dwm.vertpad:                                    0
 dwm.sidepad:                                    0
+dwm.lockfullscreen:                             0
 dwm.normfgcolor:                                #bbbbbb
 dwm.normbgcolor:                                #222222
 dwm.normbordercolor:                            #444444

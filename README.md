@@ -64,7 +64,7 @@ suckless.org applications have been patched already.
   - dmenu-numbers-4.9.diff
   - dmenu-xresources-4.9.diff
 - **dunst** - A customizable and lightweight notification-daemon
-- **dwm** - dynamic window manager (Version 6.2) contains the following patches.
+- **dwm** - dynamic window manager (Version 6.3, 2022-05-10) contains the following patches.
   - dwm-autostart-20200610-cb3f58a.diff
   - dwm-barpadding-20200720-bb2e722.diff
   - dwm-cfacts-20200913-61bb8b2.diff

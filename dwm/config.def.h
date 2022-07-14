@@ -19,6 +19,7 @@ static int showbar                          = 1;                    /* 0 means n
 static int topbar                           = 1;                    /* 0 means bottom bar */
 static int vertpad                          = 10;                   /* vertical padding of bar */
 static int sidepad                          = 10;                   /* horizontal padding of bar */
+static int lockfullscreen                   = 0;                    /* 1 will force focus on the fullscreen window */
 static char normfgcolor[]                   = "#bbbbbb";
 static char normbgcolor[]                   = "#222222";
 static char normbordercolor[]               = "#444444";
@@ -59,6 +60,7 @@ ResourcePref resources[] = {
 		{ "topbar",             INTEGER, &topbar },
 		{ "vertpad",            INTEGER, &vertpad },
 		{ "sidepad",            INTEGER, &sidepad },
+		{ "lockfullscreen",     INTEGER, &lockfullscreen },
 		{ "normfgcolor",        STRING,  &normfgcolor },
 		{ "normbgcolor",        STRING,  &normbgcolor },
 		{ "normbordercolor",    STRING,  &normbordercolor },
