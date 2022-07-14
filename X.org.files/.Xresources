@@ -20,6 +20,7 @@
 #define S_base3                                 #fdf6e3
 
 !================================ dwm relatd ===================================
+dwm.font:                                       FiraMono Nerd Font:size=10
 dwm.mfact:                                      0.55
 dwm.borderpx:                                   0
 dwm.gappx:                                      3
