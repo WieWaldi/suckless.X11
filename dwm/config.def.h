@@ -6,9 +6,10 @@
 #include "movestack.c"
 
 /* appearance */
+static char font[]                          = "monospace:size=10";
+static const char *fonts[]                  = { font };
+static const char dmenufont[]               = "monospace:size=10";
 static float mfact                          = 0.55;                 /* factor of master area size [0.05..0.95] */
-static const char *fonts[]                  = { "FiraMono Nerd Font:size=11" };
-static const char dmenufont[]               = "FiraMono Nerd Font:size=12";
 static unsigned int borderpx                = 0;                    /* border pixel of windows */
 static unsigned int gappx                   = 15;                   /* gaps between windows */
 static unsigned int snap                    = 0;                    /* snap pixel */
@@ -47,6 +48,7 @@ static char *colors[][3] = {
 };
 /* Xresources preferences to load at startup */
 ResourcePref resources[] = {
+		{ "font",               STRING,  &font },
 		{ "mfact",              FLOAT,   &mfact },
 		{ "borderpx",           INTEGER, &borderpx },
 		{ "gappx",              INTEGER, &gappx },
