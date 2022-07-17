@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <X11/extensions/Xrandr.h>
+#include <X11/extensions/dpms.h>
 #include <X11/extensions/Xinerama.h>
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
@@ -27,6 +28,7 @@
 #include "util.h"
 
 char *argv0;
+int failtrack = 0;
 
 /* global count to prevent repeated error messages */
 int count_error = 0;
@@ -104,10 +106,22 @@ dontkillme(void)
 }
 #endif
 
+static int
+readescapedint(const char *str, int *i) {
+	int n = 0;
+	if (str[*i])
+		++*i;
+	while(str[*i] && str[*i] != ';' && str[*i] != 'm') {
+		n = 10 * n + str[*i] - '0';
+		++*i;
+	}
+	return n;
+}
+
 static void
 writemessage(Display *dpy, Window win, int screen)
 {
-	int len, line_len, width, height, s_width, s_height, i, j, k, tab_replace, tab_size;
+	int len, line_len, width, height, s_width, s_height, i, k, tab_size, r, g, b, escaped_int, curr_line_len;
 	XGCValues gr_values;
 	XFontStruct *fontinfo;
 	XColor color, dummy;
@@ -143,15 +157,22 @@ writemessage(Display *dpy, Window win, int screen)
 	len = strlen(message);
 
 	/* Max max line length (cut at '\n') */
-	line_len = 0;
+	line_len = curr_line_len = 0;
 	k = 0;
-	for (i = j = 0; i < len; i++) {
+	for (i = 0; i < len; i++) {
 		if (message[i] == '\n') {
-			if (i - j > line_len)
-				line_len = i - j;
+			curr_line_len = 0;
 			k++;
-			i++;
-			j = i;
+		} else if (message[i] == 0x1b) {
+			while (i < len && message[i] != 'm') {
+				i++;
+			}
+			if (i == len)
+				die("slock: unclosed escape sequence\n");
+		} else {
+			curr_line_len += XTextWidth(fontinfo, message + i, 1);
+			if (curr_line_len > line_len)
+				line_len = curr_line_len;
 		}
 	}
 	/* If there is only one line */
@@ -166,26 +187,41 @@ writemessage(Display *dpy, Window win, int screen)
 		s_width = DisplayWidth(dpy, screen);
 		s_height = DisplayHeight(dpy, screen);
 	}
-
 	height = s_height*3/7 - (k*20)/3;
-	width  = (s_width - XTextWidth(fontinfo, message, line_len))/2;
+	width  = (s_width - line_len)/2;
 
-	/* Look for '\n' and print the text between them. */
-	for (i = j = k = 0; i <= len; i++) {
-		/* i == len is the special case for the last line */
-		if (i == len || message[i] == '\n') {
-			tab_replace = 0;
-			while (message[j] == '\t' && j < i) {
-				tab_replace++;
-				j++;
-			}
-
-			XDrawString(dpy, win, gc, width + tab_size*tab_replace, height + 20*k, message + j, i - j);
-			while (i < len && message[i] == '\n') {
-				i++;
-				j = i;
+	line_len = 0;
+	/* print the text while parsing 24 bit color ANSI escape codes*/
+	for (i = k = 0; i < len; i++) {
+		switch (message[i]) {
+			case '\n':
+				line_len = 0;
+				while (message[i + 1] == '\t') {
+					line_len += tab_size;
+					i++;
+				}
 				k++;
-			}
+				break;
+			case 0x1b:
+				i++;
+				if (message[i] == '[') {
+					escaped_int = readescapedint(message, &i);
+					if (escaped_int == 39)
+						continue;
+					if (escaped_int != 38)
+						die("slock: unknown escape sequence%d\n", escaped_int);
+					if (readescapedint(message, &i) != 2)
+						die("slock: only 24 bit color supported\n");
+					r = readescapedint(message, &i) & 0xff;
+					g = readescapedint(message, &i) & 0xff;
+					b = readescapedint(message, &i) & 0xff;
+					XSetForeground(dpy, gc, r << 16 | g << 8 | b);
+				} else
+					die("slock: unknown escape sequence\n");
+				break;
+			default:
+				XDrawString(dpy, win, gc, width + line_len, height + 20 * k, message + i, 1);
+				line_len += XTextWidth(fontinfo, message + i, 1);
 		}
 	}
 
@@ -284,6 +320,11 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 				if (running) {
 					XBell(dpy, 100);
 					failure = 1;
+					failtrack++;
+
+					if (failtrack >= failcount && failcount != 0){
+						system(failcommand);
+					}
 				}
 				explicit_bzero(&passwd, sizeof(passwd));
 				len = 0;
@@ -488,6 +529,7 @@ main(int argc, char **argv) {
 	int i, s, nlocks, nscreens;
 	int count_fonts;
 	char **font_names;
+	CARD16 standby, suspend, off;
 
 	ARGBEGIN {
 	case 'v':
@@ -563,6 +605,20 @@ main(int argc, char **argv) {
 	if (nlocks != nscreens)
 		return 1;
 
+	/* DPMS magic to disable the monitor */
+	if (!DPMSCapable(dpy))
+		die("slock: DPMSCapable failed\n");
+	if (!DPMSEnable(dpy))
+		die("slock: DPMSEnable failed\n");
+	if (!DPMSGetTimeouts(dpy, &standby, &suspend, &off))
+		die("slock: DPMSGetTimeouts failed\n");
+	if (!standby || !suspend || !off)
+		die("slock: at least one DPMS variable is zero\n");
+	if (!DPMSSetTimeouts(dpy, monitortime, monitortime, monitortime))
+		die("slock: DPMSSetTimeouts failed\n");
+
+	XSync(dpy, 0);
+
 	/* run post-lock command */
 	if (argc > 0) {
 		switch (fork()) {
@@ -579,6 +635,10 @@ main(int argc, char **argv) {
 
 	/* everything is now blank. Wait for the correct password */
 	readpw(dpy, &rr, locks, nscreens, hash);
+
+	/* reset DPMS values to inital ones */
+	DPMSSetTimeouts(dpy, standby, suspend, off);
+	XSync(dpy, 0);
 
 	return 0;
 }

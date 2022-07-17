@@ -3,14 +3,24 @@ static const char *user  = "nobody";
 static const char *group = "nobody";
 
 static const char *colorname[NUMCOLS] = {
-	[INIT] =   "black",     /* after initialization */
-	[INPUT] =  "#005577",   /* during input */
-	[FAILED] = "#CC3333",   /* wrong password */
-	[CAPS] =   "red",       /* CapsLock on */
+	[INIT] =        "black",        /* after initialization */
+	[INPUT] =       "#005577",      /* during input */
+	[FAILED] =      "#CC3333",      /* wrong password */
+	[CAPS] =        "red",          /* CapsLock on */
 };
 
 /* treat a cleared input like a wrong password (color) */
 static const int failonclear = 1;
+
+/* number of failed password attempts until failcommand is executed.
+   Set to 0 to disable */
+static const int failcount = 0;
+
+/* command to be executed after [failcount] failed password attempts */
+static const char *failcommand = "shutdown";
+
+/* time in seconds before the monitor shuts down */
+static const int monitortime = 5;
 
 /* default message */
 static const char * message = "Suckless: Software that sucks less.";
@@ -30,5 +40,4 @@ ResourcePref resources[] = {
 		{ "color3",       STRING,  &colorname[CAPS] },
 		{ "color4",       STRING,  &colorname[INPUT] },
 		{ "fontname",     STRING,  &font_name },
-		{ "fontcolor",    STRING,  &text_color },
 };
