@@ -18,13 +18,16 @@
 #define S_base1                                 #93a1a1
 #define S_base2                                 #eee8d5
 #define S_base3                                 #fdf6e3
+#define S_deeppink                              #5f005f
+#define S_darkmagenta                           #8700af
+#define S_mediumpurple                          #af87d7
 
 !================================ dwm relatd ===================================
-dwm.font:                                       FiraMono Nerd Font:size=10
+dwm.font:                                       FiraMono Nerd Font:size=12
 dwm.mfact:                                      0.55
 dwm.borderpx:                                   0
-dwm.gappx:                                      3
-dwm.snap:                                       10
+dwm.gappx:                                      15
+dwm.snap:                                       0
 dwm.resizehints:                                1
 dwm.nmaster:                                    1
 dwm.showbar:                                    1
@@ -50,14 +53,14 @@ dwm.infonormfgcolor:                            #eeeeee
 dwm.infonormbgcolor:                            #5f005f
 
 !================================ dmneu related ================================
-dmenu.font:                                     FiraMono Nerd Font:size=10:antialias=true
+dmenu.font:                                     FiraMono Nerd Font:size=14:antialias=true
 dmenu.background:                               #5f005f
 dmenu.foreground:                               #bbbbbb
 dmenu.selbackground:                            #8700af
 dmenu.selforeground:                            #eeeeee
 
 !================================ st relatd ====================================
-st*font:                                        GoMono Nerd Font:size=10:antialias=true
+st*font:                                        GoMono Nerd Font:size=14:antialias=true
 st*alpha:                                       0.95
 st*borderpx:                                    0
 st*termname:                                    st-256color
@@ -93,19 +96,41 @@ slock.color0:                                   #8700af
 slock.color1:                                   #dc322f
 slock.color3:                                   #550000
 slock.color4:                                   #af87d7
-slock.fontname:                                 10x20
+slock.fontname:                                 12x24
 slock.fontcolor:                                #afafaf
+
+!================================ svkbd relatd =================================
+svkbd.font:                                     GoMono Nerd Font:bold:size=18
+svkbd.background:                               S_deeppink
+svkbd.foreground:                               S_base0
+svkbd.shiftforeground:                          S_violet
+svkbd.shiftbackground:                          S_base1
+svkbd.abcforeground:                            S_base0
+svkbd.abcbackbround:                            S_deeppink
+svkbd.abcshiftbackground:                       S_orange
+svkbd.abcshiftforeground:                       S_red
+svkbd.pressforeground:                          S_base2
+svkbd.pressforebackground:                      S_base00
+svkbd.highlightforeground:                      S_red
+svkbd.highlightforebackground:                  S_base00
+svkbd.highlightshiftforeground:                 S_red
+svkbd.highlightshiftforebackground:             S_base00
+svkbd.overlayforeground:                        S_base0
+svkbd.overlaybackground:                        S_deeppink
+svkbd.overlayshiftforeground:                   S_base00
+svkbd.overlayshiftbackground:                   S_red
 
 !================================ Xcursor relatd ===============================
 Xcursor.theme:                                  ComixCursors-Blue
-Xcursor.size:                                   16
+! Xcursor.size:                                   16
+Xcursor.size:                                   64
 
 !================================ XTerm related ================================
 XTerm*termName:                                 xterm-256color
 XTerm*cursorColor:                              #00ff00
 XTerm*pointerShape:                             hand2
 XTerm.vt100.scrollBar:                          false
-XTerm.vt100.faceName:                           GoMono Nerd Font:size=10:antialias=true
+XTerm.vt100.faceName:                           GoMono Nerd Font:size=14:antialias=true
 XTerm.vt100.background:                         S_base03
 XTerm.vt100.foreground:                         S_base0
 XTerm*allowBoldFonts:                           false
@@ -134,6 +159,42 @@ XTerm*color12:                                  S_base0
 XTerm*color13:                                  S_violet
 XTerm*color14:                                  S_base1
 XTerm*color15:                                  S_base3
+
+!================================ XTermScratchpad ==============================
+XTermScratchPad.vt100.geometry:                 200x80
+XTermScratchPad*termName:                       xterm-256color
+XTermScratchPad*cursorColor:                    #00ff00
+XTermScratchPad*pointerShape:                   hand2
+XTermScratchPad.vt100.scrollBar:                false
+XTermScratchPad.vt100.faceName:                 GoMono Nerd Font:size=10:antialias=true
+XTermScratchPad.vt100.background:               S_base03
+XTermScratchPad.vt100.foreground:               S_base0
+XTermScratchPad*allowBoldFonts:                 true
+XTermScratchPad*internalBorder:                 10
+XTermScratchPad*mainMenu*backgroundPixmap:      gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermScratchPad*mainMenu*foreground:            white
+XTermScratchPad*vtMenu*backgroundPixmap:        gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermScratchPad*vtMenu*foreground:              white
+XTermScratchPad*fontMenu*backgroundPixmap:      gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermScratchPad*fontMenu*foreground:            white
+XTermScratchPad*tekMenu*backgroundPixmap:       gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermScratchPad*tekMenu*foreground:             white
+XTermScratchPad*color0:                         S_base02
+XTermScratchPad*color1:                         S_red
+XTermScratchPad*color2:                         S_green
+XTermScratchPad*color3:                         S_yellow
+XTermScratchPad*color4:                         S_blue
+XTermScratchPad*color5:                         S_magenta
+XTermScratchPad*color6:                         S_cyan
+XTermScratchPad*color7:                         S_base2
+XTermScratchPad*color9:                         S_orange
+XTermScratchPad*color8:                         S_base03
+XTermScratchPad*color10:                        S_base01
+XTermScratchPad*color11:                        S_base00
+XTermScratchPad*color12:                        S_base0
+XTermScratchPad*color13:                        S_violet
+XTermScratchPad*color14:                        S_base1
+XTermScratchPad*color15:                        S_base3
 
 !================================ UXTerm related ===============================
 UXTerm*termName:                                xterm-256color
