@@ -121,13 +121,12 @@ static const Rule rules[] = {
 	{ "xfreerdp",           NULL,                                   NULL,                           1 << 4,     1,            1,            -1,         0   },
 	{ "Xmessage",           "xmessage",                             "xmessage",                     0,          1,            1,            -1,         0   },
 	{ "Xsensors",           "xsensors",                             NULL,                           0,          1,            1,            -1,         0   },
-	{ "XTerm",              "xterm",                                "xterm",                        0,          1,            1,            -1,         0   },
 	{ "XTerm",              "xterm",                                "cava",                         0,          1,            1,            -1,         0   },
 	{ "XTerm",              "xterm",                                "alsamixer",                    0,          1,            1,            -1,         0   },
 	{ NULL,                 "outlook.office365.com",                NULL,                           0,          1,            1,             1,         0   },
 	{ NULL,                 "google-chrome",                        NULL,                           1 << 8,     0,            0,            -1,         0   },
-	{ NULL,                 NULL,                                   "scratchpad1",                  0,          0,            1,            -1,         '1' },
-	{ NULL,                 NULL,                                   "scratchpad2",                  0,          1,            1,            -1,         '2' },
+	{ NULL,                 NULL,                                   "ScratchPad1",                  0,          0,            1,            -1,         '1' },
+	{ NULL,                 NULL,                                   "ScratchPad2",                  0,          1,            1,            -1,         '2' },
 };
 
 /* layout(s) */
@@ -157,15 +156,15 @@ static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-i", "
 static const char *dmenusystem[]        = { "dwm-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ", NULL };
 static const char *dmenumedia[]         = { "dwm-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio", NULL };
 static const char *termcmd[]            = { "st", NULL };
-static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", NULL };
+static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", "Login", NULL };
 static const char *volumeup[]           = { "dwm-volumectrl", "up", NULL };
 static const char *volumedown[]         = { "dwm-volumectrl", "down", NULL };
 static const char *volumemute[]         = { "dwm-volumectrl", "mute", NULL };
 static const char *brightnessup[]       = { "dwm-brightness", "up", NULL };
 static const char *brightnessdown[]     = { "dwm-brightness", "down", NULL };
 static const char *xmenu[]              = { "xmenu.sh", NULL };
-static const char *scratchpad1[]        = { "1", "st", "-t", "scratchpad1", "-g", "200x40", NULL}; 
-static const char *scratchpad2[]        = { "2", "xterm", "-class", "XTermScratchPad", "-title", "scratchpad2", "2NULL}; 
+static const char *scratchpad1[]        = { "1", "st", "-t", "ScratchPad1", "-g", "200x40", "-e", "tmux-start.sh", "ScratchPad1", NULL}; 
+static const char *scratchpad2[]        = { "2", "xterm", "-class", "XTermScratchPad", "-title", "ScratchPad2", "-e", "tmux-start.sh", "ScratchPad2", NULL}; 
 
 static Key keys[] = {
 	/* modifier         key                         function        argument */
