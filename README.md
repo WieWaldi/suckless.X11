@@ -74,6 +74,7 @@ suckless.org applications have been patched already.
   - dwm-fullgaps-20200508-7b77734.diff
   - dwm-monoclesymbol-6.2.diff
   - dwm-movestack-6.1.diff
+  - dwm-namedscratchpads-6.2.diff
   - dwm-notitle-6.2.diff
   - dwm-pertag-20200914-61bb8b2.diff
   - dwm-resizecorners-6.2.diff
