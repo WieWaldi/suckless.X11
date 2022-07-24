@@ -136,7 +136,7 @@ case ${antwoord} in
     "Screenshot of selection --> PNG")
         checkformaim
         checkforxdotool
-        ${maim} ${MaimOptions} --format=png --quality 1 --select ${ScrnShtDir}/${ScrnSht}.png
+        ${maim} ${MaimOptions} --format=png --quality 10 --select ${ScrnShtDir}/${ScrnSht}.png
         notify-send 'Info' "Screenshot of selection taken.\n${ScrnSht}.png"
         ;;
 esac
