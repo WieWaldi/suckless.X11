@@ -127,6 +127,7 @@ static const Rule rules[] = {
 	{ NULL,                 "google-chrome",                        NULL,                           1 << 8,     0,            0,            -1,         0   },
 	{ NULL,                 NULL,                                   "ScratchPad1",                  0,          0,            1,            -1,         '1' },
 	{ NULL,                 NULL,                                   "ScratchPad2",                  0,          1,            1,            -1,         '2' },
+	{ NULL,                 NULL,                                   "NoteTaking",                   0,          1,            1,            -1,         '3' },
 };
 
 /* layout(s) */
@@ -165,6 +166,7 @@ static const char *brightnessdown[]     = { "dwm-brightness", "down", NULL };
 static const char *xmenu[]              = { "xmenu.sh", NULL };
 static const char *scratchpad1[]        = { "1", "st", "-t", "ScratchPad1", "-g", "200x40", "-e", "tmux-start.sh", "ScratchPad1", NULL}; 
 static const char *scratchpad2[]        = { "2", "xterm", "-class", "XTermScratchPad", "-title", "ScratchPad2", "-e", "tmux-start.sh", "ScratchPad2", NULL}; 
+static const char *NoteTaking[]         = { "3", "xterm", "-class", "XTermNoteTaking", "-title", "NoteTaking", "-e", "dwm-notetaking", NULL}; 
 
 static Key keys[] = {
 	/* modifier         key                         function        argument */
@@ -176,6 +178,7 @@ static Key keys[] = {
 	{ MODKEY,           XK_backslash,               spawn,          {.v = tmuxcmd } },
 	{ MODKEY,           XK_bracketleft,             togglescratch,  {.v = scratchpad1 } },
 	{ MODKEY,           XK_bracketright,            togglescratch,  {.v = scratchpad2 } },
+	{ MODKEY,           XK_semicolon,               togglescratch,  {.v = NoteTaking } },
 	{ MODKEY,           XK_b,                       togglebar,      {0} },
 	{ MODKEY,           XK_j,                       focusstack,     {.i = +1 } },
 	{ MODKEY,           XK_k,                       focusstack,     {.i = -1 } },

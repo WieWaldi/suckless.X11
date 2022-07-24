@@ -16,6 +16,8 @@ install:
 	@mkdir -p ${PREFIX}/share/dwm
 	@cp -f dwm-media ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dwm-media
+	@cp -f dwm-notetaking ${PREFIX}/bin
+	@chmod 755 ${PREFIX}/bin/dwm-notetaking
 	@cp -f dwm-status ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dwm-status
 	@cp -f dwm-system ${PREFIX}/bin

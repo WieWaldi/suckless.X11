@@ -196,6 +196,42 @@ XTermScratchPad*color13:                        S_violet
 XTermScratchPad*color14:                        S_base1
 XTermScratchPad*color15:                        S_base3
 
+!================================ XTermNoteTaking ==============================
+XTermNoteTaking.vt100.geometry:                 85x70
+XTermNoteTaking*termName:                       xterm-256color
+XTermNoteTaking*cursorColor:                    #00ff00
+XTermNoteTaking*pointerShape:                   hand2
+XTermNoteTaking.vt100.scrollBar:                false
+XTermNoteTaking.vt100.faceName:                 GoMono Nerd Font:size=14:antialias=true
+XTermNoteTaking.vt100.background:               S_base03
+XTermNoteTaking.vt100.foreground:               S_base0
+XTermNoteTaking*allowBoldFonts:                 true
+XTermNoteTaking*internalBorder:                 0
+XTermNoteTaking*mainMenu*backgroundPixmap:      gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermNoteTaking*mainMenu*foreground:            white
+XTermNoteTaking*vtMenu*backgroundPixmap:        gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermNoteTaking*vtMenu*foreground:              white
+XTermNoteTaking*fontMenu*backgroundPixmap:      gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermNoteTaking*fontMenu*foreground:            white
+XTermNoteTaking*tekMenu*backgroundPixmap:       gradient:vertical?dimension=600&start=gray10&end=gray40
+XTermNoteTaking*tekMenu*foreground:             white
+XTermNoteTaking*color0:                         S_base02
+XTermNoteTaking*color1:                         S_red
+XTermNoteTaking*color2:                         S_green
+XTermNoteTaking*color3:                         S_yellow
+XTermNoteTaking*color4:                         S_blue
+XTermNoteTaking*color5:                         S_magenta
+XTermNoteTaking*color6:                         S_cyan
+XTermNoteTaking*color7:                         S_base2
+XTermNoteTaking*color9:                         S_orange
+XTermNoteTaking*color8:                         S_base03
+XTermNoteTaking*color10:                        S_base01
+XTermNoteTaking*color11:                        S_base00
+XTermNoteTaking*color12:                        S_base0
+XTermNoteTaking*color13:                        S_violet
+XTermNoteTaking*color14:                        S_base1
+XTermNoteTaking*color15:                        S_base3
+
 !================================ UXTerm related ===============================
 UXTerm*termName:                                xterm-256color
 UXTerm*cursorColor:                             #00ff00
