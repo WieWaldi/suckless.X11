@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# +----------------------------------------------------------------------------+
+# | rdp (wrapper for xfreerdp)                                                 |
+# +----------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
+
+# +----- Main -----------------------------------------------------------------+
+# /bin/xfreerdp --ignore-certificate -g 2400x1400 -d domain.com -u username -p password $1 &
+# /bin/xfreerdp --ignore-certificate -g 2400x1400 -a 8 -D -x m -z -u username -p password -t 3391 host.domain.com &
+/bin/xfreerdp --ignore-certificate -g 2000x1200 -d de.ttiinc.com -u username -p $(cat ~/.config/password_store/password_1) $1 &
+
+# +----- End ------------------------------------------------------------------+
+exit 0
