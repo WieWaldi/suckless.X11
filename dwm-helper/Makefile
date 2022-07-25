@@ -14,6 +14,8 @@ install:
 	@echo "Installing executable file to ${PREFIX}/bin"
 	@mkdir -p ${PREFIX}/bin
 	@mkdir -p ${PREFIX}/share/dwm
+	@cp -f dwm-brightness ${PREFIX}/bin
+	@chmod 755 ${PREFIX}/bin/dwm-brightness
 	@cp -f dwm-media ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dwm-media
 	@cp -f dwm-notetaking ${PREFIX}/bin
@@ -35,7 +37,9 @@ install:
 
 uninstall:
 	@echo "Removing executable file from ${PREFIX}/bin"
+	@rm -f ${PREFIX}/bin/dwm-brightness
 	@rm -f ${PREFIX}/bin/dwm-media
+	@rm -f ${PREFIX}/bin/dwm-notetaking
 	@rm -f ${PREFIX}/bin/dwm-status
 	@rm -f ${PREFIX}/bin/dwm-system
 	@rm -f ${PREFIX}/bin/dwm-volumectrl
