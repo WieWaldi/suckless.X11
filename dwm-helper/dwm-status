@@ -1,12 +1,23 @@
 #!/bin/sh
 #
-# +-------------------------------------------------------------------------+
-# | dwm_status                                                              |
-# +-------------------------------------------------------------------------+
-# | Copyright © 2020 Waldemar Schroeer                                      |
-# |                  waldemar.schroeer(at)rz-amper.de                       |
-# +-------------------------------------------------------------------------+
+# +----------------------------------------------------------------------------+
+# | dwm_status                                                                 |
+# +----------------------------------------------------------------------------+
+# | Copyright © 2020 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
 
+# +---------- Configuration starts here ---------------------------------------+
+locdate="$(date "+%A %d.%m.%Y")"
+loctime="$(date "+%H:%M")"
+usctime="$(TZ=US/Central date "+%H:%M")"
+ucttime="$(date "+%a %d %b  %H:%M")"
+battery_dir="/sys/class/power_supply"
+battery_ident="BAT0"
+
+gpu_amd_card0_dir=""
+
+# +---------- Main ------------------------------------------------------------+
 print_mem_used() {
     mem_used="$(free -m | grep "Mem" | awk '{print $3}')"
     mem_free="$(free -m | grep "Mem" | awk '{print $4}')"
@@ -14,20 +25,45 @@ print_mem_used() {
 }
 
 print_datetime() {
-    locdate="$(date "+%A %d.%m.%Y")"
-    loctime="$(date "+%H:%M")"
-    # usctime="$(TZ=US/Central date "+%H:%M")"
-    # datetime="$(date "+%a %d %b  %H:%M")"
-    # printf " ${locdate}  ${loctime}  ${usctime}"
     printf " ${locdate}  ${loctime}"
+    # printf " ${locdate}  ${loctime}  ${usctime}"
 }
 
 print_battery() {
-    bcapacity=$(cat /sys/class/power_supply/BAT0/capacity)
-    bstatus=$(cat /sys/class/power_supply/BAT0/status)
-    printf " ${bcapacity}%%"
+    if [[ -d "${battery_dir}/${battery_ident}" ]]; then
+        battery_status=$(cat "${battery_dir}/${battery_ident}/status" )
+        battery_capacity=$( cat "${battery_dir}/${battery_ident}/capacity" )
+
+        if [ "$battery_capacity" -lt 20 ]; then
+            battery_icon_capacity="  "
+        elif [ "$battery_capacity" -lt 25 ]; then
+            battery_icon_capacity="  "
+        elif [ "$battery_capacity" -lt 50 ]; then
+            battery_icon_capacity="  "
+        elif [ "$battery_capacity" -lt 81 ]; then
+            batteryery_icon_capacity="  "
+        elif [ "$battery_capacity" -gt 80 ]; then
+            batteryery_icon_capacity="  "
+        fi
+
+        if [[ "${battery_status}" = "Charging" ]]; then
+            battery_icon_status=" "
+        else
+            battery_icon_status=" "
+        fi
+
+        printf "${battery_icon_status}${battery_icon_capacity}${battery_capacity}%%"
+    else
+        printf "No Batt."
+    fi
 }
 
+# print_battery() {
+#     bcapacity=$(cat /sys/class/power_supply/BAT0/capacity)
+#     bstatus=$(cat /sys/class/power_supply/BAT0/status)
+#     printf " ${bcapacity}%%"
+# }
+# 
 print_volume() {
     var="$(amixer sget Master | grep -F 'Left:')"
     case $var in
@@ -72,7 +108,7 @@ while true; do
     # xsetroot -name "$(print_volume) $(print_battery) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
     # xsetroot -name "$(print_volume) $(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
     # xsetroot -name "$(print_volume) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
-    xsetroot -name "$(print_volume) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
+    xsetroot -name "$(print_battery) $(print_volume) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
 
     # reset old rates
     cpu_idle_old=$cpu_idle_now
