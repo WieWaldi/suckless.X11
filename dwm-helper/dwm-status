@@ -41,9 +41,9 @@ print_battery() {
         elif [ "$battery_capacity" -lt 50 ]; then
             battery_icon_capacity="  "
         elif [ "$battery_capacity" -lt 81 ]; then
-            batteryery_icon_capacity="  "
+            battery_icon_capacity="  "
         elif [ "$battery_capacity" -gt 80 ]; then
-            batteryery_icon_capacity="  "
+            battery_icon_capacity="  "
         fi
 
         if [[ "${battery_status}" = "Charging" ]]; then
