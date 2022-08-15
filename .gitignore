@@ -54,6 +54,10 @@ sent/sent
 surf/surf
 stw/stw
 
+#======== slop =================================================================
+sxiv/sxiv
+sxiv/version.h
+
 #======== xdotool ==============================================================
 xdotool/xdo_version.h
 xdotool/xdotool
