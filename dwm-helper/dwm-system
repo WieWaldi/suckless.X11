@@ -18,6 +18,9 @@ declare -a actions=(
     "Store Password for edc\a_wschroeer"
     "Store Password for edc\da_wschroeer"
     ""
+    "Connect AZ09"
+    "Connect Speaker"
+    ""
     "Screenshot of Desktop --> JPG"
     "Screenshot of Desktop --> PNG"
     "Screenshot of active window --> JPG"
@@ -102,6 +105,12 @@ case ${antwoord} in
         ;;
     "Store Password for edc\da_wschroeer")
         zenity --entry --title="Store Password" --text="Enter Password for edc\a_wschroeer" > ~/.config/password_store/password_2
+        ;;
+    "Connect AZ09")
+        bluetoothctl connect 00:00:00:00:05:88
+        ;;
+    "Connect Speaker")
+        bluetoothctl connect 00:16:94:47:4D:2E
         ;;
     "Screenshot of Desktop --> JPG")
         checkformaim
