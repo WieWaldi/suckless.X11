@@ -105,7 +105,7 @@ static const Rule rules[] = {
 	{ "mpv",                NULL,                                   NULL,                           0,          1,            1,            -1,         0   },
 	{ "Pavucontrol",        "pavucontrol",                          NULL,                           0,          1,            1,            -1,         0   },
 	{ "Surf",               NULL,                                   NULL,                           0,          1,            1,            -1,         0   },
-	{ "Teams",              NULL,                                   NULL,                           1 << 6,     0,            0,            -1,         0   },
+	{ "Teams",              NULL,                                   NULL,                           0,          1,            1,            -1,         0   },
 	{ "Thunderbird",        NULL,                                   NULL,                           1 << 7,     0,            0,            -1,         0   },
 	{ "Thunderbird",        "Calendar",                             NULL,                           1 << 7,     1,            1,            -1,         0   },
 	{ "Thunderbird",        "CardBook",                             NULL,                           1 << 7,     1,            1,            -1,         0   },
@@ -124,9 +124,9 @@ static const Rule rules[] = {
 	{ "Xsensors",           "xsensors",                             NULL,                           0,          1,            1,            -1,         0   },
 	{ "XTerm",              "xterm",                                "cava",                         0,          1,            1,            -1,         0   },
 	{ "XTerm",              "xterm",                                "alsamixer",                    0,          1,            1,            -1,         0   },
-	{ NULL,                 "outlook.office365.com",                NULL,                           0,          1,            1,             1,         0   },
+	{ NULL,                 "outlook.office365.com",                NULL,                           0,          1,            1,            -1,         0   },
 	{ NULL,                 "google-chrome",                        NULL,                           1 << 8,     0,            0,            -1,         0   },
-	{ NULL,                 NULL,                                   "ScratchPad1",                  0,          0,            1,            -1,         '1' },
+	{ NULL,                 NULL,                                   "ScratchPad1",                  0,          1,            1,            -1,         '1' },
 	{ NULL,                 NULL,                                   "ScratchPad2",                  0,          1,            1,            -1,         '2' },
 	{ NULL,                 NULL,                                   "NoteTaking",                   0,          1,            1,            -1,         '3' },
 };
@@ -169,7 +169,7 @@ static const char *scratchpad1[]        = { "1", "st", "-t", "ScratchPad1", "-g"
 static const char *scratchpad2[]        = { "2", "xterm", "-class", "XTermScratchPad", "-title", "ScratchPad2", "-e", "tmux-start.sh", "ScratchPad2", NULL}; 
 static const char *NoteTaking[]         = { "3", "xterm", "-class", "XTermNoteTaking", "-title", "NoteTaking", "-e", "dwm-notetaking", NULL}; 
 
-static Key keys[] = {
+static const Key keys[] = {
 	/* modifier         key                         function        argument */
 	{ MODKEY,           XK_w,                       spawn,          {.v = xmenu } },
 	{ MODKEY,           XK_p,                       spawn,          {.v = dmenucmd } },
@@ -230,7 +230,7 @@ static Key keys[] = {
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
-static Button buttons[] = {
+static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },

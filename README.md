@@ -64,7 +64,7 @@ suckless.org applications have been patched already.
   - dmenu-numbers-4.9.diff
   - dmenu-xresources-4.9.diff
 - **dunst** - A customizable and lightweight notification-daemon
-- **dwm** - dynamic window manager (Version 6.3, 2022-05-10) contains the following patches.
+- **dwm** - dynamic window manager (Version 6.3, 2022-08-26) contains the following patches.
   - dwm-autostart-20200610-cb3f58a.diff
   - dwm-barpadding-20200720-bb2e722.diff
   - dwm-cfacts-20200913-61bb8b2.diff
@@ -78,6 +78,7 @@ suckless.org applications have been patched already.
   - dwm-notitle-6.2.diff
   - dwm-pertag-20200914-61bb8b2.diff
   - dwm-resizecorners-6.2.diff
+  - dwm-warp-6.2.diff
   - dwm-xresources-6.2.diff
 - **farbfeld** - A lossless image format which is easy to parse, pipe and compress.
 - **feh** — image viewer and cataloguer
