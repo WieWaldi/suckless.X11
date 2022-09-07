@@ -1,11 +1,20 @@
-# suckless.CentOS
+<img src="https://raw.githubusercontent.com/WieWaldi/suckless.X11/master/img/RZ-Amper_Logo_135x135.png" align="left" width="135px" height="135px" />
+
+### suckless.X11 by WieWaldi
+> *My personal build of dwm and other tools to form a suckless X11 environment.*
+
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
+<br />
+
+# suckless.X11
 WieWaldi's collection of suckless applications and other simple tools adapted to
 a minimal installation of CentOS. Yes, the name of this repository may be kinda
 missleading since it doesn't contain suckless implementations only but other
 stuff as well. This repo targets specially and only a minimal installation of
 CentOS 7/8.
 
-![screenshot](https://raw.githubusercontent.com/WieWaldi/suckless.CentOS/master/screenshots/screenshot.jpg)
+![screenshot](https://raw.githubusercontent.com/WieWaldi/suckless.X11/master/img/screenshot.jpg)
 
 ## Motivation ...
 ... is to get a CentOS minimal installation equiped with a suckless graphical
@@ -123,7 +132,7 @@ suckless.org applications have been patched already.
 - **xssstate** - display the state of the X screensaver extension
 
 ## Colors
-No, it's not a "The Blue Oyster" theme. But I like these colors anyway.
+No, it's not a "The Blue Oyster" theme. But I like these pink and purple colors anyway.
 | Color         | Hex | RGB | CTERM |
 |---|---|---|---|
 | Deep Pink     |    ![#5f005f](https://via.placeholder.com/15/5f005f/5f005f.png) `#5f005f`| 95, 0, 95     | 53  |
@@ -149,3 +158,6 @@ No, it's not a "The Blue Oyster" theme. But I like these colors anyway.
 | blue          |   ![#268bd2](https://via.placeholder.com/15/268bd2/268bd2.png) `#268bd2`|
 | cyan          |   ![#2aa198](https://via.placeholder.com/15/2aa198/2aa198.png) `#2aa198`|
 | green         |   ![#859900](https://via.placeholder.com/15/859900/859900.png) `#859900`|
+
+## Links/URLs/Credits  
+[256 Colors Cheat Sheet](https://www.ditig.com/256-colors-cheat-sheet) - List of 256 colors for Xterm prompt (console)
