@@ -126,11 +126,11 @@ suckless.org applications have been patched already.
 No, it's not a "The Blue Oyster" theme. But I like these colors anyway.
 | Color         | Hex | RGB | CTERM |
 |---|---|---|---|
-| Deep Pink     |    ![#5f005f](https://via.placeholder.com/15/5f005f/000000?text=+) `#5f005f`| 95, 0, 95     | 53  |
-| Dark Magenta  |    ![#8700af](https://via.placeholder.com/15/8700af/000000?text=+) `#8700af`| 135, 0, 175   | 91  |
-| Medium Purple |    ![#af87d7](https://via.placeholder.com/15/af87d7/000000?text=+) `#af87d7`| 175, 135, 215 | 140 |
+| Deep Pink     |    ![#5f005f](https://via.placeholder.com/15/5f005f/5f005f.png) `#5f005f`| 95, 0, 95     | 53  |
+| Dark Magenta  |    ![#8700af](https://via.placeholder.com/15/8700af/8700af.png) `#8700af`| 135, 0, 175   | 91  |
+| Medium Purple |    ![#af87d7](https://via.placeholder.com/15/af87d7/af87d7.png) `#af87d7`| 175, 135, 215 | 140 |
 
-![Solarized Theme](https://github.com/altercation/solarized)
+[Solarized Theme](https://github.com/altercation/solarized)
 | Color         | Hex |
 |---|---|
 | base03        |   ![#002b36](https://via.placeholder.com/15/002b36/000000?text=+) `#002b36`|
