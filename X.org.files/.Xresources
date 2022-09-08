@@ -1,7 +1,28 @@
-!================================ Common =======================================
-!-- Solarized Color Theme
-!-- https://github.com/altercation/solarized/blob/master/xresources/solarized
-!-- Common
+! +----------------------------------------------------------------------------+
+! | ~/.Xresources                                                              |
+! +----------------------------------------------------------------------------+
+! | Description: the X resources                                               |
+! |      Author: Waldemar Schroeer                                             |
+! |    Revision: 2022-09-07                                                    |
+! |                                                                            |
+! | Copyright © 2019 Waldemar Schroeer                                         |
+! |                  waldemar.schroeer(at)rz-amper.de                          |
+! +----------------------------------------------------------------------------+
+
+! +----- Notes ----------------------------------------------------------------+
+! 0 = Black       8 = Gray
+! 1 = Blue        9 = Light Blue
+! 2 = Green       A = Light Green
+! 3 = Aqua        B = Light Aqua
+! 4 = Red         C = Light Red
+! 5 = Purple      D = Light Purple
+! 6 = Yellow      E = Light Yellow
+! 7 = White       F = Bright White
+
+! dwm.font:                                       FiraMono Nerd Font:size=12
+! dwm.font:                                       FiraCode Nerd Font Mono:style=Regular:size=24:antialias=true:hinting=false:autohint=false:hintstyle=hintnone:dpi=96
+
+! +----- Solarized Color Theme ------------------------------------------------+
 #define S_yellow                                #b58900
 #define S_orange                                #cb4b16
 #define S_red                                   #dc322f
@@ -22,8 +43,17 @@
 #define S_darkmagenta                           #8700af
 #define S_mediumpurple                          #af87d7
 
-!================================ dwm relatd ===================================
-dwm.font:                                       FiraMono Nerd Font:size=12
+! +----- Xft related-----------------------------------------------------------+
+Xft.autohint:                                   false
+Xft.lcdfilter:                                  lcddefault
+Xft.hintstyle:                                  hintslight
+Xft.hinting:                                    true
+Xft.antialias:                                  true
+Xft.rgba:                                       rgb
+Xft.dpi:                                        96
+
+! +----- dwm related ----------------------------------------------------------+
+dwm.font:                                       FiraCode Nerd Font:size=14
 dwm.mfact:                                      0.55
 dwm.borderpx:                                   0
 dwm.gappx:                                      15
@@ -32,11 +62,13 @@ dwm.resizehints:                                1
 dwm.nmaster:                                    1
 dwm.showbar:                                    1
 dwm.topbar:                                     1
+dwm.horizpadbar:                                0
+dwm.vertpadbar:                                 0
 dwm.vertpad:                                    0
 dwm.sidepad:                                    0
 dwm.lockfullscreen:                             0
 dwm.normfgcolor:                                #bbbbbb
-dwm.normbgcolor:                                #222222
+dwm.normbgcolor:                                #5f005f
 dwm.normbordercolor:                            #444444
 dwm.selfgcolor:                                 #eeeeee
 dwm.selbgcolor:                                 #005577
@@ -51,15 +83,31 @@ dwm.infoselfgcolor:                             #eeeeee
 dwm.infoselbgcolor:                             #5f005f
 dwm.infonormfgcolor:                            #eeeeee
 dwm.infonormbgcolor:                            #5f005f
+dwm.color0:                                     S_base02
+dwm.color1:                                     S_red
+dwm.color2:                                     S_green
+dwm.color3:                                     S_yellow
+dwm.color4:                                     S_blue
+dwm.color5:                                     S_magenta
+dwm.color6:                                     S_cyan
+dwm.color7:                                     S_base2
+dwm.color9:                                     S_orange
+dwm.color8:                                     S_base03
+dwm.color10:                                    S_base01
+dwm.color11:                                    S_base00
+dwm.color12:                                    S_base0
+dwm.color13:                                    S_violet
+dwm.color14:                                    S_base1
+dwm.color15:                                    S_base3
 
-!================================ dmneu related ================================
+! +----- dmneu related --------------------------------------------------------+
 dmenu.font:                                     FiraMono Nerd Font:size=14:antialias=true
 dmenu.background:                               #5f005f
 dmenu.foreground:                               #bbbbbb
 dmenu.selbackground:                            #8700af
 dmenu.selforeground:                            #eeeeee
 
-!================================ st relatd ====================================
+! +----- st relatd ------------------------------------------------------------+
 st*font:                                        GoMono Nerd Font:size=14:antialias=true
 st*alpha:                                       0.95
 st*borderpx:                                    0
@@ -91,15 +139,19 @@ st*color15:                                     S_base3
 st.background:                                  S_base3
 st.foreground:                                  S_base00
 
-!================================ slock relatd =================================
-slock.color0:                                   #8700af
-slock.color1:                                   #dc322f
-slock.color3:                                   #550000
-slock.color4:                                   #af87d7
+! +----- slock relatd ---------------------------------------------------------+
+slock.color0:                                   #000000
+slock.color1:                                   #000000
+slock.color3:                                   #000000
+slock.color4:                                   #000000
+!slock.color0:                                   #8700af
+!slock.color1:                                   #dc322f
+!slock.color3:                                   #550000
+!slock.color4:                                   #af87d7
 slock.fontname:                                 12x24
 slock.fontcolor:                                #afafaf
 
-!================================ svkbd relatd =================================
+! +----- svkbd relatd ---------------------------------------------------------+
 svkbd.font:                                     GoMono Nerd Font:bold:size=18
 svkbd.background:                               S_deeppink
 svkbd.foreground:                               S_base0
@@ -120,12 +172,17 @@ svkbd.overlaybackground:                        S_deeppink
 svkbd.overlayshiftforeground:                   S_base00
 svkbd.overlayshiftbackground:                   S_red
 
-!================================ Xcursor relatd ===============================
+! +----- svkbd relatd ---------------------------------------------------------+
+Sxiv.backgroud:                                 #000000
+Sxiv.foregroud:                                 #ffffff
+Sxiv.font:                                      GoMono Nerd Font:bold:size=18
+
+! +----- Xcursor relatd -------------------------------------------------------+
 Xcursor.theme:                                  ComixCursors-Blue
 ! Xcursor.size:                                   16
 Xcursor.size:                                   64
 
-!================================ XTerm related ================================
+! +----- XTerm related --------------------------------------------------------+
 XTerm*termName:                                 xterm-256color
 XTerm*cursorColor:                              #00ff00
 XTerm*pointerShape:                             hand2
@@ -160,7 +217,7 @@ XTerm*color13:                                  S_violet
 XTerm*color14:                                  S_base1
 XTerm*color15:                                  S_base3
 
-!================================ XTermScratchpad ==============================
+! +----- XTermScratchpad ------------------------------------------------------+
 XTermScratchPad.vt100.geometry:                 200x80
 XTermScratchPad*termName:                       xterm-256color
 XTermScratchPad*cursorColor:                    #00ff00
@@ -196,7 +253,7 @@ XTermScratchPad*color13:                        S_violet
 XTermScratchPad*color14:                        S_base1
 XTermScratchPad*color15:                        S_base3
 
-!================================ XTermNoteTaking ==============================
+! +----- XTermScratchpad ------------------------------------------------------+
 XTermNoteTaking.vt100.geometry:                 85x70
 XTermNoteTaking*termName:                       xterm-256color
 XTermNoteTaking*cursorColor:                    #00ff00
@@ -232,7 +289,7 @@ XTermNoteTaking*color13:                        S_violet
 XTermNoteTaking*color14:                        S_base1
 XTermNoteTaking*color15:                        S_base3
 
-!================================ UXTerm related ===============================
+! +----- UXTerm related -------------------------------------------------------+
 UXTerm*termName:                                xterm-256color
 UXTerm*cursorColor:                             #00ff00
 UXTerm*pointerShape:                            hand2
@@ -267,14 +324,14 @@ UXTerm*color13:                                 S_violet
 UXTerm*color14:                                 S_base1
 UXTerm*color15:                                 S_base3
 
-!================================ XEyes related ================================
+! +----- XEyes related --------------------------------------------------------+
 XEyes.geometry:                                 75x75-2130+50
 XEyes*foreground:                               #000000
 XEyes*background:                               #ffffff
 XEyes*outline:                                  #101010
 XEyes*center:                                   #ffffff
 
-!================================ XMenu related ================================
+! +----- XMenu related --------------------------------------------------------+
 xmenu.font:                                     FiraMono Nerd Font:size=10:antialias=true
 xmenu.background:                               #5f005f
 xmenu.foreground:                               #bbbbbb
@@ -288,7 +345,7 @@ xmenu.height:                                   28
 xmenu.borderWidth:                              1
 xmenu.separatorWidth:                           30
 
-!================================ XClock related ===============================
+! +----- XClock related -------------------------------------------------------+
 .XClock.geometry:                               75x75-2130+150
 .XClock.Clock.analog:                           true
 .XClock.Clock.strftime:                         (%A)\040%F\040%T
@@ -298,7 +355,7 @@ xmenu.separatorWidth:                           30
 .XClock.Clock.background:                       #ffffff
 .XClock.Clock.foreground:                       #000000
 
-!================================ Xmessage related =============================
+! +----- Xmessage related -----------------------------------------------------+
 .Xmessage.form.message.scrollVertical:          never
 .Xmessage.form.message.scrollHorizontal:        never
 ! .Xmessage.form.message.background:              black
@@ -311,7 +368,7 @@ xmenu.separatorWidth:                           30
 ! .Xmessage.form.Command.background:              black
 .Xmessage.form.Command.shapeStyle:              Rectangle
 
-!================================ herbe ========================================
+! +----- herbe related --------------------------------------------------------+
 herbe.background_color:                         #3e3e3e
 herbe.border_color:                             #ececec
 herbe.font_color:                               #ececec

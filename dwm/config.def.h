@@ -17,6 +17,8 @@ static int resizehints                      = 1;                    /* 1 means r
 static int nmaster                          = 1;                    /* number of clients in master area */
 static int showbar                          = 1;                    /* 0 means no bar */
 static int topbar                           = 1;                    /* 0 means bottom bar */
+static int horizpadbar                      = 2;                    /* horizontal padding for statusbar */
+static int vertpadbar                       = 0;                    /* vertical padding for statusbar */
 static int vertpad                          = 10;                   /* vertical padding of bar */
 static int sidepad                          = 10;                   /* horizontal padding of bar */
 static int lockfullscreen                   = 0;                    /* 1 will force focus on the fullscreen window */
@@ -36,6 +38,41 @@ static char infoselfgcolor[]                = "#eeeeee";
 static char infoselbgcolor[]                = "#5f005f";
 static char infonormfgcolor[]               = "#eeeeee";
 static char infonormbgcolor[]               = "#5f005f";
+static char termcol0[]                      = "#000000";
+static char termcol1[]                      = "#ff0000";
+static char termcol2[]                      = "#33ff00";
+static char termcol3[]                      = "#ff0099";
+static char termcol4[]                      = "#0066ff";
+static char termcol5[]                      = "#cc00ff";
+static char termcol6[]                      = "#00ffff";
+static char termcol7[]                      = "#d0d0d0";
+static char termcol8[]                      = "#808080";
+static char termcol9[]                      = "#ff0000";
+static char termcol10[]                     = "#33ff00";
+static char termcol11[]                     = "#ff0099";
+static char termcol12[]                     = "#0066ff";
+static char termcol13[]                     = "#cc00ff";
+static char termcol14[]                     = "#00ffff";
+static char termcol15[]                     = "#ffffff";
+
+static char *termcolor[] = {
+		termcol0,
+		termcol1,
+		termcol2,
+		termcol3,
+		termcol4,
+		termcol5,
+		termcol6,
+		termcol7,
+		termcol8,
+		termcol9,
+		termcol10,
+		termcol11,
+		termcol12,
+		termcol13,
+		termcol14,
+		termcol15,
+};
 
 static char *colors[][3] = {
 		/*                                      fg                  bg                  border   */
@@ -58,6 +95,8 @@ ResourcePref resources[] = {
 		{ "nmaster",            INTEGER, &nmaster },
 		{ "showbar",            INTEGER, &showbar },
 		{ "topbar",             INTEGER, &topbar },
+		{ "horizpadbar",        INTEGER, &horizpadbar },
+		{ "vertpadbar",         INTEGER, &vertpadbar },
 		{ "vertpad",            INTEGER, &vertpad },
 		{ "sidepad",            INTEGER, &sidepad },
 		{ "lockfullscreen",     INTEGER, &lockfullscreen },
@@ -77,6 +116,22 @@ ResourcePref resources[] = {
 		{ "infoselbgcolor",     STRING,  &infoselbgcolor },
 		{ "infonormfgcolor",    STRING,  &infonormfgcolor },
 		{ "infonormbgcolor",    STRING,  &infonormbgcolor },
+		{ "color0",             STRING,  &termcol0 },
+		{ "color1",             STRING,  &termcol1 },
+		{ "color2",             STRING,  &termcol2 },
+		{ "color3",             STRING,  &termcol3 },
+		{ "color4",             STRING,  &termcol4 },
+		{ "color5",             STRING,  &termcol5 },
+		{ "color6",             STRING,  &termcol6 },
+		{ "color7",             STRING,  &termcol7 },
+		{ "color8",             STRING,  &termcol8 },
+		{ "color9",             STRING,  &termcol9 },
+		{ "color10",            STRING,  &termcol10 },
+		{ "color11",            STRING,  &termcol11 },
+		{ "color12",            STRING,  &termcol12 },
+		{ "color13",            STRING,  &termcol13 },
+		{ "color14",            STRING,  &termcol14 },
+		{ "color15",            STRING,  &termcol15 },
 };
 /* tagging */
 /* static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }; */
@@ -85,21 +140,22 @@ ResourcePref resources[] = {
 /* static const char *tags[] = { "", "Finder", "File", "Edit", "View", "Settings", "Go", "Window", "Help"}; */
 static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
 
-
 static const Rule rules[] = {
 	/* class                instance                                title                           tags mask   iscentered    isfloating    monitor     scratch key */
 	{ "Blueman-manager",    "blueman-manager",                      NULL,                           0,          1,            1,            -1,         0   },
 	{ "Citrix",             "citrix",                               "Citrix Workspace",             1 << 1,     1,            1,            -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "Settings",                     0,          1,            1,            -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "cool-retro-term",              0,          1,            1,            -1,         0   },
-	{ "cool-retro-term",    "cool-retro-term",                      "CMatrix",                      0,          1,            1,             2,         0   },
+	{ "cool-retro-term",    "cool-retro-term",                      "CMatrix",                      0,          1,            1,            -1,         0   },
 	{ "Deadbeef",           "deadbeef",                             "DeaDBeeF-1.8.4",               0,          1,            1,            -1,         0   },
 	{ "dragonplayer",       "dragon",                               NULL,                           0,          1,            1,            -1,         0   },
 	{ "Firefox",            "Navigator",                            NULL,                           1 << 8,     0,            0,            -1,         0   },
 	{ "Firefox",            "Browser",                              "Firefox Preferences",          1 << 8,     0,            1,            -1,         0   },
+	{ "Gcolor3",            "gcolor3",                              NULL,                           0,          1,            1,            -1,         0   },
 	{ "Gimp",               NULL,                                   NULL,                           0,          0,            1,            -1,         0   },
 	{ "Gnome-calculator",   "gnome-calculator",                     "Calculator",                   0,          1,            1,            -1,         0   },
 	{ "gnuplot_qt",         NULL,                                   NULL,                           0,          1,            1,            -1,         0   },
+	{ "Gpick",              "gpick",                                NULL,                           0,          1,            1,            -1,         0   },
 	{ "Gxmessage",          "gxmessage",                            "PopUp",                        0,          1,            1,            -1,         0   },
 	{ "Krasses Radio",      NULL,                                   NULL,                           1 << 1,     1,            1,            -1,         0   },
 	{ "mpv",                NULL,                                   NULL,                           0,          1,            1,            -1,         0   },

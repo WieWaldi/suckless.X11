@@ -3,21 +3,49 @@
 # +----------------------------------------------------------------------------+
 # | dwm_status                                                                 |
 # +----------------------------------------------------------------------------+
-# | Copyright © 2020 Waldemar Schroeer                                         |
+# |       Usage: No options needed, simply start it through .xinitrc           |
+# | Description: Stores status in WM_NAME X11 property of the root window      |
+# |    Requires: GNU core utils                                                |
+# |       Notes:                                                               |
+# |      Author: Waldemar Schroeer                                             |
+# |     Company: Rechenzentrum Amper                                           |
+# |     Version:                                                               |
+# |     Created: 2022-09-07                                                    |
+# |    Revision:                                                               |
+# |                                                                            |
+# | Copyright © 2019 Waldemar Schroeer                                         |
 # |                  waldemar.schroeer(at)rz-amper.de                          |
 # +----------------------------------------------------------------------------+
 
-# +---------- Configuration starts here ---------------------------------------+
+# +----- Variables ------------------------------------------------------------+
 locdate="$(date "+%A %d.%m.%Y")"
 loctime="$(date "+%H:%M")"
 usctime="$(TZ=US/Central date "+%H:%M")"
 ucttime="$(date "+%a %d %b  %H:%M")"
 battery_dir="/sys/class/power_supply"
 battery_ident="BAT0"
-
 gpu_amd_card0_dir=""
+SEPA=""
+SEPB=""
+c_bckg="NONE"
+g_bckg=$(cat ${HOME}/.Xresources | grep "dwm.statusbgcolor" | awk '{print $2}')
+dwm_status=""
 
-# +---------- Main ------------------------------------------------------------+
+# +----- Functions ------------------------------------------------------------+
+prompt_segment() {
+    local bckg forg cont
+    bckg="${1}"
+    forg="${2}"
+    cont="${3}"
+    if [[ ${c_bckg} = 'NONE' ]];then
+        echo -e -n "^b${g_bckg}^^C${bckg}^${SEPA}"
+    else
+        echo -e -n "^B${c_bckg}^^C${bckg}^${SEPA}"
+    fi
+    c_bckg=${bckg}
+    echo -e -n "^B${bckg}^^C${forg}^${SEPB} ${cont}"
+}
+
 print_mem_used() {
     mem_used="$(free -m | grep "Mem" | awk '{print $3}')"
     mem_free="$(free -m | grep "Mem" | awk '{print $4}')"
@@ -84,12 +112,21 @@ print_volume() {
 
 print_temperature() {
     tempcpu="$(sensors | grep "CPU Temp" | awk '{print $3}')"
-    tempgpu="$(echo "$(cat /sys/class/drm/card0/device/hwmon/hwmon2/temp1_input) / 1000" | bc)"
+    tempgpu="$(echo "$(cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input) / 1000" | bc)"
     printf "CPU:${tempcpu} GPU:+${tempgpu}°C"
 }
 
 print_appleicons() {
     printf "    "
+}
+
+build_dwm_status() {
+    prompt_segment 1 7 "$(print_battery)"
+    prompt_segment 2 7 "$(print_volume)"
+    prompt_segment 3 7 "$(print_temperature)"
+    prompt_segment 4 7 "$(print_cpu_used)"
+    prompt_segment 5 7 "$(print_mem_used)"
+    prompt_segment 6 7 "$(print_datetime)"
 }
 
 while true; do
@@ -108,7 +145,9 @@ while true; do
     # xsetroot -name "$(print_volume) $(print_battery) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
     # xsetroot -name "$(print_volume) $(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
     # xsetroot -name "$(print_volume) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
-    xsetroot -name "$(print_battery) $(print_volume) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
+    # xsetroot -name "$(print_battery) $(print_volume) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
+    xsetroot -name "$(build_dwm_status)"
+    # echo "$(build_dwm_status)"
 
     # reset old rates
     cpu_idle_old=$cpu_idle_now
