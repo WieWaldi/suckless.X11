@@ -142,6 +142,7 @@ static const char *tags[] = { "", "", "", "", "", "", "", "
 
 static const Rule rules[] = {
 	/* class                instance                                title                           tags mask   iscentered    isfloating    monitor     scratch key */
+	{ "Arandr",             "arandr",                               NULL,                           0,          1,            1,            -1,         0   },
 	{ "Blueman-manager",    "blueman-manager",                      NULL,                           0,          1,            1,            -1,         0   },
 	{ "Citrix",             "citrix",                               "Citrix Workspace",             1 << 1,     1,            1,            -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "Settings",                     0,          1,            1,            -1,         0   },
