@@ -9,7 +9,9 @@
 static char font[]                          = "monospace:size=10";
 static const char *fonts[]                  = { font };
 static const char dmenufont[]               = "monospace:size=10";
+static const int mainmon                    = 0;                    /* xsetroot will only change the bar on this monitor */
 static float mfact                          = 0.55;                 /* factor of master area size [0.05..0.95] */
+static const Bool viewontag                 = True;                 /* Switch view on tag switch */
 static unsigned int borderpx                = 0;                    /* border pixel of windows */
 static unsigned int gappx                   = 15;                   /* gaps between windows */
 static unsigned int snap                    = 0;                    /* snap pixel */

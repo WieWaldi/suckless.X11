@@ -811,8 +811,10 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 			isCode = 1;
 
 			text[i] = '\0';
-			w = TEXTW(text) - lrpad;
-			drw_text(drw, x, borderpx + vertpadbar / 2, w, bh - vertpadbar, 0, text, 0);
+			if (m == &mons[mainmon]) { /* status is only drawn on main monitor */
+				w = TEXTW(text) - lrpad;
+				drw_text(drw, x, borderpx + vertpadbar / 2, w, bh - vertpadbar, 0, text, 0);
+			}
 
 			x += w;
 
@@ -872,8 +874,10 @@ drawstatusbar(Monitor *m, int bh, char* stext) {
 	}
 
 	if (!isCode) {
-		w = TEXTW(text) - lrpad;
-		drw_text(drw, x, borderpx + vertpadbar / 2, w, bh - vertpadbar, 0, text, 0);
+		if (m == &mons[mainmon]) { /* status is only drawn on main monitor */
+			w = TEXTW(text) - lrpad;
+			drw_text(drw, x, borderpx + vertpadbar / 2, w, bh - vertpadbar, 0, text, 0);
+		}
 	}
 
 	drw_setscheme(drw, scheme[SchemeNorm]);
@@ -895,7 +899,7 @@ drawbar(Monitor *m)
 		return;
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == selmon) { /* status is only drawn on selected monitor */
+	if (m == &mons[mainmon]) { /* status is only drawn on main monitor */
 		tw = m->ww - drawstatusbar(m, bh, stext);
 	}
 
@@ -1958,6 +1962,8 @@ tag(const Arg *arg)
 		selmon->sel->tags = arg->ui & TAGMASK;
 		focus(NULL);
 		arrange(selmon);
+		if(viewontag && ((arg->ui & TAGMASK) != TAGMASK))
+			view(arg);
 	}
 }
 
