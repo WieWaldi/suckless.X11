@@ -61,12 +61,13 @@ print_date() {
 }
 
 print_time() {
-    printf " %s  %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
-    # printf " %s" "$(date "+%H:%M")"
+    # printf " %s  %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
+    printf " %s" "$(date "+%H:%M")"
 }
 
 print_date_time() {
     printf " %s" "$(date "+%A %d.%m.%Y")"
+    # printf " %s  %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
     printf " %s" "$(date "+%H:%M")"
 
 }
@@ -180,12 +181,12 @@ print_appleicons() {
 build_dwm_status() {
     prompt_segment 0 15 "$(print_battery)"
     prompt_segment 1 15 "$(print_volume)"
-    prompt_segment 2 15 "$(print_temp_cpu)"
-    prompt_segment 3 15 "$(print_temp_gpu)"
-    prompt_segment 4 15 "$(print_cpu_used)"
-    prompt_segment 5 15 "$(print_mem_used)"
-    prompt_segment 6 15 "$(print_date)"
-    prompt_segment 7 15 "$(print_time)"
+    prompt_segment 2 15 "$(print_network)"
+    prompt_segment 3 15 "$(print_temp_cpu)"
+    prompt_segment 4 15 "$(print_temp_gpu)"
+    prompt_segment 5 15 "$(print_cpu_used)"
+    prompt_segment 6 15 "$(print_mem_used)"
+    prompt_segment 7 15 "$(print_date_time)"
 }
 
 while true; do
