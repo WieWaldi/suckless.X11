@@ -18,12 +18,14 @@
 # +----------------------------------------------------------------------------+
 
 # +----- Variables ------------------------------------------------------------+
-locdate="$(date "+%A %d.%m.%Y")"
-loctime="$(date "+%H:%M")"
-usctime="$(TZ=US/Central date "+%H:%M")"
-ucttime="$(date "+%a %d %b  %H:%M")"
 battery_dir="/sys/class/power_supply"
 battery_ident="BAT0"
+tmp_cpu_string="atk0110"
+tmp_gpu_string="radeon"
+tmp_hdd_string="HDD"
+
+
+
 gpu_amd_card0_dir=""
 SEPA=""
 SEPB=""
@@ -43,77 +45,132 @@ prompt_segment() {
         echo -e -n "^B${c_bckg}^^C${bckg}^${SEPA}"
     fi
     c_bckg=${bckg}
-    echo -e -n "^B${bckg}^^C${forg}^${SEPB} ${cont}"
+    # echo -e -n "^B${bckg}^^C${forg}^${SEPB} ${cont}"
+    echo -e -n "^B${bckg}^^C${forg}^ ${cont}"
 }
 
 print_mem_used() {
-    mem_used="$(free -m | grep "Mem" | awk '{print $3}')"
-    mem_free="$(free -m | grep "Mem" | awk '{print $4}')"
-    printf " Used:${mem_used}MB|Free:${mem_free}MB"
+    printf " %s" "$(free --mebi | sed -n '2{p;q}' | awk '{printf ("%2.2f┊%2.2f GB\n", ( $3 / 1024), ($2 / 1024))}')"
+    # mem_used="$(free -m | grep "Mem" | awk '{print $3}')"
+    # mem_free="$(free -m | grep "Mem" | awk '{print $4}')"
+    # printf " Used:${mem_used}MB|Free:${mem_free}MB"
 }
 
-print_datetime() {
-    printf " ${locdate}  ${loctime}"
-    # printf " ${locdate}  ${loctime}  ${usctime}"
+print_date() {
+    printf " %s" "$(date "+%A %d.%m.%Y")"
+}
+
+print_time() {
+    printf " %s  %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
+    # printf " %s" "$(date "+%H:%M")"
+}
+
+print_date_time() {
+    printf " %s" "$(date "+%A %d.%m.%Y")"
+    printf " %s" "$(date "+%H:%M")"
+
 }
 
 print_battery() {
+    local battery_status battery_capacity battery_status_icon battery_capacity_icon
     if [[ -d "${battery_dir}/${battery_ident}" ]]; then
         battery_status=$(cat "${battery_dir}/${battery_ident}/status" )
         battery_capacity=$( cat "${battery_dir}/${battery_ident}/capacity" )
-
         if [ "$battery_capacity" -lt 20 ]; then
-            battery_icon_capacity="  "
+            battery_capacity_icon="  "
         elif [ "$battery_capacity" -lt 25 ]; then
-            battery_icon_capacity="  "
+            battery_capacity_icon="  "
         elif [ "$battery_capacity" -lt 50 ]; then
-            battery_icon_capacity="  "
+            battery_capacity_icon="  "
         elif [ "$battery_capacity" -lt 81 ]; then
-            battery_icon_capacity="  "
+            battery_capacity_icon="  "
         elif [ "$battery_capacity" -gt 80 ]; then
-            battery_icon_capacity="  "
+            battery_capacity_icon="  "
         fi
-
         if [[ "${battery_status}" = "Charging" ]]; then
-            battery_icon_status=" "
+            battery_status_icon=""
         else
-            battery_icon_status=" "
+            battery_status_icon=" "
         fi
-
-        printf "${battery_icon_status}${battery_icon_capacity}${battery_capacity}%%"
+        # printf "${battery_icon_status}${battery_icon_capacity}${battery_capacity}%%"
+        printf "%3s%2s%2s%%" "${battery_status_icon}" "${battery_capacity_icon}" "${battery_capacity}"
     else
-        printf "No Batt."
+        battery_status_icon=" "
+        printf "%s" "${battery_status_icon}"
     fi
 }
 
-# print_battery() {
-#     bcapacity=$(cat /sys/class/power_supply/BAT0/capacity)
-#     bstatus=$(cat /sys/class/power_supply/BAT0/status)
-#     printf " ${bcapacity}%%"
-# }
-# 
 print_volume() {
+    local volume_icon volume_level
     var="$(amixer sget Master | grep -F 'Left:')"
     case $var in
         *'[on]')
-            # volume="$(amixer sget Master | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
-            volume="$(echo ${var} | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
-            if [ "${volume}" -le 50 ]; then
-                printf " ${volume}%%"
-            elif [ "${volume}" -le 100 ]; then
-                printf " ${volume}%%"
+            volume_level="$(echo ${var} | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
+            if [ "${volume_level}" -le 31 ]; then
+                volume_icon=""
+            elif [ "${volume_level}" -gt 59 ]; then
+                volume_icon="墳"
+            else
+                volume_icon="奔"
             fi
         ;;       
         *'[off]')
-            printf " [M]"
+            volume_icon="婢"
         ;;
     esac
+    printf "%s %3s" "${volume_icon}" "${volume_level}"
+}
+
+print_network() {
+    local network_wifi_icon network_wifi_link network_ether_icon
+    case "$(cat /sys/class/net/w*/operstate 2>/dev/null)" in
+        down)
+            network_wifi_icon="睊"
+            network_wifi_link="0"
+            ;;
+        up)
+            network_wifi_icon=" "
+            network_wifi_link="$(awk '/^\s*w/ { print int($3*100/70) }')"
+            ;;
+    esac
+    case "$(cat /sys/class/net/e*/operstate 2>/dev/null)" in
+        down)
+            network_ether_icon=" "
+            ;;
+        up)
+            network_ether_icon="ﯱ "
+            ;;
+    esac
+    printf "%s %s %3s" "${network_ether_icon}" "${network_wifi_icon}" "${network_wifi_link}"
 }
 
 print_temperature() {
-    tempcpu="$(sensors | grep "CPU Temp" | awk '{print $3}')"
-    tempgpu="$(echo "$(cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input) / 1000" | bc)"
-    printf "CPU:${tempcpu} GPU:+${tempgpu}°C"
+    local sensors_out temp_cpu temp_gpu temp_hd1
+    sensors_out=$(sensors -A 2>/dev/null)
+    temp_cpu="$(sensors -A | awk -v n=2 '/atk0110/ { for ( i=l;i<=n;i++ ) getline; print $3}')"
+    temp_gpu="$(sensors -A | awk -v n=0 '/radeon/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
+    temp_hd1="$(sensors -A | awk -v n=0 '/nvme/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
+    printf ""
+    if [[ ! -z ${temp_cpu} ]]; then
+        printf "CPU:%3s" "${temp_cpu}"
+    fi
+    if [[ ! -z ${temp_gpu} ]]; then
+        printf "┊GPU:%3s" "${temp_gpu}"
+    fi
+    if [[ ! -z ${temp_hd1} ]]; then
+        printf "┊HDD:%3s" "${temp_gpu}"
+    fi
+}
+
+print_temp_cpu() {
+    tempcpu="$(sensors | grep "CPU Temp" | awk '{print $3}' | tr -d "+°C")"
+    printf "CPU:%3s" "${tempcpu}"
+}
+
+print_temp_gpu() {
+    tempgpu="$(sensors | grep "temp1" | awk '{print $2}' | tr -d "+°C")"
+    # tempgpu="$(echo "$(cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input) / 1000" | bc)"
+    printf "GPU:%3s" "${tempgpu}"
 }
 
 print_appleicons() {
@@ -121,12 +178,14 @@ print_appleicons() {
 }
 
 build_dwm_status() {
-    prompt_segment 1 7 "$(print_battery)"
-    prompt_segment 2 7 "$(print_volume)"
-    prompt_segment 3 7 "$(print_temperature)"
-    prompt_segment 4 7 "$(print_cpu_used)"
-    prompt_segment 5 7 "$(print_mem_used)"
-    prompt_segment 6 7 "$(print_datetime)"
+    prompt_segment 0 15 "$(print_battery)"
+    prompt_segment 1 15 "$(print_volume)"
+    prompt_segment 2 15 "$(print_temp_cpu)"
+    prompt_segment 3 15 "$(print_temp_gpu)"
+    prompt_segment 4 15 "$(print_cpu_used)"
+    prompt_segment 5 15 "$(print_mem_used)"
+    prompt_segment 6 15 "$(print_date)"
+    prompt_segment 7 15 "$(print_time)"
 }
 
 while true; do
@@ -138,14 +197,9 @@ while true; do
     let cpu_used="100 * ($cpu_interval - ($cpu_idle_now-${cpu_idle_old:-0})) / $cpu_interval"
 
     print_cpu_used() {
-        printf " ${cpu_used}%%"
+        printf " %3s%%" ${cpu_used}
     }
 
-    # xsetroot -name "$(print_appleicons) $(print_volume) $(print_battery) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
-    # xsetroot -name "$(print_volume) $(print_battery) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
-    # xsetroot -name "$(print_volume) $(print_battery) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
-    # xsetroot -name "$(print_volume) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
-    # xsetroot -name "$(print_battery) $(print_volume) $(print_temperature) $(print_cpu_used) $(print_mem_used) $(print_datetime)"
     xsetroot -name "$(build_dwm_status)"
     # echo "$(build_dwm_status)"
 

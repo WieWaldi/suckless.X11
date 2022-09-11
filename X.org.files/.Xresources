@@ -43,6 +43,33 @@
 #define S_darkmagenta                           #8700af
 #define S_mediumpurple                          #af87d7
 
+! #define dwmstatuscolor0                         #5f005f
+! #define dwmstatuscolor1                         #760076
+! #define dwmstatuscolor2                         #8d008d
+! #define dwmstatuscolor3                         #a400a4
+! #define dwmstatuscolor4                         #bb00bb
+! #define dwmstatuscolor5                         #d200d2
+! #define dwmstatuscolor6                         #e900e9
+! #define dwmstatuscolor7                         #ff00ff
+
+#define dwmstatuscolor0                         #680000
+#define dwmstatuscolor1                         #7c2b00
+#define dwmstatuscolor2                         #695700
+#define dwmstatuscolor3                         #044f00
+#define dwmstatuscolor4                         #00505e
+#define dwmstatuscolor5                         #000d63
+#define dwmstatuscolor6                         #360063
+#define dwmstatuscolor7                         #6e0039
+
+! #define dwmstatuscolor0                         #b58900
+! #define dwmstatuscolor1                         #cb4b16
+! #define dwmstatuscolor2                         #dc322f
+! #define dwmstatuscolor3                         #d33682
+! #define dwmstatuscolor4                         #6c71c4
+! #define dwmstatuscolor5                         #268bd2
+! #define dwmstatuscolor6                         #2aa198
+! #define dwmstatuscolor7                         #859900
+
 ! +----- Xft related-----------------------------------------------------------+
 Xft.autohint:                                   false
 Xft.lcdfilter:                                  lcddefault
@@ -53,7 +80,7 @@ Xft.rgba:                                       rgb
 Xft.dpi:                                        96
 
 ! +----- dwm related ----------------------------------------------------------+
-dwm.font:                                       FiraCode Nerd Font:size=14
+dwm.font:                                       FiraMono Nerd Font:size=14
 dwm.mfact:                                      0.55
 dwm.borderpx:                                   0
 dwm.gappx:                                      15
@@ -83,14 +110,22 @@ dwm.infoselfgcolor:                             #eeeeee
 dwm.infoselbgcolor:                             #5f005f
 dwm.infonormfgcolor:                            #eeeeee
 dwm.infonormbgcolor:                            #5f005f
-dwm.color0:                                     S_base02
-dwm.color1:                                     S_red
-dwm.color2:                                     S_green
-dwm.color3:                                     S_yellow
-dwm.color4:                                     S_blue
-dwm.color5:                                     S_magenta
-dwm.color6:                                     S_cyan
-dwm.color7:                                     S_base2
+! dwm.color0:                                     S_base02
+! dwm.color1:                                     S_red
+! dwm.color2:                                     S_green
+! dwm.color3:                                     S_yellow
+! dwm.color4:                                     S_blue
+! dwm.color5:                                     S_magenta
+! dwm.color6:                                     S_cyan
+! dwm.color7:                                     S_base2
+dwm.color0:                                     dwmstatuscolor0
+dwm.color1:                                     dwmstatuscolor1
+dwm.color2:                                     dwmstatuscolor2
+dwm.color3:                                     dwmstatuscolor3
+dwm.color4:                                     dwmstatuscolor4
+dwm.color5:                                     dwmstatuscolor5
+dwm.color6:                                     dwmstatuscolor6
+dwm.color7:                                     dwmstatuscolor7
 dwm.color9:                                     S_orange
 dwm.color8:                                     S_base03
 dwm.color10:                                    S_base01
