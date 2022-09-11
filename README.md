@@ -103,7 +103,7 @@ suckless.org applications have been patched already.
   - sent-options-20190213-72d33d4.diff
 - **slock** — simple X screen locker (Version 1.4) contains the following patches.
   - slock-capscolor-20170106-2d2a21a.diff
-  - slock-message-20191002-b46028b.diff
+  - slock-colormessage-20200210-35633d4.diff
   - slock-xresources-20191126-53e56c7.diff
 - **slop** - select operation
 - **sselp** - Simple X selection printer
