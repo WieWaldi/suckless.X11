@@ -87,10 +87,10 @@ print_battery() {
         elif [ "$battery_capacity" -gt 80 ]; then
             battery_capacity_icon="  "
         fi
-        if [[ "${battery_status}" = "Charging" ]]; then
-            battery_status_icon=""
-        else
+        if [[ "${battery_status}" = "Discharging" ]]; then
             battery_status_icon=" "
+        else
+            battery_status_icon=""
         fi
         # printf "${battery_icon_status}${battery_icon_capacity}${battery_capacity}%%"
         printf "%3s%2s%2s%%" "${battery_status_icon}" "${battery_capacity_icon}" "${battery_capacity}"
@@ -107,7 +107,7 @@ print_volume() {
         *'[on]')
             volume_level="$(echo ${var} | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
             if [ "${volume_level}" -le 31 ]; then
-                volume_icon=""
+                volume_icon=""
             elif [ "${volume_level}" -gt 59 ]; then
                 volume_icon="墳"
             else
