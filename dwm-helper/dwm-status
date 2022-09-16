@@ -119,7 +119,7 @@ print_volume() {
             volume_icon="婢"
         ;;
     esac
-    printf "%s %3s" "${volume_icon}" "${volume_level}"
+    printf "%s %3s%%" "${volume_icon}" "${volume_level}"
 }
 
 print_network() {
@@ -131,7 +131,7 @@ print_network() {
             ;;
         up)
             network_wifi_icon=" "
-            network_wifi_link="$(awk '/^\s*w/ { print int($3*100/70) }')"
+            network_wifi_link="$(awk '/^\s*w/ { print int($3*100/70) }' /proc/net/wireless)"
             ;;
     esac
     case "$(cat /sys/class/net/e*/operstate 2>/dev/null)" in
@@ -142,15 +142,15 @@ print_network() {
             network_ether_icon="ﯱ "
             ;;
     esac
-    printf "%s %s %3s" "${network_ether_icon}" "${network_wifi_icon}" "${network_wifi_link}"
+    printf "%s %s %3s%%" "${network_ether_icon}" "${network_wifi_icon}" "${network_wifi_link}"
 }
 
 print_temperature() {
     local sensors_out temp_cpu temp_gpu temp_hd1
     sensors_out=$(sensors -A 2>/dev/null)
-    temp_cpu="$(sensors -A | awk -v n=2 '/atk0110/ { for ( i=l;i<=n;i++ ) getline; print $3}')"
-    temp_gpu="$(sensors -A | awk -v n=0 '/radeon/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
-    temp_hd1="$(sensors -A | awk -v n=0 '/nvme/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
+    temp_cpu="$(sensors -A | awk -v n=0 '/coretemp-isa-0000/ { for ( i=l;i<=n;i++ ) getline; print $4}')"
+    temp_gpu="$(sensors -A | awk -v n=0 '/pch_cometlake-virtual-0/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
+    temp_hd1="$(sensors -A | awk -v n=0 '/nvme-pci-5500/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
     printf ""
     if [[ ! -z ${temp_cpu} ]]; then
         printf "CPU:%3s" "${temp_cpu}"
@@ -159,7 +159,7 @@ print_temperature() {
         printf "┊GPU:%3s" "${temp_gpu}"
     fi
     if [[ ! -z ${temp_hd1} ]]; then
-        printf "┊HDD:%3s" "${temp_gpu}"
+        printf "┊HDD:%3s" "${temp_hd1}"
     fi
 }
 
@@ -182,8 +182,7 @@ build_dwm_status() {
     prompt_segment 0 15 "$(print_battery)"
     prompt_segment 1 15 "$(print_volume)"
     prompt_segment 2 15 "$(print_network)"
-    prompt_segment 3 15 "$(print_temp_cpu)"
-    prompt_segment 4 15 "$(print_temp_gpu)"
+    prompt_segment 3 15 "$(print_temperature)"
     prompt_segment 5 15 "$(print_cpu_used)"
     prompt_segment 6 15 "$(print_mem_used)"
     prompt_segment 7 15 "$(print_date_time)"
