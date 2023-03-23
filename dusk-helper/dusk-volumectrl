@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | dwm_volumectrl                                                          |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+if [ $# -ne 1 ]; then
+    printf "usage: dwm_volumctrl ( up|down|mute )\n\n"
+    exit 1
+fi
+
+if [ $1 == "up" ]; then
+    amixer -q -D pulse sset Master 5%+
+    # amixer -q sset 'Master' 5%+
+    notify-send 'Info' 'Volume Up 5%'
+elif [ $1 == "down" ]; then
+    amixer -q -D pulse sset Master 5%-
+    # amixer -q sset 'Master' 5%-
+    notify-send 'Info' 'Volume Down 5%'
+elif [ $1 == "mute" ]; then
+    amixer -q -D pulse sset Master toggle
+    notify-send 'Info' 'Volume mute toggle'
+fi
+
+exit
+

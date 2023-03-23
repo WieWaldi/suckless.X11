@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | dwm_wrapper                                                             |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+print_mem_used() {
+    mem_used="$(free -m | grep "Mem" | awk '{print $3}')"
+    mem_free="$(free -m | grep "Mem" | awk '{print $4}')"
+    echo -ne "Memory Used: ${mem_used}MB / Memory Free: ${mem_free}MB"
+}
+
+print_datetime() {
+    datetimeloc="$(date "+%A %d.%m.%Y %Z=%H:%M")"
+    datetimeusc="$(TZ=US/Central date "+%Z=%H:%M")"
+    datetime="$(date "+%a %d %b ${sep_line} %H:%M")"
+    echo -ne "${datetimeloc} ${datetimeusc}"
+}
+
+while true; do
+    # get new cpu idle and total usage
+    eval $(awk '/^cpu /{print "cpu_idle_now=" $5 "; cpu_total_now=" $2+$3+$4+$5 }' /proc/stat)
+    cpu_interval=$((cpu_total_now-${cpu_total_old:-0}))
+
+    # calculate cpu usage (%)
+    let cpu_used="100 * ($cpu_interval - ($cpu_idle_now-${cpu_idle_old:-0})) / $cpu_interval"
+
+    print_cpu_used() {
+        printf "%-14b" "CPU: ${cpu_used}%"
+    }
+
+
+    xsetroot -name "$(print_cpu_used)\
+    $(print_mem_used)\
+    $(print_datetime)"
+
+    # reset old rates
+    cpu_idle_old=$cpu_idle_now
+    cpu_total_old=$cpu_total_now
+
+    # loop stats every 1 second
+    sleep 1s
+done &
+
+
+# /bin/xrandr --output DP-3 --rotate left
+# /usr/local/bin/feh --bg-scale /usr/share/backgrounds/funeral.jpg &
+# /usr/bin/xset -dpms
+exec ~/bin/dwm

@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | ~/.local/bin/dwm-system                                                 |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+# +---------- Configuration starts here ------------------------------------+
+# Array of actions to choose from
+declare -a actions=(
+    "Lock Screen (Good Boy)"
+    "Fuck things up (Reboot)"
+    "Fuck things up even worse (Shutdown)"
+    "Piss off (Exit from DE)"
+    ""
+    "Store Password for edc\a_wschroeer"
+    "Store Password for edc\da_wschroeer"
+    ""
+    "Connect AZ09"
+    "Connect Speaker"
+    ""
+    "Screenshot of Desktop --> JPG"
+    "Screenshot of Desktop --> PNG"
+    "Screenshot of active window --> JPG"
+    "Screenshot of active window --> PNG"
+    "Screenshot of selection --> JPG"
+    "Screenshot of selection --> PNG"
+)
+
+# The directory to store screenshots
+# Don't use ~ for your home directory but rather ${HOME}
+ScrnShtDir="${HOME}/Pictures/Screenshots"
+
+# Location of maim (maim needs the following LD Library Path)
+maim="/usr/bin/maim"
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HOME}/.local/lib64:${HOME}/.local/lib
+
+# General maim options
+MaimOptions="--quiet --delay 1"
+
+# Location of xdotool
+xdotool="${HOME}/.local/bin/xdotool"
+
+# How the base file name gets formated. Currently "Year-Mont-Day-Hour-Minute-Second"
+# date=$(date +%Y-%m-%d-%H-%M-%S)
+# scrnsht="${HOME}/Screenshots/${date}.jpg"
+ScrnSht="$(date +%Y-%m-%d-%H-%M-%S)"
+
+# Which tool to use for locking the screen
+ScreenLock="${HOME}/.local/bin/slock-wrapper &"
+
+# Command to shutdown
+ShutDown="poweroff"
+
+# Command to reboot
+Reboot="reboot"
+
+# Command to exit desktop environment
+Exit="/bin/pkill -KILL -u $USER"
+# +---------- Configuration ends here --------------------------------------+
+
+checkforxdotool () {
+    if [ ! -f "${xdotool}" ]; then
+        notify-send "Error" "Could not find xdotool."
+        exit 1
+    fi
+}
+
+checkformaim () {
+    if [ ! -f "${maim}" ]; then
+        notify-send "Error" "Could not find maim."
+        exit 1
+    fi
+}
+
+if [ ! -d ${ScrnShtDir} ]; then
+    mkdir -p ${ScrnShtDir}
+fi
+antwoord="$( printf "%s\n" "${actions[@]}" | dmenu "$@" )"
+case ${antwoord} in
+    "Lock Screen (Good Boy)")
+        notify-send 'Info' 'Locking screen in 5 seconds.'
+        sleep 5
+        ${ScreenLock}
+        ;;
+    "Fuck things up even worse (Shutdown)")
+        notify-send 'Info' 'Shutting down in 5 seconds.'
+        sleep 5
+        # ${ShutDown}
+        ;;
+    "Fuck things up (Reboot)")
+        notify-send 'Info' 'Rebooting in 5 second.'
+        sleep 5
+        # ${Reboot}
+        ;;
+    "Piss off (Exit from DE)")
+        notify-send "Info" "Quitting all apps\nand pissing off in 5 seconds."
+        sleep 5
+        # ${Exit}
+        ;;
+    "Store Password for edc\a_wschroeer")
+        zenity --entry --title="Store Password" --text="Enter Password for edc\a_wschroeer" > ~/.config/password_store/password_1
+        ;;
+    "Store Password for edc\da_wschroeer")
+        zenity --entry --title="Store Password" --text="Enter Password for edc\a_wschroeer" > ~/.config/password_store/password_2
+        ;;
+    "Connect AZ09")
+        bluetoothctl connect 00:00:00:00:05:88
+        ;;
+    "Connect Speaker")
+        bluetoothctl connect 00:16:94:47:4D:2E
+        ;;
+    "Screenshot of Desktop --> JPG")
+        checkformaim
+        ${maim} ${MaimOptions} --format=jpg --quality 10 ${ScrnShtDir}/${ScrnSht}.jpg
+        notify-send 'Info' "Screenshot of whole Desktop taken.\n${ScrnSht}"
+        ;;
+    "Screenshot of Desktop --> PNG")
+        checkformaim
+        ${maim} ${MaimOptions} --format=png --quality 1 ${ScrnShtDir}/${ScrnSht}.png
+        notify-send 'Info' "Screenshot of whole Desktop taken.\n${ScrnSht}"
+        ;;
+    "Screenshot of active window --> JPG")
+        checkformaim
+        checkforxdotool
+        activewindow=$(${xdotool} getactivewindow)
+        ${maim} ${MaimOptions} --format=jpg --quality 10 -i $activewindow ${ScrnShtDir}/${ScrnSht}.jpg
+        notify-send 'Info' "Screenshot of active window taken.\n${ScrnSht}.jpg"
+        ;;
+    "Screenshot of active window --> PNG")
+        checkformaim
+        checkforxdotool
+        activewindow=$(${xdotool} getactivewindow)
+        ${maim} ${MaimOptions} --format=png --quality 1 -i $activewindow ${ScrnShtDir}/${ScrnSht}.png
+        notify-send 'Info' "Screenshot of active window taken.\n${ScrnSht}.png"
+        ;;
+    "Screenshot of selection --> JPG")
+        checkformaim
+        checkforxdotool
+        ${maim} ${MaimOptions} --format=jpg --quality 10 --select ${ScrnShtDir}/${ScrnSht}.jpg
+        notify-send 'Info' "Screenshot of selection taken.\n${ScrnSht}.jpg"
+        ;;
+    "Screenshot of selection --> PNG")
+        checkformaim
+        checkforxdotool
+        ${maim} ${MaimOptions} --format=png --quality 10 --select ${ScrnShtDir}/${ScrnSht}.png
+        notify-send 'Info' "Screenshot of selection taken.\n${ScrnSht}.png"
+        ;;
+esac
+
+exit 0

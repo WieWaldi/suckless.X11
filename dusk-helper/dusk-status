@@ -1,0 +1,212 @@
+#!/bin/sh
+#
+# +----------------------------------------------------------------------------+
+# | dwm_status                                                                 |
+# +----------------------------------------------------------------------------+
+# |       Usage: No options needed, simply start it through .xinitrc           |
+# | Description: Stores status in WM_NAME X11 property of the root window      |
+# |    Requires: GNU core utils                                                |
+# |       Notes:                                                               |
+# |      Author: Waldemar Schroeer                                             |
+# |     Company: Rechenzentrum Amper                                           |
+# |     Version:                                                               |
+# |     Created: 2022-09-07                                                    |
+# |    Revision:                                                               |
+# |                                                                            |
+# | Copyright © 2019 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
+
+# +----- Variables ------------------------------------------------------------+
+battery_dir="/sys/class/power_supply"
+battery_ident="BAT0"
+tmp_cpu_string="atk0110"
+tmp_gpu_string="radeon"
+tmp_hdd_string="HDD"
+
+
+
+gpu_amd_card0_dir=""
+SEPA=""
+SEPB=""
+c_bckg="NONE"
+g_bckg=$(cat ${HOME}/.Xresources | grep "dwm.statusbgcolor" | awk '{print $2}')
+dwm_status=""
+
+# +----- Functions ------------------------------------------------------------+
+prompt_segment() {
+    local bckg forg cont
+    bckg="${1}"
+    forg="${2}"
+    cont="${3}"
+    if [[ ${c_bckg} = 'NONE' ]];then
+        echo -e -n "^b${g_bckg}^^C${bckg}^${SEPA}"
+    else
+        echo -e -n "^B${c_bckg}^^C${bckg}^${SEPA}"
+    fi
+    c_bckg=${bckg}
+    # echo -e -n "^B${bckg}^^C${forg}^${SEPB} ${cont}"
+    echo -e -n "^B${bckg}^^C${forg}^ ${cont}"
+}
+
+print_mem_used() {
+    printf " %s" "$(free --mebi | sed -n '2{p;q}' | awk '{printf ("%2.2f┊%2.2f GB\n", ( $3 / 1024), ($2 / 1024))}')"
+    # mem_used="$(free -m | grep "Mem" | awk '{print $3}')"
+    # mem_free="$(free -m | grep "Mem" | awk '{print $4}')"
+    # printf " Used:${mem_used}MB|Free:${mem_free}MB"
+}
+
+print_date() {
+    printf " %s" "$(date "+%A %d.%m.%Y")"
+}
+
+print_time() {
+    # printf " %s  %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
+    printf " %s" "$(date "+%H:%M")"
+}
+
+print_date_time() {
+    printf " %s" "$(date "+%A %d.%m.%Y")"
+    # printf " %s  %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
+    printf " %s" "$(date "+%H:%M")"
+
+}
+
+print_battery() {
+    local battery_status battery_capacity battery_status_icon battery_capacity_icon
+    if [[ -d "${battery_dir}/${battery_ident}" ]]; then
+        battery_status=$(cat "${battery_dir}/${battery_ident}/status" )
+        battery_capacity=$( cat "${battery_dir}/${battery_ident}/capacity" )
+        if [ "$battery_capacity" -lt 20 ]; then
+            battery_capacity_icon="  "
+        elif [ "$battery_capacity" -lt 25 ]; then
+            battery_capacity_icon="  "
+        elif [ "$battery_capacity" -lt 50 ]; then
+            battery_capacity_icon="  "
+        elif [ "$battery_capacity" -lt 81 ]; then
+            battery_capacity_icon="  "
+        elif [ "$battery_capacity" -gt 80 ]; then
+            battery_capacity_icon="  "
+        fi
+        if [[ "${battery_status}" = "Discharging" ]]; then
+            battery_status_icon=" "
+        else
+            battery_status_icon=""
+        fi
+        # printf "${battery_icon_status}${battery_icon_capacity}${battery_capacity}%%"
+        printf "%3s%2s%2s%%" "${battery_status_icon}" "${battery_capacity_icon}" "${battery_capacity}"
+    else
+        battery_status_icon=" "
+        printf "%s" "${battery_status_icon}"
+    fi
+}
+
+print_volume() {
+    local volume_icon volume_level
+    var="$(amixer sget Master | grep -F 'Left:')"
+    case $var in
+        *'[on]')
+            volume_level="$(echo ${var} | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
+            if [ "${volume_level}" -le 31 ]; then
+                volume_icon=""
+            elif [ "${volume_level}" -gt 59 ]; then
+                volume_icon="墳"
+            else
+                volume_icon="奔"
+            fi
+        ;;       
+        *'[off]')
+            volume_icon="婢"
+        ;;
+    esac
+    printf "%s %3s%%" "${volume_icon}" "${volume_level}"
+}
+
+print_network() {
+    local network_wifi_icon network_wifi_link network_ether_icon
+    case "$(cat /sys/class/net/w*/operstate 2>/dev/null)" in
+        down)
+            network_wifi_icon="睊"
+            network_wifi_link="0"
+            ;;
+        up)
+            network_wifi_icon=" "
+            network_wifi_link="$(awk '/^\s*w/ { print int($3*100/70) }' /proc/net/wireless)"
+            ;;
+    esac
+    case "$(cat /sys/class/net/e*/operstate 2>/dev/null)" in
+        down)
+            network_ether_icon=" "
+            ;;
+        up)
+            network_ether_icon="ﯱ "
+            ;;
+    esac
+    printf "%s %s %3s%%" "${network_ether_icon}" "${network_wifi_icon}" "${network_wifi_link}"
+}
+
+print_temperature() {
+    local sensors_out temp_cpu temp_gpu temp_hd1
+    sensors_out=$(sensors -A 2>/dev/null)
+    temp_cpu="$(sensors -A | awk -v n=0 '/coretemp-isa-0000/ { for ( i=l;i<=n;i++ ) getline; print $4}')"
+    temp_gpu="$(sensors -A | awk -v n=0 '/pch_cometlake-virtual-0/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
+    temp_hd1="$(sensors -A | awk -v n=0 '/nvme-pci-5500/ { for ( i=l;i<=n;i++ ) getline; print $2}')"
+    printf ""
+    if [[ ! -z ${temp_cpu} ]]; then
+        printf "CPU:%3s" "${temp_cpu}"
+    fi
+    if [[ ! -z ${temp_gpu} ]]; then
+        printf "┊GPU:%3s" "${temp_gpu}"
+    fi
+    if [[ ! -z ${temp_hd1} ]]; then
+        printf "┊HDD:%3s" "${temp_hd1}"
+    fi
+}
+
+print_temp_cpu() {
+    tempcpu="$(sensors | grep "CPU Temp" | awk '{print $3}' | tr -d "+°C")"
+    printf "CPU:%3s" "${tempcpu}"
+}
+
+print_temp_gpu() {
+    tempgpu="$(sensors | grep "temp1" | awk '{print $2}' | tr -d "+°C")"
+    # tempgpu="$(echo "$(cat /sys/class/drm/card0/device/hwmon/hwmon0/temp1_input) / 1000" | bc)"
+    printf "GPU:%3s" "${tempgpu}"
+}
+
+print_appleicons() {
+    printf "    "
+}
+
+build_dwm_status() {
+    prompt_segment 0 15 "$(print_battery)"
+    prompt_segment 1 15 "$(print_volume)"
+    prompt_segment 2 15 "$(print_network)"
+    prompt_segment 3 15 "$(print_temperature)"
+    prompt_segment 5 15 "$(print_cpu_used)"
+    prompt_segment 6 15 "$(print_mem_used)"
+    prompt_segment 7 15 "$(print_date_time)"
+}
+
+while true; do
+    # get new cpu idle and total usage
+    eval $(awk '/^cpu /{print "cpu_idle_now=" $5 "; cpu_total_now=" $2+$3+$4+$5 }' /proc/stat)
+    cpu_interval=$((cpu_total_now-${cpu_total_old:-0}))
+
+    # calculate cpu usage (%)
+    let cpu_used="100 * ($cpu_interval - ($cpu_idle_now-${cpu_idle_old:-0})) / $cpu_interval"
+
+    print_cpu_used() {
+        printf " %3s%%" ${cpu_used}
+    }
+
+    xsetroot -name "$(build_dwm_status)"
+    # echo "$(build_dwm_status)"
+
+    # reset old rates
+    cpu_idle_old=$cpu_idle_now
+    cpu_total_old=$cpu_total_now
+
+    # loop stats every 1 second
+    sleep 1s
+done &

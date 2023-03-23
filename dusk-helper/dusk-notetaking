@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#
+# +-------------------------------------------------------------------------+
+# | ~/.local/bin/dwm-notetaking                                             |
+# +-------------------------------------------------------------------------+
+# | Copyright © 2022 Waldemar Schroeer                                      |
+# |                  waldemar.schroeer(at)rz-amper.de                       |
+# +-------------------------------------------------------------------------+
+
+# +---------- Configuration starts here ------------------------------------+
+export notepaddir="${HOME}/Notes"
+export notepadfile="${notepaddir}/notepad"
+export datetime="$(date "+Datum: %Y-%m-%d Uhrzeit: %H-%M-%S")"
+
+# +---------- Main ---------------------------------------------------------+
+if [[ ! -d "${notepaddir}" ]]; then
+    mkdir -p ${notepaddir}
+fi
+echo -e "\n\n" >> ${notepadfile}
+echo "+------------ ${datetime} -----------------------------+" >> ${notepadfile}
+vim '+normal Go' +startinsert ${notepadfile}
+
+# +---------- End ----------------------------------------------------------+
+exit 0
