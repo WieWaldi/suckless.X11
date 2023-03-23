@@ -135,6 +135,25 @@ dwm.color13:                                    S_violet
 dwm.color14:                                    S_base1
 dwm.color15:                                    S_base3
 
+! +----- dusk related ---------------------------------------------------------+
+dusk.font:                                      FiraMono Nerd Font:size=14
+dusk.color0:                                    dwmstatuscolor0
+dusk.color1:                                    dwmstatuscolor1
+dusk.color2:                                    dwmstatuscolor2
+dusk.color3:                                    dwmstatuscolor3
+dusk.color4:                                    dwmstatuscolor4
+dusk.color5:                                    dwmstatuscolor5
+dusk.color6:                                    dwmstatuscolor6
+dusk.color7:                                    dwmstatuscolor7
+dusk.color9:                                    S_orange
+dusk.color8:                                    S_base03
+dusk.color10:                                   S_base01
+dusk.color11:                                   S_base00
+dusk.color12:                                   S_base0
+dusk.color13:                                   S_violet
+dusk.color14:                                   S_base1
+dusk.color15:                                   S_base3
+
 ! +----- dmneu related --------------------------------------------------------+
 dmenu.font:                                     FiraMono Nerd Font:size=14:antialias=true
 dmenu.background:                               #5f005f
