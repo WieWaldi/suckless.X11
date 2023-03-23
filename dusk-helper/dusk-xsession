@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
 # +----------------------------------------------------------------------------+
-# | prepare.sh                                                                 |
+# | dusk-xsession                                                              |
 # +----------------------------------------------------------------------------+
-# | Copyright © 2019 Waldemar Schroeer                                         |
+# | Copyright © 2023 Waldemar Schroeer                                         |
 # |                  waldemar.schroeer(at)rz-amper.de                          |
 # +----------------------------------------------------------------------------+
 
@@ -28,4 +28,4 @@ fi
 /bin/xrandr --dpi 96
 
 # +----- Start window manager -------------------------------------------------+
-exec ${HOME}/.local/bin/dwm 2> ${HOME}/tmp/dwm.log
+exec ${HOME}/.local/bin/dusk 2> ${HOME}/tmp/dusk.log
