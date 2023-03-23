@@ -26,8 +26,6 @@ install:
 	@chmod 755 ${PREFIX}/bin/dusk-system
 	@cp -f dusk-volumectrl ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dusk-volumectrl
-	@cp -f dusk-wrapper ${PREFIX}/bin
-	@chmod 755 ${PREFIX}/bin/dusk-wrapper
 	@cp -f dusk-xsession ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dusk-xsession
 
@@ -39,5 +37,4 @@ uninstall:
 	@rm -f ${PREFIX}/bin/dusk-status
 	@rm -f ${PREFIX}/bin/dusk-system
 	@rm -f ${PREFIX}/bin/dusk-volumectrl
-	@rm -f ${PREFIX}/bin/dusk-wrapper
 	@rm -f ${PREFIX}/bin/dusk-xsession
