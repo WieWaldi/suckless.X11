@@ -486,7 +486,7 @@ static const char *spcmd_r[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e
 static const char *statusclickcmd[] = { NULL, "bin/statusbar/statusclick.sh", NULL };
 static const char *dmenusystem[]        = { "dusk-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ", NULL };
 static const char *dmenumedia[]         = { "dusk-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio", NULL };
-static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", "Login", NULL };
+static const char *tmuxcmd[]            = { NULL, "st", "-e", "tmux-start.sh", "Login", NULL };
 static const char *volumeup[]           = { "dusk-volumectrl", "up", NULL };
 static const char *volumedown[]         = { "dusk-volumectrl", "down", NULL };
 static const char *volumemute[]         = { "dusk-volumectrl", "mute", NULL };
@@ -531,7 +531,7 @@ static Key keys[] = {
 	{ KeyPress,   MODKEY|Shift,                 XK_l,            setcfact,               {.f = -0.25} }, // decrease client size respective to other windows within the same area
 	{ KeyPress,   MODKEY|Shift,                 XK_o,            setcfact,               {0} },
 
-	{ KeyPress,   MODKEY,Shift,                 XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
+	{ KeyPress,   MODKEY|Shift,                 XK_backslash,    togglepinnedws,         {0} }, // toggle pinning of currently selected workspace on the current monitor
 	{ KeyPress,   MODKEY,                       XK_z,            showhideclient,         {0} }, // hide the currently selected client (or show if hidden)
 	{ KeyPress,   MODKEY,                       XK_q,            killclient,             {0} }, // close the currently focused window
 	{ KeyPress,   MODKEY|Shift,                 XK_q,            restart,                {0} }, // restart dusk
