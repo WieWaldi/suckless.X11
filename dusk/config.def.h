@@ -486,7 +486,6 @@ static const char *spcmd_r[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e
 static const char *statusclickcmd[] = { NULL, "bin/statusbar/statusclick.sh", NULL };
 static const char *dmenusystem[]        = { "dusk-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ", NULL };
 static const char *dmenumedia[]         = { "dusk-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio", NULL };
-static const char *termcmd[]            = { "st", NULL };
 static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", "Login", NULL };
 static const char *volumeup[]           = { "dusk-volumectrl", "up", NULL };
 static const char *volumedown[]         = { "dusk-volumectrl", "down", NULL };
