@@ -392,7 +392,7 @@ static const BarRule barrules[] = {
 static const WorkspaceRule wsrules[] = {
 	/*                                                                     ------------------------------- schemes ------------------------------- ------ icons ------
 	   name,  monitor,  pinned,  layout,  mfact,  nmaster,  nstack,  gaps, default,          visible,          selected,         occupied,         def,   vac,  occ,  */
-	{  "1",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "1",   "",   "[1]", },
+	{  "1",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      " ",   "",   "[ ]", },
 	{  "2",   -1,       0,       9,       .80,   -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "2",   "",   "[2]", },
 	{  "3",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "3",   "",   "[3]", },
 	{  "4",   -1,       0,       0,       -1,    -1,       -1,      -1,    SchemeWsNorm,     SchemeWsVisible,  SchemeWsSel,      SchemeWsOcc,      "4",   "",   "[4]", },
@@ -469,7 +469,8 @@ static const Layout layouts[] = {
 
 /* Scratch/Spawn commands:        NULL (scratchkey), command, argument, argument, ..., NULL */
 static const char *termcmd[]  = { NULL, "st", NULL };
-static const char *dmenucmd[] = {
+static const char *dmenucmd[]           = { "dmenu_run", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Яцп ТЋїѕ Ѕћїт:", NULL };
+static const char *dmenucmdold[] = {
 	NULL,
 	"dmenu_run",
 	"-fn", dmenufont,
@@ -483,26 +484,41 @@ static const char *spcmd_w[] = {"w", "st", "-n", "spterm (w)", "-g", "120x34", N
 static const char *spcmd_e[] = {"e", "st", "-n", "spterm (e)", "-g", "120x34", NULL };
 static const char *spcmd_r[] = {"r", "st", "-n", "spfm (r)", "-g", "144x41", "-e", "ranger", NULL };
 static const char *statusclickcmd[] = { NULL, "bin/statusbar/statusclick.sh", NULL };
+static const char *dmenusystem[]        = { "dusk-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ", NULL };
+static const char *dmenumedia[]         = { "dusk-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio", NULL };
+static const char *termcmd[]            = { "st", NULL };
+static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", "Login", NULL };
+static const char *volumeup[]           = { "dusk-volumectrl", "up", NULL };
+static const char *volumedown[]         = { "dusk-volumectrl", "down", NULL };
+static const char *volumemute[]         = { "dusk-volumectrl", "mute", NULL };
+static const char *brightnessup[]       = { "dusk-brightness", "up", NULL };
+static const char *brightnessdown[]     = { "dusk-brightness", "down", NULL };
+static const char *xmenu[]              = { "xmenu.sh", NULL };
 
 static Key keys[] = {
 	/* type       modifier                      key              function                argument */
-	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmd } }, // spawn dmenu for launching other programs
-	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } }, // spawn a terminal
-	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } }, // draw/spawn a terminal
-	{ KeyPress,   MODKEY,                       XK_b,            togglebar,              {0} }, // toggles the display of the bar(s) on the current monitor
+	{ KeyPress,   MODKEY,                       XK_w,            spawn,                  {.v = xmenu } },           // spawn xmenu for launching other programs
+	{ KeyPress,   MODKEY,                       XK_p,            spawn,                  {.v = dmenucmd } },        // spawn dmenu for launching other programs
+	{ KeyPress,   MODKEY,                       XK_d,            spawn,                  {.v = dmenucmdold } },     // spawn the old dmenu for launching other programs
+	{ KeyPress,   MODKEY,                       XK_Return,       spawn,                  {.v = termcmd } },         // spawn a terminal
+	{ KeyPress,   MODKEY,                       XK_s,            spawn,                  {.v = dmenusystem } },      // spawn dmenu to choose system functions
+	{ KeyPress,   MODKEY,                       XK_r,            spawn,                  {.v = dmenumedia } },      // spawn dmenu to choose media functions
+	{ KeyPress,   MODKEY,                       XK_backslash,    spawn,                  {.v = tmuxcmd } },         // spawn a terminal
+	{ KeyPress,   MODKEY|Shift,                 XK_Return,       riospawn,               {.v = termcmd } },         // draw/spawn a terminal
+	{ KeyPress,   MODKEY,                       XK_b,            togglebar,              {0} },                     // toggles the display of the bar(s) on the current monitor
 
-	{ KeyPress,   MODKEY,                       XK_j,            focusstack,             {.i = +1 } }, // focus on the next client in the stack
-	{ KeyPress,   MODKEY,                       XK_k,            focusstack,             {.i = -1 } }, // focus on the previous client in the stack
-	{ KeyPress,   MODKEY|Alt|Shift,             XK_j,            focusstack,             {.i = +2 } }, // allows focusing on hidden clients
-	{ KeyPress,   MODKEY|Alt|Shift,             XK_k,            focusstack,             {.i = -2 } }, // allows focusing on hidden clients
-	{ KeyPress,   MODKEY,                       XK_Left,         focusdir,               {.i = 0 } }, // focus on the client left of the currently focused client
-	{ KeyPress,   MODKEY,                       XK_Right,        focusdir,               {.i = 1 } }, // focus on the client right of the currently focused client
-	{ KeyPress,   MODKEY,                       XK_Up,           focusdir,               {.i = 2 } }, // focus on the client above the currently focused client
-	{ KeyPress,   MODKEY,                       XK_Down,         focusdir,               {.i = 3 } }, // focus on the client below the currently focused client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Left,         placedir,               {.i = 0 } }, // swap places with the client window on the immediate left of the current client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Right,        placedir,               {.i = 1 } }, // swap places with the client window on the immediate right of the current client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Up,           placedir,               {.i = 2 } }, // swap places with the client window on the immediate up of the current client
-	{ KeyPress,   MODKEY|Ctrl,                  XK_Down,         placedir,               {.i = 3 } }, // swap places with the client window on the immediate down of the current client
+	{ KeyPress,   MODKEY,                       XK_j,            focusstack,             {.i = +1 } },              // focus on the next client in the stack
+	{ KeyPress,   MODKEY,                       XK_k,            focusstack,             {.i = -1 } },              // focus on the previous client in the stack
+	{ KeyPress,   MODKEY|Alt|Shift,             XK_j,            focusstack,             {.i = +2 } },              // allows focusing on hidden clients
+	{ KeyPress,   MODKEY|Alt|Shift,             XK_k,            focusstack,             {.i = -2 } },              // allows focusing on hidden clients
+	{ KeyPress,   MODKEY,                       XK_Left,         focusdir,               {.i = 0 } },               // focus on the client left of the currently focused client
+	{ KeyPress,   MODKEY,                       XK_Right,        focusdir,               {.i = 1 } },               // focus on the client right of the currently focused client
+	{ KeyPress,   MODKEY,                       XK_Up,           focusdir,               {.i = 2 } },               // focus on the client above the currently focused client
+	{ KeyPress,   MODKEY,                       XK_Down,         focusdir,               {.i = 3 } },               // focus on the client below the currently focused client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Left,         placedir,               {.i = 0 } },               // swap places with the client window on the immediate left of the current client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Right,        placedir,               {.i = 1 } },               // swap places with the client window on the immediate right of the current client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Up,           placedir,               {.i = 2 } },               // swap places with the client window on the immediate up of the current client
+	{ KeyPress,   MODKEY|Ctrl,                  XK_Down,         placedir,               {.i = 3 } },               // swap places with the client window on the immediate down of the current client
 
 	{ KeyPress,   MODKEY|Ctrl,                  XK_j,            pushdown,               {0} }, // move the selected client down the stack
 	{ KeyPress,   MODKEY|Ctrl,                  XK_k,            pushup,                 {0} }, // move the selected client up the stack
