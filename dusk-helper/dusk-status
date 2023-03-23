@@ -200,7 +200,8 @@ while true; do
         printf " %3s%%" ${cpu_used}
     }
 
-    xsetroot -name "$(build_dwm_status)"
+    ${HOME}/.local/bin/duskc run_command setstatus 9 "$(build_dwm_status)" 2>&1 > /dev/null
+    # xsetroot -name "$(build_dwm_status)"
     # echo "$(build_dwm_status)"
 
     # reset old rates
