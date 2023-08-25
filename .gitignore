@@ -46,8 +46,11 @@ slop/install_manifest.txt
 
 #======== suckless =============================================================
 dwm/dwm
+dwm.*
 st/st
 dmenu/dmenu
+dusk/dusk
+dusk/duskc
 slock/slock
 gllock/gllock
 sent/sent
