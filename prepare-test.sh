@@ -278,8 +278,8 @@ EPEL_enable() {
 }
 
 RPMFusion_query() {
-    EnableRPMFusionFree="$(antwoord "Enable RPM Fusion Free Repository? ${YN}")"
-    EnableRPMFusionNonFree="$(antwoord "Enable RPM Fusion NonFree Repository? ${YN}")"
+    EnableRPMFusionFree="$(__read_Antwoord_YN "Enable RPM Fusion Free Repository?")"
+    EnableRPMFusionNonFree="$(__read_Antwoord_YN "Enable RPM Fusion NonFree Repository?")"
 }
 
 RPMFusion_enable() {
