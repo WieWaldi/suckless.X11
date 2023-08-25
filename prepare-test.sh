@@ -101,14 +101,30 @@ GoogleChrome_query() {
     InstallGoogleChrome="$(__read_Antwoord_YN "Do you want to get Google Chrome installed?")"
 }
 
+HostName_query() {
+    SetHostname="$(__read_Antwoord_YN "Do you want to set hostname?")"
+    if [[ "${SetHostname}" = "yes" ]]; then
+        gethostname="$(__read_Line "Hostname")"
+    fi
+}
+
+HostName_set() {
+    __echo_Left "Setting Hostname to: ${gethostname}"
+    if [[ "${SetHostname}" = "yes" ]]; then
+        hostnamectl set-hostname ${gethostname} >>${logfile} 2>&1
+        __echo_Result
+    else
+        echo_Skipped
+    fi
+}
 GoogleChrome_install() {
     __echo_Left "Installing Repository: google-chrome"
     if [[ "${InstallGoogleChrome}" = "yes" ]]; then
         __echo_Left "Adding google-chrome.repo"
-        # cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d >>${logfile} 2>&1
+        cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d >>${logfile} 2>&1
         __echo_Result
         __echo_Left "Installing google-chrome-stable"
-        # dnf install -y google-chrome-stable >> ${logfile} 2>&1
+        dnf install -y google-chrome-stable >> ${logfile} 2>&1
         __echo_Result
     else
         __echo_Skipped
