@@ -6,9 +6,9 @@
 |                                                                              |
 |    This script will prepare your freshly installed System.                   |
 |    Currently supported OS and Distributions:                                 |
-|     - RedHat Enterpise Linux 7/8                                             |
+|     - RedHat Enterpise Linux 7/8/9                                           |
 |     - CentOS 7/CentOS Stream 8                                               |
-|     - Fedora 33/34/35                                                        |
+|     - Fedora 33/34/35/37/38/39                                               |
 |                                                                              |
 |    Please don't try to run this script on anything other than these          |
 |    mentioned distribution.                                                   |
