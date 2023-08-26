@@ -139,9 +139,9 @@ VirtualBox_install() {
     __echo_Left "Installing Repository: VirtualBox"
     if [[ "${InstallVirtualBox}" = "yes" ]]; then
         __echo_Left "Adding virtualbox.repo"
-        # cp ${cdir}/etc/yum.repos.d/virtualbox.repo /etc/yum.repos.d >> ${logfile} 2>&1
+        cp ${cdir}/etc/yum.repos.d/virtualbox.repo /etc/yum.repos.d >> ${logfile} 2>&1
         __echo_Result
-        # dnf install -y VirtualBox-6.0 >> ${logfile} 2>&1
+        dnf install -y VirtualBox-6.0 >> ${logfile} 2>&1
         __echo_Result
     else
         __echo_Skipped
@@ -397,6 +397,7 @@ if [[ "${os}" = "Linux" ]]; then
             if [[ "${version}" != 3* ]]; then
                 __exit_Error 10 "This is not a supported version of Fedora."
             fi
+            echo "Start" >> ${logfile}
             GoogleChrome_query
             VirtualBox_query
             HostName_query
@@ -420,7 +421,7 @@ if [[ "${os}" = "Linux" ]]; then
             DefaultPackages_install
             FilesXorg_copy
             SDDM_enable
-            LogfileLocation
+            echo "End" >> ${logfile}
             ;;
         "CentOS Linux" )
             GoogleChrome_query
