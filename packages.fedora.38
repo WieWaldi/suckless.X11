@@ -84,6 +84,7 @@ python3
 samba-client
 samba-common
 sddm
+sddm-x11
 slop
 tar
 thunar
