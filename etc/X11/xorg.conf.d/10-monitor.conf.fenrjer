@@ -1,0 +1,99 @@
+# +----------------------------------------------------------------------------+
+# | /etc/X11/xorg.conf.d/10-monitor.conf                                       |
+# +----------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
+
+# +----- General --------------------------------------------------------------+
+Section "ServerLayout"
+    Identifier      "X.org Configured"
+    Screen        0 "Screen0" 0 0
+    InputDevice     "Mouse0" "CorePointer"
+    InputDevice     "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Files"
+    ModulePath      "/usr/lib64/xorg/modules"
+    FontPath        "catalogue:/etc/X11/fontpath.d"
+    FontPath        "built-ins"
+EndSection
+
+Section "Module"
+    Load            "glx"
+EndSection
+
+Section "InputDevice"
+    Identifier      "Keyboard0"
+    Driver          "kbd"
+EndSection
+
+Section "InputDevice"
+    Identifier      "Mouse0"
+    Driver          "mouse"
+    Option          "Protocol" "auto"
+    Option          "Device" "/dev/input/mice"
+    Option          "ZAxisMapping" "4 5 6 7"
+EndSection
+
+Section "Screen"
+    Identifier      "Screen0"
+    Device          "Card0"
+    Monitor         "Monitor1"
+    DefaultDepth    24
+    SubSection "Display"
+        Depth       24
+        Virtual     4920 2880
+    EndSubSection
+EndSection
+
+Section "Device"
+    Identifier      "Card0"
+    Driver          "radeon"
+    BusID           "PCI:1:0:0"
+    Option          "Monitor-DisplayPort-0" "Monitor1"
+    Option          "Monitor-DVI-0" "Monitor3"
+    Option          "Monitor-DVI-1" "Monitor2"
+EndSection
+
+Section "Monitor"
+    Identifier      "Monitor1"
+    VendorName      "Samsung"
+    ModelName       "4k Monitor"
+    Modeline        "3840x2160" 712.75  3840 4160 4576 5312  2160 2163 2168 2237 -hsync +vsync
+    Modeline        "1920x1080" 173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+    Option          "PreferredMode" "3840x2160"
+    Option          "Position" "0 720"
+    Option          "DPMS" "false"
+    Option          "Primary" "true"
+    Option          "Rotate" "normal"
+EndSection
+
+Section "Monitor"
+    Identifier      "Monitor2"
+    VendorName      "Dell"
+    ModelName       "Full HD Monitor"
+    Modeline        "1920x1080" 173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+    Option          "PreferredMode" "1920x1080"
+    Option          "Position" "3840 840"
+    Option          "DPMS" "false"
+    Option          "Primary" "false"
+    Option          "Rotate" "left"
+EndSection
+
+Section "Monitor"
+    Identifier      "Monitor3"
+    VendorName      "Panasonic"
+    ModelName       "TH-42PWD7"
+    Modeline        "852x480" 31.75  856 880 960 1064  480 483 493 500 -hsync +vsync
+    Modeline        "1280x720" 74.50  1280 1344 1472 1664  720 723 728 748 -hsync +vsync
+    Modeline        "1920x1080" 173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+    Option          "PreferredMode" "1280x720"
+    Option          "Position" "1280 0"
+    Option          "DPMS" "false"
+    Option          "Primary" "false"
+    Option          "Rotate" "normal"
+EndSection
+
+
+# +----- EOF ------------------------------------------------------------------+
