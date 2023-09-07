@@ -24,13 +24,10 @@ struct g {
 
 #include "config.h"
 
-#define LENGTH(X) (sizeof X / sizeof X[0])
+#define LENGTH(X) (sizeof(X) / sizeof((X)[0]))
 #define INITIAL_CAPACITY 2
 
 static char *argv0;
-static unsigned int screen_width, screen_height;
-static unsigned int window_width, window_height;
-static bool hidden = true;
 static char **cmd;
 static pid_t cmdpid;
 static FILE *inputf;
@@ -50,7 +47,11 @@ static GC xgc;
 static XftDraw *xdraw;
 static XftColor xforeground, xbackground;
 static XftFont *xfont;
+static unsigned int screen_width, screen_height;
+static unsigned int window_width, window_height;
+static bool hidden = true;
 
+__attribute__ ((noreturn))
 static void
 die(const char *fmt, ...)
 {
@@ -58,15 +59,15 @@ die(const char *fmt, ...)
 	va_list ap;
 
 	va_start(ap, fmt);
-	vfprintf(stderr, fmt, ap);
+	(void)vfprintf(stderr, fmt, ap);
 	va_end(ap);
 
 	if (fmt[0] && fmt[strlen(fmt)-1] == ':') {
-		fputc(' ', stderr);
+		(void)fputc(' ', stderr);
 		errno = tmp;
 		perror(NULL);
 	} else {
-		fputc('\n', stderr);
+		(void)fputc('\n', stderr);
 	}
 
 	exit(1);
@@ -75,10 +76,10 @@ die(const char *fmt, ...)
 static void
 usage()
 {
-	die("\
-usage: stw [-t ] [-x pos] [-y pos] [-X pos] [-Y pos] [-a align]\n\
-           [-f foreground] [-b background] [-F font] [-B borderpx]\n\
-           [-p period] [-A alpha] command [arg ...]"
+	die(
+"usage: stw [-Vt] [-x pos] [-y pos] [-X pos] [-Y pos] [-a align]\n"
+"           [-f foreground] [-b background] [-F font] [-B borderpx]\n"
+"           [-p period] [-A alpha] command [arg ...]"
 	);
 }
 
@@ -110,8 +111,11 @@ start_cmd()
 		close(xfd);
 		close(fds[0]);
 		dup2(fds[1], STDOUT_FILENO);
+		setpgid(0, 0);
 		execvp(cmd[0], cmd);
 		exit(1);
+	default:
+		break;
 	}
 
 	close(fds[1]);
@@ -186,7 +190,7 @@ draw()
 	window_height += borderpx * 2;
 
 	if (window_width != prev_mw || window_height != prev_mh) {
-		// todo: for some reason old GC value still works after XFreePixmap call
+		// TODO: for some reason old GC value still works after XFreePixmap call
 		XFreePixmap(dpy, drawable);
 		drawable = XCreatePixmap(dpy, root, window_width, window_height, depth);
 		if (!drawable)
@@ -194,7 +198,7 @@ draw()
 		XftDrawChange(xdraw, drawable);
 	}
 	XSetForeground(dpy, xgc, xbackground.pixel);
-	XFillRectangle(dpy, drawable, xgc, 0, 0, window_width,window_height);
+	XFillRectangle(dpy, drawable, xgc, 0, 0, window_width, window_height);
 
 	// render text lines
 	unsigned int y = borderpx;
@@ -259,7 +263,7 @@ run()
 			start_cmd();
 		}
 
-		int dirty = 0;
+		bool dirty = false;
 
 		int inputfd = 0;
 		if (inputf != NULL) {
@@ -290,7 +294,7 @@ run()
 		if (inputf && (fds[2].revents & POLLIN || fds[2].revents & POLLHUP)) {
 			read_text();
 			draw();
-			dirty = 1;
+			dirty = true;
 		}
 
 		// Handle signals
@@ -322,13 +326,13 @@ run()
 
 				if (ev.type == Expose && ev.xexpose.count == 0) {
 					// Last expose event processed, redraw once
-					dirty = 1;
-				
+					dirty = true;
+
 				} else if (ev.type == ButtonPress) {
 					// X Window was clicked, restart subcommand
-					if (cmdpid && kill(cmdpid, SIGTERM) == -1)
+					if (cmdpid && kill(-cmdpid, SIGTERM) == -1) {
 						die("kill:");
-
+					}
 					alarm(0);
 					restart_now = true;
 				}
@@ -345,7 +349,7 @@ run()
 			} else {
 				XLowerWindow(dpy, win);
 			}
-			
+
 			XMapWindow(dpy, win);
 
 			int x = pos(px, screen_width);
@@ -413,7 +417,7 @@ setup(char *font)
 	if (!xfont)
 		die("cannot load font");
 
-	// todo: use dedicated color variables instead of array
+	// TODO: use dedicated color variables instead of array
 	if (!XftColorAllocName(dpy, visual, colormap, colors[0], &xforeground))
 		die("cannot allocate foreground color");
 	if (!XftColorAllocName(dpy, visual, colormap, colors[1], &xbackground))
@@ -499,8 +503,8 @@ stoi(char *s, int *r) {
 	char *e;
 	long int li = strtol(s, &e, 10);
 	*r = (int)li;
-	return ((s[0] < '0' || s[0] > '9') && s[0] != '-') \
-		|| li < INT_MIN || li > INT_MAX \
+	return ((s[0] < '0' || s[0] > '9') && s[0] != '-')
+		|| li < INT_MIN || li > INT_MAX
 		|| *e != '\0';
 }
 
@@ -510,6 +514,10 @@ main(int argc, char *argv[])
 	char *xfont = font;
 
 	ARGBEGIN {
+	case 'V':
+		printf("%s " VERSION "\n", argv0);
+		return 0;
+		break;
 	case 'x':
 		if (-1 == parsegeom(EARGF(usage()), "+-", "%", &px))
 			usage();
@@ -542,7 +550,7 @@ main(int argc, char *argv[])
 	case 'a': {
 		const char *a = EARGF(usage());
 		align = a[0];
-		if (strlen(a) != 1 \
+		if (strlen(a) != 1
 		|| (align != 'l' && align != 'r' && align != 'c'))
 			usage();
 	} break;
@@ -571,4 +579,6 @@ main(int argc, char *argv[])
 
 	setup(xfont);
 	run();
+
+	return 0;
 }
