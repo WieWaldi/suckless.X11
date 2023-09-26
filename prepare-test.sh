@@ -156,7 +156,6 @@ SshRootLogin_disable() {
     __echo_Left "Disabling SSH login for root user"
     if [[ "${DisableSshRoot}" = "yes" ]]; then
         grep "^PermitRootLogin" /etc/ssh/sshd_config > /dev/null 2>&1
-        __echo_Result
         retVal=$?
         if [[ "${retVal}" -ne 0 ]]; then
             echo -e "\nPermitRootLogin no" >> /etc/ssh/sshd_config
