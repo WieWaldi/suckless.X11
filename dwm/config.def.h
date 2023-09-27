@@ -1,10 +1,5 @@
 /* See LICENSE file for copyright and license details. */
 
-/* include */
-#include <X11/XF86keysym.h>
-#include "vanitygaps.c"
-#include "movestack.c"
-
 /* appearance */
 static char font[]                          = "monospace:size=10";                                              // font used at topbar
 static char *fonts[]                        = { font };                                                         // get fonts from font.-)
@@ -190,6 +185,11 @@ static const Rule rules[] = {
 };
 
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+
+/* include */
+#include <X11/XF86keysym.h>
+#include "vanitygaps.c"
+#include "movestack.c"
 
 
 static const Layout layouts[] = {
