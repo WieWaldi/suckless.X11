@@ -81,7 +81,7 @@ Xft.dpi:                                        96
 
 ! +----- dwm related ----------------------------------------------------------+
 dwm.borderpx:                                   0
-dwm.demanufont:                                 FiraMono Nerd Font:size=14
+dwm.dmenufont:                                  FiraMono Nerd Font:size=14
 dwm.font:                                       FiraMono Nerd Font:size=14
 dwm.gappih:                                     15
 dwm.gappiv:                                     15
