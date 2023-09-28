@@ -3,7 +3,6 @@
 /* appearance */
 static char font[]                          = "monospace:size=10";                                              // font used at topbar
 static char *fonts[]                        = { font };                                                         // get fonts from font.-)
-static char dmenufont[]                     = "monospace:size=10";                                              // font used by dmenu
 static float mfact                          = 0.55;                                                             // factor of master area size [0.05..0.95]
 static int nmaster                          = 1;                                                                // number of clients in master area
 static int resizehints                      = 1;                                                                // 1 means respect size hints in tiled resizals
@@ -80,7 +79,6 @@ static char *colors[][3] = {
 /* Xresources preferences to load at startup */
 ResourcePref resources[] = {
 		{ "borderpx",           INTEGER, &borderpx },
-		{ "dmenufont",          STRING,  &dmenufont },
 		{ "font",               STRING,  &font },
 		{ "gappih",             INTEGER, &gappih },
 		{ "gappiv",             INTEGER, &gappiv },

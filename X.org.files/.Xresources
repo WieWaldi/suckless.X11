@@ -81,8 +81,7 @@ Xft.dpi:                                        96
 
 ! +----- dwm related ----------------------------------------------------------+
 dwm.borderpx:                                   0
-dwm.dmenufont:                                  FiraMono Nerd Font:size=14
-dwm.font:                                       FiraMono Nerd Font:size=14
+dwm.font:                                       FiraMono Nerd Font:size=10
 dwm.gappih:                                     15
 dwm.gappiv:                                     15
 dwm.gappoh:                                     15
@@ -143,7 +142,7 @@ dmenu.selbackground:                            #8700af
 dmenu.selforeground:                            #eeeeee
 
 ! +----- st relatd ------------------------------------------------------------+
-st*font:                                        GoMono Nerd Font:size=14:antialias=true
+st*font:                                        GoMono Nerd Font:size=11:antialias=true
 st*alpha:                                       0.95
 st*borderpx:                                    0
 st*termname:                                    st-256color
