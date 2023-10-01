@@ -80,36 +80,35 @@ Xft.rgba:                                       rgb
 Xft.dpi:                                        96
 
 ! +----- dwm related ----------------------------------------------------------+
-dwm.font:                                       FiraMono Nerd Font:size=14
-dwm.mfact:                                      0.55
 dwm.borderpx:                                   0
-dwm.gappx:                                      15
-dwm.snap:                                       0
-dwm.resizehints:                                1
-dwm.nmaster:                                    1
-dwm.showbar:                                    1
-dwm.topbar:                                     1
-dwm.horizpadbar:                                0
-dwm.vertpadbar:                                 0
-dwm.vertpad:                                    0
-dwm.sidepad:                                    0
+dwm.font:                                       FiraMono Nerd Font:size=10
+dwm.gappih:                                     15
+dwm.gappiv:                                     15
+dwm.gappoh:                                     15
+dwm.gappov:                                     15
+dwm.infonormbgcolor:                            #5f005f
+dwm.infonormfgcolor:                            #eeeeee
+dwm.infoselbgcolor:                             #5f005f
+dwm.infoselfgcolor:                             #eeeeee
 dwm.lockfullscreen:                             0
-dwm.normfgcolor:                                #bbbbbb
+dwm.mfact:                                      0.55
+dwm.nmaster:                                    1
 dwm.normbgcolor:                                #5f005f
 dwm.normbordercolor:                            #444444
-dwm.selfgcolor:                                 #eeeeee
+dwm.normfgcolor:                                #bbbbbb
+dwm.resizehints:                                1
 dwm.selbgcolor:                                 #005577
 dwm.selbordercolor:                             #005577
-dwm.statusfgcolor:                              #eeeeee
+dwm.selfgcolor:                                 #eeeeee
+dwm.showbar:                                    1
+dwm.snap:                                       0
 dwm.statusbgcolor:                              #5f005f
-dwm.tagselfgcolor:                              #eeeeee
-dwm.tagselbgcolor:                              #5f005f
-dwm.tagnormfgcolor:                             #af87d7
+dwm.statusfgcolor:                              #eeeeee
 dwm.tagnormbgcolor:                             #5f005f
-dwm.infoselfgcolor:                             #eeeeee
-dwm.infoselbgcolor:                             #5f005f
-dwm.infonormfgcolor:                            #eeeeee
-dwm.infonormbgcolor:                            #5f005f
+dwm.tagnormfgcolor:                             #af87d7
+dwm.tagselbgcolor:                              #5f005f
+dwm.tagselfgcolor:                              #eeeeee
+dwm.topbar:                                     1
 ! dwm.color0:                                     S_base02
 ! dwm.color1:                                     S_red
 ! dwm.color2:                                     S_green
@@ -143,7 +142,7 @@ dmenu.selbackground:                            #8700af
 dmenu.selforeground:                            #eeeeee
 
 ! +----- st relatd ------------------------------------------------------------+
-st*font:                                        GoMono Nerd Font:size=14:antialias=true
+st*font:                                        GoMono Nerd Font:size=11:antialias=true
 st*alpha:                                       0.95
 st*borderpx:                                    0
 st*termname:                                    st-256color
@@ -207,7 +206,7 @@ svkbd.overlaybackground:                        S_deeppink
 svkbd.overlayshiftforeground:                   S_base00
 svkbd.overlayshiftbackground:                   S_red
 
-! +----- svkbd relatd ---------------------------------------------------------+
+! +----- sxiv relatd ----------------------------------------------------------+
 Sxiv.backgroud:                                 #000000
 Sxiv.foregroud:                                 #ffffff
 Sxiv.font:                                      GoMono Nerd Font:bold:size=18
@@ -252,7 +251,7 @@ XTerm*color13:                                  S_violet
 XTerm*color14:                                  S_base1
 XTerm*color15:                                  S_base3
 
-! +----- XTermScratchpad ------------------------------------------------------+
+! +----- XTermScratchPad related ----------------------------------------------+
 XTermScratchPad.vt100.geometry:                 200x80
 XTermScratchPad*termName:                       xterm-256color
 XTermScratchPad*cursorColor:                    #00ff00
@@ -288,7 +287,7 @@ XTermScratchPad*color13:                        S_violet
 XTermScratchPad*color14:                        S_base1
 XTermScratchPad*color15:                        S_base3
 
-! +----- XTermScratchpad ------------------------------------------------------+
+! +----- XTermNoteTaking related ----------------------------------------------+
 XTermNoteTaking.vt100.geometry:                 85x70
 XTermNoteTaking*termName:                       xterm-256color
 XTermNoteTaking*cursorColor:                    #00ff00

@@ -14,6 +14,7 @@ export XDG_DATA_DIRS=/usr/local/share:/usr/share
 export XDG_DATA_HOME=${HOME}/.local/share
 export XDG_CACHE_HOME=${HOME}/.cache
 export XDG_CONFIG_HOME=${HOME}/.config
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 # +----- X11 related stuff ----------------------------------------------------+
 if [[ -f ${HOME}/.Xresources ]]; then
