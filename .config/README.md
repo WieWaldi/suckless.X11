@@ -9,3 +9,4 @@
 
 # picom related web sites
 [askubuntu.com](https://askubuntu.com/questions/751149/screen-tearing-when-using-i3-none-when-using-unity) - Screen tearing when using i3, none when using unity  
+[Arian8j2/picom](https://github.com/Arian8j2/picom) - Picom with nice transitions and working shadows  
