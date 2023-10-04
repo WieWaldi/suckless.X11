@@ -132,7 +132,7 @@ ResourcePref resources[] = {
 /* static const char *tags[] = { "➊", "➋", "➌", "➍", "➎", "➏", "➐", "➑", "➒" }; */
 /* static const char *tags[] = { "☹", "♨", "♺", "♿", "⚒", "⚓", "⚕", "⚗", "i⚛ }; */
 /* static const char *tags[] = { "", "Finder", "File", "Edit", "View", "Settings", "Go", "Window", "Help"}; */
-static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
+static const char *tags[] = { "", "", "", "", "", "", "󰊻", "", "" };
 
 /* Client Rules */
 static const Rule rules[] = {
@@ -185,8 +185,8 @@ static const Rule rules[] = {
 };
 
 #define FORCE_VSPLIT 1                                                                                          // nrowgrid layout: force two clients to always split vertically
-#define WFACTIVE '>'                                                                                           // window following
-#define WFINACTIVE 'v'
+#define WFACTIVE 'F'                                                                                           // window following
+#define WFINACTIVE 'N'
 #define WFDEFAULT WFINACTIVE
 
 
@@ -198,20 +198,20 @@ static const Rule rules[] = {
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "    ",      tile },                                                                                     // first entry is default
-	{ "   ",       NULL },                                                                                     // no layout function means floating behavior
-	{ "   ",       monocle },
-	{ "   ",       spiral },
-	{ "   ",       dwindle },
-	{ "   H[]",     deck },
-	{ "   TTT",     bstack },
-	{ "   ===",     bstackhoriz },
-	{ "   HHH",     grid },
-	{ "   ###",     nrowgrid },
-	{ "   ---",     horizgrid },
-	{ "   :::",     gaplessgrid },
-	{ "   |M|",     centeredmaster },
-	{ "   >M>",     centeredfloatingmaster },
+	{ "   Tile     ", tile },                                                                                     // first entry is default
+	{ "   Float    ", NULL },                                                                                     // no layout function means floating behavior
+	{ "   Monocle  ", monocle },
+	{ "   Spiral   ", spiral },
+	{ "   Dwindle  ", dwindle },
+	{ "   Deck     ", deck },
+	{ "   BStack   ", bstack },
+	{ "   BStackH  ", bstackhoriz },
+	{ "   Grid     ", grid },
+	{ "   nRow Grid", nrowgrid },
+	{ "   HorizGrid", horizgrid },
+	{ "   Gapless G", gaplessgrid },
+	{ "| |CMaster  ", centeredmaster },
+	{ "| |CFMaster ", centeredfloatingmaster },
 };
 
 /* key definitions */
