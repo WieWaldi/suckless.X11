@@ -184,7 +184,11 @@ static const Rule rules[] = {
 	{ NULL,                 NULL,                                   "NoteTaking",                   0,          1,            1,            1,          -1,         '3' },
 };
 
-#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#define FORCE_VSPLIT 1                                                                                          // nrowgrid layout: force two clients to always split vertically
+#define WFACTIVE '>'                                                                                           // window following
+#define WFINACTIVE 'v'
+#define WFDEFAULT WFINACTIVE
+
 
 /* include */
 #include <X11/XF86keysym.h>
@@ -253,6 +257,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_bracketright,            togglescratch,  {.v = scratchpad2 } },
 	{ MODKEY,                       XK_semicolon,               togglescratch,  {.v = NoteTaking } },
 	{ MODKEY,                       XK_b,                       togglebar,      {0} },
+	{ MODKEY,                       XK_n,                       togglefollow,   {0} },
 	{ MODKEY,                       XK_j,                       focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,                       focusstack,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_i,                       incnmaster,     {.i = +1 } },
@@ -316,18 +321,19 @@ static const Key keys[] = {
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
-	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
-	{ ClkStatusText,        0,              Button3,        spawn,          {.v = xmenu } },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	/* click                        event mask                  button          function        argument */
+	{ ClkLtSymbol,                  0,                          Button1,        setlayout,      {0} },
+	{ ClkLtSymbol,                  0,                          Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkFollowSymbol,              0,                          Button1,        togglefollow,   {0} },
+	{ ClkWinTitle,                  0,                          Button2,        zoom,           {0} },
+	{ ClkStatusText,                0,                          Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,                0,                          Button3,        spawn,          {.v = xmenu } },
+	{ ClkClientWin,                 MODKEY,                     Button1,        movemouse,      {0} },
+	{ ClkClientWin,                 MODKEY,                     Button2,        togglefloating, {0} },
+	{ ClkClientWin,                 MODKEY,                     Button3,        resizemouse,    {0} },
+	{ ClkTagBar,                    0,                          Button1,        view,           {0} },
+	{ ClkTagBar,                    0,                          Button3,        toggleview,     {0} },
+	{ ClkTagBar,                    MODKEY,                     Button1,        tag,            {0} },
+	{ ClkTagBar,                    MODKEY,                     Button3,        toggletag,      {0} },
 };
 
