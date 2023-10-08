@@ -81,6 +81,7 @@ typedef union {
 void die(const char *, ...);
 void redraw(void);
 void draw(void);
+void tfulldirt(void);
 void iso14755(const Arg *);
 
 void kscrolldown(const Arg *);
@@ -138,3 +139,4 @@ extern unsigned int defaultbg;
 extern const int boxdraw, boxdraw_bold, boxdraw_braille;
 extern char *iso14755_cmd;
 extern float alpha;
+extern float alphaUnfocused;
