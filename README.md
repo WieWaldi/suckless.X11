@@ -74,24 +74,23 @@ suckless.org applications have been patched already.
   - dmenu-xresources-4.9.diff
 - **dunst** - A customizable and lightweight notification-daemon
 - **dwm** - dynamic window manager (Version 6.3, 2022-08-26) contains the following patches.
-  - dwm-autostart-20200610-cb3f58a.diff
-  - dwm-barpadding-20200720-bb2e722.diff
-  - dwm-cfacts-20200913-61bb8b2.diff
-  - dwm-colorbar-6.2.diff
-  - dwm-fakefullscreen-20170508-ceac8c9.diff
-  - dwm-fibonacci-20200418-c82db69.diff
-  - dwm-fullgaps-20200508-7b77734.diff
+  - dwm-autostart-20210120-cb3f58a.diff
+  - dwm-center-6.2.diff
+  - dwm-cfacts-vanitygaps-6.2_combo.diff
+  - dwm-fakefullscreen-20210714-138b405.diff
+  - dwm-focusedontop-6.4.diff
+  - dwm-focusonclick-20200110-61bb8b2.diff
+  - dwm-colorbar-6.3.diff
+  - dwm-layoutscroll-6.2.diff
   - dwm-monoclesymbol-6.2.diff
-  - dwm-movestack-6.1.diff
+  - dwm-movestack-20211115-a786211.diff
   - dwm-namedscratchpads-6.2.diff
-  - dwm-notitle-6.2.diff
   - dwm-pertag-20200914-61bb8b2.diff
   - dwm-resizecorners-6.2.diff
   - dwm-status2d-6.3.diff
   - dwm-status2d-xrdb-6.2.diff
-  - dwm-statuspadding-6.3.diff
-  - dwm-warp-6.2.diff
-  - dwm-xresources-6.2.diff
+  - dwm-windowfollow-20221002-69d5652.diff
+  - dwm-xresources-20210827-138b405.diff
 - **farbfeld** - A lossless image format which is easy to parse, pipe and compress.
 - **feh** — image viewer and cataloguer
 - **lsw** - list windows
@@ -112,6 +111,7 @@ suckless.org applications have been patched already.
   - st-blinking_cursor-20200531-a2a7044.diff
   - st-bold-is-not-bright-20190127-3be4cf1.diff
   - st-boxdraw_v2-0.8.3.diff
+  - st-focus-20230610-68d1ad9.diff
   - st-iso14755-0.8.3.diff
   - st-iso14755-20180911-67d0cb6.diff
   - st-scrollback-20200419-72e3f6c.diff

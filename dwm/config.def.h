@@ -65,7 +65,7 @@ static char *termcolor[]                    = { termcol0,
                                                 termcol12,
                                                 termcol13,
                                                 termcol14,
-                                                termcol15, };
+                                                termcol15 };
 
 static char *colors[][3] = {
 		/*                                      fg                  bg                  border   */
@@ -109,22 +109,22 @@ ResourcePref resources[] = {
 		{ "tagselbgcolor",      STRING,  &tagselbgcolor },
 		{ "tagselfgcolor",      STRING,  &tagselfgcolor },
 		{ "topbar",             INTEGER, &topbar },
-		{ "color0",             STRING,  &termcol0 },
-		{ "color1",             STRING,  &termcol1 },
-		{ "color2",             STRING,  &termcol2 },
-		{ "color3",             STRING,  &termcol3 },
-		{ "color4",             STRING,  &termcol4 },
-		{ "color5",             STRING,  &termcol5 },
-		{ "color6",             STRING,  &termcol6 },
-		{ "color7",             STRING,  &termcol7 },
-		{ "color8",             STRING,  &termcol8 },
-		{ "color9",             STRING,  &termcol9 },
-		{ "color10",            STRING,  &termcol10 },
-		{ "color11",            STRING,  &termcol11 },
-		{ "color12",            STRING,  &termcol12 },
-		{ "color13",            STRING,  &termcol13 },
-		{ "color14",            STRING,  &termcol14 },
-		{ "color15",            STRING,  &termcol15 },
+		{ "termcol0",             STRING,  &termcol0 },
+		{ "termcol1",             STRING,  &termcol1 },
+		{ "termcol2",             STRING,  &termcol2 },
+		{ "termcol3",             STRING,  &termcol3 },
+		{ "termcol4",             STRING,  &termcol4 },
+		{ "termcol5",             STRING,  &termcol5 },
+		{ "termcol6",             STRING,  &termcol6 },
+		{ "termcol7",             STRING,  &termcol7 },
+		{ "termcol8",             STRING,  &termcol8 },
+		{ "termcol9",             STRING,  &termcol9 },
+		{ "termcol10",            STRING,  &termcol10 },
+		{ "termcol11",            STRING,  &termcol11 },
+		{ "termcol12",            STRING,  &termcol12 },
+		{ "termcol13",            STRING,  &termcol13 },
+		{ "termcol14",            STRING,  &termcol14 },
+		{ "termcol15",            STRING,  &termcol15 },
 };
 
 /* Tagging */
@@ -132,7 +132,7 @@ ResourcePref resources[] = {
 /* static const char *tags[] = { "➊", "➋", "➌", "➍", "➎", "➏", "➐", "➑", "➒" }; */
 /* static const char *tags[] = { "☹", "♨", "♺", "♿", "⚒", "⚓", "⚕", "⚗", "i⚛ }; */
 /* static const char *tags[] = { "", "Finder", "File", "Edit", "View", "Settings", "Go", "Window", "Help"}; */
-static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
+static const char *tags[] = { "", "", "", "", "", "", "󰊻", "", "" };
 
 /* Client Rules */
 static const Rule rules[] = {
@@ -184,7 +184,11 @@ static const Rule rules[] = {
 	{ NULL,                 NULL,                                   "NoteTaking",                   0,          1,            1,            1,          -1,         '3' },
 };
 
-#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#define FORCE_VSPLIT 1                                                                                          // nrowgrid layout: force two clients to always split vertically
+#define WFACTIVE 'F'                                                                                           // window following
+#define WFINACTIVE 'N'
+#define WFDEFAULT WFINACTIVE
+
 
 /* include */
 #include <X11/XF86keysym.h>
@@ -194,20 +198,20 @@ static const Rule rules[] = {
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "    ",      tile },                                                                                     // first entry is default
-	{ "   ",       NULL },                                                                                     // no layout function means floating behavior
-	{ "   ",       monocle },
-	{ "   ",       spiral },
-	{ "   ",       dwindle },
-	{ "   H[]",     deck },
-	{ "   TTT",     bstack },
-	{ "   ===",     bstackhoriz },
-	{ "   HHH",     grid },
-	{ "   ###",     nrowgrid },
-	{ "   ---",     horizgrid },
-	{ "   :::",     gaplessgrid },
-	{ "   |M|",     centeredmaster },
-	{ "   >M>",     centeredfloatingmaster },
+	{ "   Tile     ", tile },                                                                                     // first entry is default
+	{ "   Float    ", NULL },                                                                                     // no layout function means floating behavior
+	{ "   Monocle  ", monocle },
+	{ "   Spiral   ", spiral },
+	{ "   Dwindle  ", dwindle },
+	{ "   Deck     ", deck },
+	{ "   BStack   ", bstack },
+	{ "   BStackH  ", bstackhoriz },
+	{ "   Grid     ", grid },
+	{ "   nRow Grid", nrowgrid },
+	{ "   HorizGrid", horizgrid },
+	{ "   Gapless G", gaplessgrid },
+	{ "| |CMaster  ", centeredmaster },
+	{ "| |CFMaster ", centeredfloatingmaster },
 };
 
 /* key definitions */
@@ -253,6 +257,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_bracketright,            togglescratch,  {.v = scratchpad2 } },
 	{ MODKEY,                       XK_semicolon,               togglescratch,  {.v = NoteTaking } },
 	{ MODKEY,                       XK_b,                       togglebar,      {0} },
+	{ MODKEY,                       XK_n,                       togglefollow,   {0} },
 	{ MODKEY,                       XK_j,                       focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,                       focusstack,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_i,                       incnmaster,     {.i = +1 } },
@@ -316,18 +321,19 @@ static const Key keys[] = {
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
-	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
-	{ ClkStatusText,        0,              Button3,        spawn,          {.v = xmenu } },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	/* click                        event mask                  button          function        argument */
+	{ ClkLtSymbol,                  0,                          Button1,        setlayout,      {0} },
+	{ ClkLtSymbol,                  0,                          Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkFollowSymbol,              0,                          Button1,        togglefollow,   {0} },
+	{ ClkWinTitle,                  0,                          Button2,        zoom,           {0} },
+	{ ClkStatusText,                0,                          Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,                0,                          Button3,        spawn,          {.v = xmenu } },
+	{ ClkClientWin,                 MODKEY,                     Button1,        movemouse,      {0} },
+	{ ClkClientWin,                 MODKEY,                     Button2,        togglefloating, {0} },
+	{ ClkClientWin,                 MODKEY,                     Button3,        resizemouse,    {0} },
+	{ ClkTagBar,                    0,                          Button1,        view,           {0} },
+	{ ClkTagBar,                    0,                          Button3,        toggleview,     {0} },
+	{ ClkTagBar,                    MODKEY,                     Button1,        tag,            {0} },
+	{ ClkTagBar,                    MODKEY,                     Button3,        toggletag,      {0} },
 };
 
