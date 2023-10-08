@@ -19,56 +19,107 @@
 ! 6 = Yellow      E = Light Yellow
 ! 7 = White       F = Bright White
 
-! dwm.font:                                       FiraMono Nerd Font:size=12
-! dwm.font:                                       FiraCode Nerd Font Mono:style=Regular:size=24:antialias=true:hinting=false:autohint=false:hintstyle=hintnone:dpi=96
-
+! dwm
+!       dwm.font:                               FiraMono Nerd Font:size=12
+!       dwm.font:                               FiraCode Nerd Font Mono:style=Regular:size=24:antialias=true:hinting=false:autohint=false:hintstyle=hintnone:dpi=96
+! st
+!       st*font:                                GoMono Nerd Font:size=14:antialias=true
 ! +----- Solarized Color Theme ------------------------------------------------+
-#define S_yellow                                #b58900
-#define S_orange                                #cb4b16
-#define S_red                                   #dc322f
-#define S_magenta                               #d33682
-#define S_violet                                #6c71c4
-#define S_blue                                  #268bd2
-#define S_cyan                                  #2aa198
-#define S_green                                 #859900
-#define S_base03                                #002b36
-#define S_base02                                #073642
-#define S_base01                                #586e75
-#define S_base00                                #657b83
-#define S_base0                                 #839496
-#define S_base1                                 #93a1a1
-#define S_base2                                 #eee8d5
-#define S_base3                                 #fdf6e3
-#define S_deeppink                              #5f005f
-#define S_darkmagenta                           #8700af
-#define S_mediumpurple                          #af87d7
+! Dark
+!       *background:                            solarized_base03
+!       *foreground:                            solarized_base0
+!       *fadeColor:                             solarized_base03
+!       *cursorColor:                           solarized_base1
+!       *pointerColorBackground                 solarized_base01
+!       *pointerColorForeground                 solarized_base1
+! Light
+!       *background:                            solarized_base3
+!       *foreground:                            solarized_base00
+!       *fadeColor:                             solarized_base3
+!       *cursorColor:                           solarized_base01
+!       *pointerColorBackground                 solarized_base1
+!       *pointerColorForeground                 solarized_base01
+! black dark/light
+!       *color0:                                solarized_base02
+!       *color8:                                solarized_base03
+! red dark/light
+!       *color1:                                solarized_red
+!       *color9:                                solarized_orange
+! green dark/light
+!       *color2:                                solarized_green
+!       *color10:                               solarized_base01
+! yellow dark/light
+!       *color3:                                solarized_yellow
+!       *color11:                               solarized_base00
+! blue dark/light
+!       *color4:                                solarized_blue
+!       *color12:                               solarized_base0
+! magenta dark/light
+!       *color5:                                solarized_magenta
+!       *color13:                               solarized_violet
+! cyan dark/light
+!       *color6:                                solarized_cyan
+!       *color14:                               solarized_base1
+! white dark/light
+!       *color7:                                solarized_base2
+!       *color15:                               solarized_base3
 
-! #define dwmstatuscolor0                         #5f005f
-! #define dwmstatuscolor1                         #760076
-! #define dwmstatuscolor2                         #8d008d
-! #define dwmstatuscolor3                         #a400a4
-! #define dwmstatuscolor4                         #bb00bb
-! #define dwmstatuscolor5                         #d200d2
-! #define dwmstatuscolor6                         #e900e9
-! #define dwmstatuscolor7                         #ff00ff
+#define solarized_base03                        #002b36
+#define solarized_base02                        #073642
+#define solarized_base01                        #586e75
+#define solarized_base00                        #657b83
+#define solarized_base0                         #839496
+#define solarized_base1                         #93a1a1
+#define solarized_base2                         #eee8d5
+#define solarized_base3                         #fdf6e3
 
-#define dwmstatuscolor0                         #680000
-#define dwmstatuscolor1                         #7c2b00
-#define dwmstatuscolor2                         #695700
-#define dwmstatuscolor3                         #044f00
-#define dwmstatuscolor4                         #00505e
-#define dwmstatuscolor5                         #000d63
-#define dwmstatuscolor6                         #360063
-#define dwmstatuscolor7                         #6e0039
+#define solarized_yellow                        #b58900
+#define solarized_orange                        #cb4b16
+#define solarized_red                           #dc322f
+#define solarized_magenta                       #d33682
+#define solarized_violet                        #6c71c4
+#define solarized_blue                          #268bd2
+#define solarized_cyan                          #2aa198
+#define solarized_green                         #859900
 
-! #define dwmstatuscolor0                         #b58900
-! #define dwmstatuscolor1                         #cb4b16
-! #define dwmstatuscolor2                         #dc322f
-! #define dwmstatuscolor3                         #d33682
-! #define dwmstatuscolor4                         #6c71c4
-! #define dwmstatuscolor5                         #268bd2
-! #define dwmstatuscolor6                         #2aa198
-! #define dwmstatuscolor7                         #859900
+#define solarized_cursor                        #00ff00
+#define solarized_cursorrev                     #88ff88
+
+! +----- The Blue Oyster Theme ------------------------------------------------+
+#define tbo_base03                              #5f005f
+#define tbo_base02                              #870087
+#define tbo_base01                              #af00d7
+#define tbo_base00                              #d700ff
+#define tbo_base0                               #d75fff
+#define tbo_base1                               #d787ff
+#define tbo_base2                               #ffafff
+#define tbo_base3                               #ffd7ff
+
+#define tbo_yellow                              #b58900
+#define tbo_orange                              #cb4b16
+#define tbo_red                                 #dc322f
+#define tbo_magenta                             #d33682
+#define tbo_violet                              #6c71c4
+#define tbo_blue                                #268bd2
+#define tbo_cyan                                #2aa198
+#define tbo_green                               #859900
+
+#define tbo_color0                              #680000
+#define tbo_color1                              #7c2b00
+#define tbo_color2                              #695700
+#define tbo_color3                              #044f00
+#define tbo_color4                              #00505e
+#define tbo_color5                              #000d63
+#define tbo_color6                              #360063
+#define tbo_color7                              #6e0039
+#define tbo_color8                              #000000
+#define tbo_color9                              #000000
+#define tbo_color10                             #000000
+#define tbo_color11                             #af00d7
+#define tbo_color12                             #af87d7
+#define tbo_color13                             #444444
+#define tbo_color14                             #bcbcbc
+#define tbo_color15                             #eeeeee
 
 ! +----- Xft related-----------------------------------------------------------+
 Xft.autohint:                                   false
@@ -81,58 +132,50 @@ Xft.dpi:                                        96
 
 ! +----- dwm related ----------------------------------------------------------+
 dwm.borderpx:                                   0
-dwm.font:                                       FiraMono Nerd Font:size=10
+dwm.font:                                       FiraMono Nerd Font:style=Regular:size=12
 dwm.gappih:                                     15
 dwm.gappiv:                                     15
 dwm.gappoh:                                     15
 dwm.gappov:                                     15
-dwm.infonormbgcolor:                            #5f005f
-dwm.infonormfgcolor:                            #eeeeee
-dwm.infoselbgcolor:                             #5f005f
-dwm.infoselfgcolor:                             #eeeeee
 dwm.lockfullscreen:                             0
 dwm.mfact:                                      0.55
 dwm.nmaster:                                    1
-dwm.normbgcolor:                                #5f005f
-dwm.normbordercolor:                            #444444
-dwm.normfgcolor:                                #bbbbbb
 dwm.resizehints:                                1
-dwm.selbgcolor:                                 #005577
-dwm.selbordercolor:                             #005577
-dwm.selfgcolor:                                 #eeeeee
+dwm.topbar:                                     1
 dwm.showbar:                                    1
 dwm.snap:                                       0
-dwm.statusbgcolor:                              #5f005f
-dwm.statusfgcolor:                              #eeeeee
-dwm.tagnormbgcolor:                             #5f005f
-dwm.tagnormfgcolor:                             #af87d7
-dwm.tagselbgcolor:                              #5f005f
-dwm.tagselfgcolor:                              #eeeeee
-dwm.topbar:                                     1
-! dwm.color0:                                     S_base02
-! dwm.color1:                                     S_red
-! dwm.color2:                                     S_green
-! dwm.color3:                                     S_yellow
-! dwm.color4:                                     S_blue
-! dwm.color5:                                     S_magenta
-! dwm.color6:                                     S_cyan
-! dwm.color7:                                     S_base2
-dwm.color0:                                     dwmstatuscolor0
-dwm.color1:                                     dwmstatuscolor1
-dwm.color2:                                     dwmstatuscolor2
-dwm.color3:                                     dwmstatuscolor3
-dwm.color4:                                     dwmstatuscolor4
-dwm.color5:                                     dwmstatuscolor5
-dwm.color6:                                     dwmstatuscolor6
-dwm.color7:                                     dwmstatuscolor7
-dwm.color9:                                     S_orange
-dwm.color8:                                     S_base03
-dwm.color10:                                    S_base01
-dwm.color11:                                    S_base00
-dwm.color12:                                    S_base0
-dwm.color13:                                    S_violet
-dwm.color14:                                    S_base1
-dwm.color15:                                    S_base3
+dwm.infonormbgcolor:                            tbo_base03
+dwm.infonormfgcolor:                            tbo_color15
+dwm.infoselbgcolor:                             tbo_base03
+dwm.infoselfgcolor:                             tbo_color15
+dwm.normbgcolor:                                tbo_base03
+dwm.normbordercolor:                            tbo_color13
+dwm.normfgcolor:                                tbo_color14
+dwm.selbgcolor:                                 tbo_color10
+dwm.selbordercolor:                             tbo_color10
+dwm.selfgcolor:                                 tbo_color15
+dwm.statusbgcolor:                              tbo_base03
+dwm.statusfgcolor:                              tbo_color15
+dwm.tagnormbgcolor:                             tbo_base03
+dwm.tagnormfgcolor:                             tbo_color12
+dwm.tagselbgcolor:                              tbo_base03
+dwm.tagselfgcolor:                              tbo_color15
+dwm.termcol0:                                   tbo_color0
+dwm.termcol1:                                   tbo_color1
+dwm.termcol2:                                   tbo_color2
+dwm.termcol3:                                   tbo_color3
+dwm.termcol4:                                   tbo_color4
+dwm.termcol5:                                   tbo_color5
+dwm.termcol6:                                   tbo_color6
+dwm.termcol7:                                   tbo_color7
+dwm.termcol8:                                   tbo_color8
+dwm.termcol9:                                   tbo_color9
+dwm.termcol10:                                  tbo_color10
+dwm.termcol11:                                  tbo_color11
+dwm.termcol12:                                  tbo_color12
+dwm.termcol13:                                  tbo_color13
+dwm.termcol14:                                  tbo_color14
+dwm.termcol15:                                  tbo_color15
 
 ! +----- dmneu related --------------------------------------------------------+
 dmenu.font:                                     FiraMono Nerd Font:size=14:antialias=true
@@ -142,36 +185,34 @@ dmenu.selbackground:                            #8700af
 dmenu.selforeground:                            #eeeeee
 
 ! +----- st relatd ------------------------------------------------------------+
-st*font:                                        GoMono Nerd Font:size=11:antialias=true
+st*font:                                        GoMono Nerd Font:style=Regular:size=14:antialias=true:hinting=false:autohint=false:hintstyle=hintnone:dpi=96
 st*alpha:                                       0.95
+st*alphaunfocused:                              0.50
 st*borderpx:                                    0
 st*termname:                                    st-256color
 st*shell:                                       /bin/sh
-st*cursorColor:                                 #00ff00
-st*cursorColorRev:                              #0000ff
-st*color0:                                      S_base02
-st*color1:                                      S_red
-st*color2:                                      S_green
-st*color3:                                      S_yellow
-st*color4:                                      S_blue
-st*color5:                                      S_magenta
-st*color6:                                      S_cyan
-st*color7:                                      S_base2
-st*color9:                                      S_orange
-st*color8:                                      S_base03
-st*color10:                                     S_base01
-st*color11:                                     S_base00
-st*color12:                                     S_base0
-st*color13:                                     S_violet
-st*color14:                                     S_base1
-st*color15:                                     S_base3
-!-- Change Theme here - Light/Dark
-!-- Dark
-!st.background:                                 S_base03
-!st.foreground:                                 S_base0
-!-- Light
-st.background:                                  S_base3
-st.foreground:                                  S_base00
+st.background:                                  solarized_base3
+st.backgroundfocused:                           solarized_base3
+st.backgroundunfocused:                         solarized_base03
+st.foreground:                                  solarized_base00
+st*cursorColor:                                 solarized_cursor
+st*cursorColorRev:                              solarized_cursorrev
+st*color0:                                      solarized_base02
+st*color8:                                      solarized_base03
+st*color1:                                      solarized_red
+st*color9:                                      solarized_orange
+st*color2:                                      solarized_green
+st*color10:                                     solarized_base01
+st*color3:                                      solarized_yellow
+st*color11:                                     solarized_base00
+st*color4:                                      solarized_blue
+st*color12:                                     solarized_base0
+st*color5:                                      solarized_magenta
+st*color13:                                     solarized_violet
+st*color6:                                      solarized_cyan
+st*color14:                                     solarized_base1
+st*color7:                                      solarized_base2
+st*color15:                                     solarized_base3
 
 ! +----- slock relatd ---------------------------------------------------------+
 slock.color0:                                   #000000
@@ -218,12 +259,9 @@ Xcursor.size:                                   64
 
 ! +----- XTerm related --------------------------------------------------------+
 XTerm*termName:                                 xterm-256color
-XTerm*cursorColor:                              #00ff00
 XTerm*pointerShape:                             hand2
 XTerm.vt100.scrollBar:                          false
 XTerm.vt100.faceName:                           GoMono Nerd Font:size=14:antialias=true
-XTerm.vt100.background:                         S_base03
-XTerm.vt100.foreground:                         S_base0
 XTerm*allowBoldFonts:                           false
 XTerm*internalBorder:                           0
 XTerm*mainMenu*backgroundPixmap:                gradient:vertical?dimension=600&start=gray10&end=gray40
@@ -234,22 +272,60 @@ XTerm*fontMenu*backgroundPixmap:                gradient:vertical?dimension=600&
 XTerm*fontMenu*foreground:                      white
 XTerm*tekMenu*backgroundPixmap:                 gradient:vertical?dimension=600&start=gray10&end=gray40
 XTerm*tekMenu*foreground:                       white
-XTerm*color0:                                   S_base02
-XTerm*color1:                                   S_red
-XTerm*color2:                                   S_green
-XTerm*color3:                                   S_yellow
-XTerm*color4:                                   S_blue
-XTerm*color5:                                   S_magenta
-XTerm*color6:                                   S_cyan
-XTerm*color7:                                   S_base2
-XTerm*color9:                                   S_orange
-XTerm*color8:                                   S_base03
-XTerm*color10:                                  S_base01
-XTerm*color11:                                  S_base00
-XTerm*color12:                                  S_base0
-XTerm*color13:                                  S_violet
-XTerm*color14:                                  S_base1
-XTerm*color15:                                  S_base3
+XTerm.vt100.background:                         solarized_base03
+XTerm.vt100.foreground:                         solarized_base0
+XTerm*cursorColor:                              solarized_base1
+XTerm*color0:                                   solarized_base02
+XTerm*color8:                                   solarized_base03
+XTerm*color1:                                   solarized_red
+XTerm*color9:                                   solarized_orange
+XTerm*color2:                                   solarized_green
+XTerm*color10:                                  solarized_base01
+XTerm*color3:                                   solarized_yellow
+XTerm*color11:                                  solarized_base00
+XTerm*color4:                                   solarized_blue
+XTerm*color12:                                  solarized_base0
+XTerm*color5:                                   solarized_magenta
+XTerm*color13:                                  solarized_violet
+XTerm*color6:                                   solarized_cyan
+XTerm*color14:                                  solarized_base1
+XTerm*color7:                                   solarized_base2
+XTerm*color15:                                  solarized_base3
+
+! +----- XTerm-Test related ----------------------------------------------------+
+XTerm-Test*termName:                            xterm-256color
+XTerm-Test*pointerShape:                        hand2
+XTerm-Test.vt100.scrollBar:                     false
+XTerm-Test.vt100.faceName:                      GoMono Nerd Font:size=14:antialias=true
+XTerm-Test*allowBoldFonts:                      false
+XTerm-Test*internalBorder:                      0
+XTerm-Test*mainMenu*backgroundPixmap:           gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm-Test*mainMenu*foreground:                 white
+XTerm-Test*vtMenu*backgroundPixmap:             gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm-Test*vtMenu*foreground:                   white
+XTerm-Test*fontMenu*backgroundPixmap:           gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm-Test*fontMenu*foreground:                 white
+XTerm-Test*tekMenu*backgroundPixmap:            gradient:vertical?dimension=600&start=gray10&end=gray40
+XTerm-Test*tekMenu*foreground:                  white
+XTerm-Test.vt100.background:                    tbo_base3
+XTerm-Test.vt100.foreground:                    tbo_base00
+XTerm-Test*cursorColor:                         tbo_base1
+XTerm-Test*color0:                              tbo_base02
+XTerm-Test*color8:                              tbo_base03
+XTerm-Test*color1:                              tbo_red
+XTerm-Test*color9:                              tbo_orange
+XTerm-Test*color2:                              tbo_green
+XTerm-Test*color10:                             tbo_base01
+XTerm-Test*color3:                              tbo_yellow
+XTerm-Test*color11:                             tbo_base00
+XTerm-Test*color4:                              tbo_blue
+XTerm-Test*color12:                             tbo_base0
+XTerm-Test*color5:                              tbo_magenta
+XTerm-Test*color13:                             tbo_violet
+XTerm-Test*color6:                              tbo_cyan
+XTerm-Test*color14:                             tbo_base1
+XTerm-Test*color7:                              tbo_base2
+XTerm-Test*color15:                             tbo_base3
 
 ! +----- XTermScratchPad related ----------------------------------------------+
 XTermScratchPad.vt100.geometry:                 200x80
@@ -258,8 +334,6 @@ XTermScratchPad*cursorColor:                    #00ff00
 XTermScratchPad*pointerShape:                   hand2
 XTermScratchPad.vt100.scrollBar:                false
 XTermScratchPad.vt100.faceName:                 GoMono Nerd Font:size=10:antialias=true
-XTermScratchPad.vt100.background:               S_base03
-XTermScratchPad.vt100.foreground:               S_base0
 XTermScratchPad*allowBoldFonts:                 true
 XTermScratchPad*internalBorder:                 10
 XTermScratchPad*mainMenu*backgroundPixmap:      gradient:vertical?dimension=600&start=gray10&end=gray40
@@ -270,32 +344,33 @@ XTermScratchPad*fontMenu*backgroundPixmap:      gradient:vertical?dimension=600&
 XTermScratchPad*fontMenu*foreground:            white
 XTermScratchPad*tekMenu*backgroundPixmap:       gradient:vertical?dimension=600&start=gray10&end=gray40
 XTermScratchPad*tekMenu*foreground:             white
-XTermScratchPad*color0:                         S_base02
-XTermScratchPad*color1:                         S_red
-XTermScratchPad*color2:                         S_green
-XTermScratchPad*color3:                         S_yellow
-XTermScratchPad*color4:                         S_blue
-XTermScratchPad*color5:                         S_magenta
-XTermScratchPad*color6:                         S_cyan
-XTermScratchPad*color7:                         S_base2
-XTermScratchPad*color9:                         S_orange
-XTermScratchPad*color8:                         S_base03
-XTermScratchPad*color10:                        S_base01
-XTermScratchPad*color11:                        S_base00
-XTermScratchPad*color12:                        S_base0
-XTermScratchPad*color13:                        S_violet
-XTermScratchPad*color14:                        S_base1
-XTermScratchPad*color15:                        S_base3
+XTermScratchPad.vt100.background:               solarized_base03
+XTermScratchPad.vt100.foreground:               solarized_base0
+XTermScratchPad*cursorColor:                    solarized_base1
+XTermScratchPad*color0:                         solarized_base02
+XTermScratchPad*color8:                         solarized_base03
+XTermScratchPad*color1:                         solarized_red
+XTermScratchPad*color9:                         solarized_orange
+XTermScratchPad*color2:                         solarized_green
+XTermScratchPad*color10:                        solarized_base01
+XTermScratchPad*color3:                         solarized_yellow
+XTermScratchPad*color11:                        solarized_base00
+XTermScratchPad*color4:                         solarized_blue
+XTermScratchPad*color12:                        solarized_base0
+XTermScratchPad*color5:                         solarized_magenta
+XTermScratchPad*color13:                        solarized_violet
+XTermScratchPad*color6:                         solarized_cyan
+XTermScratchPad*color14:                        solarized_base1
+XTermScratchPad*color7:                         solarized_base2
+XTermScratchPad*color15:                        solarized_base3
 
 ! +----- XTermNoteTaking related ----------------------------------------------+
-XTermNoteTaking.vt100.geometry:                 85x70
+XTermNoteTaking.vt100.geometry:                 100x60
 XTermNoteTaking*termName:                       xterm-256color
 XTermNoteTaking*cursorColor:                    #00ff00
 XTermNoteTaking*pointerShape:                   hand2
 XTermNoteTaking.vt100.scrollBar:                false
 XTermNoteTaking.vt100.faceName:                 GoMono Nerd Font:size=14:antialias=true
-XTermNoteTaking.vt100.background:               S_base03
-XTermNoteTaking.vt100.foreground:               S_base0
 XTermNoteTaking*allowBoldFonts:                 true
 XTermNoteTaking*internalBorder:                 0
 XTermNoteTaking*mainMenu*backgroundPixmap:      gradient:vertical?dimension=600&start=gray10&end=gray40
@@ -306,22 +381,25 @@ XTermNoteTaking*fontMenu*backgroundPixmap:      gradient:vertical?dimension=600&
 XTermNoteTaking*fontMenu*foreground:            white
 XTermNoteTaking*tekMenu*backgroundPixmap:       gradient:vertical?dimension=600&start=gray10&end=gray40
 XTermNoteTaking*tekMenu*foreground:             white
-XTermNoteTaking*color0:                         S_base02
-XTermNoteTaking*color1:                         S_red
-XTermNoteTaking*color2:                         S_green
-XTermNoteTaking*color3:                         S_yellow
-XTermNoteTaking*color4:                         S_blue
-XTermNoteTaking*color5:                         S_magenta
-XTermNoteTaking*color6:                         S_cyan
-XTermNoteTaking*color7:                         S_base2
-XTermNoteTaking*color9:                         S_orange
-XTermNoteTaking*color8:                         S_base03
-XTermNoteTaking*color10:                        S_base01
-XTermNoteTaking*color11:                        S_base00
-XTermNoteTaking*color12:                        S_base0
-XTermNoteTaking*color13:                        S_violet
-XTermNoteTaking*color14:                        S_base1
-XTermNoteTaking*color15:                        S_base3
+XTermNoteTaking.vt100.background:               solarized_base3
+XTermNoteTaking.vt100.foreground:               solarized_base00
+XTermNoteTaking*cursorColor:                    solarized_green
+XTermNoteTaking*color0:                         solarized_base02
+XTermNoteTaking*color8:                         solarized_base03
+XTermNoteTaking*color1:                         solarized_red
+XTermNoteTaking*color9:                         solarized_orange
+XTermNoteTaking*color2:                         solarized_green
+XTermNoteTaking*color10:                        solarized_base01
+XTermNoteTaking*color3:                         solarized_yellow
+XTermNoteTaking*color11:                        solarized_base00
+XTermNoteTaking*color4:                         solarized_blue
+XTermNoteTaking*color12:                        solarized_base0
+XTermNoteTaking*color5:                         solarized_magenta
+XTermNoteTaking*color13:                        solarized_violet
+XTermNoteTaking*color6:                         solarized_cyan
+XTermNoteTaking*color14:                        solarized_base1
+XTermNoteTaking*color7:                         solarized_base2
+XTermNoteTaking*color15:                        solarized_base3
 
 ! +----- UXTerm related -------------------------------------------------------+
 UXTerm*termName:                                xterm-256color
@@ -329,8 +407,6 @@ UXTerm*cursorColor:                             #00ff00
 UXTerm*pointerShape:                            hand2
 UXTerm.vt100.scrollBar:                         false
 UXTerm.vt100.faceName:                          GoMono Nerd Font:size=10:antialias=true
-UXTerm.vt100.background:                        S_base03
-UXTerm.vt100.foreground:                        S_base0
 UXTerm*allowBoldFonts:                          false
 UXTerm*internalBorder:                          0
 UXTerm*mainMenu*backgroundPixmap:               gradient:vertical?dimension=600&start=gray10&end=gray40
@@ -341,22 +417,24 @@ UXTerm*fontMenu*backgroundPixmap:               gradient:vertical?dimension=600&
 UXTerm*fontMenu*foreground:                     white
 UXTerm*tekMenu*backgroundPixmap:                gradient:vertical?dimension=600&start=gray10&end=gray40
 UXTerm*tekMenu*foreground:                      white
-UXTerm*color0:                                  S_base02
-UXTerm*color1:                                  S_red
-UXTerm*color2:                                  S_green
-UXTerm*color3:                                  S_yellow
-UXTerm*color4:                                  S_blue
-UXTerm*color5:                                  S_magenta
-UXTerm*color6:                                  S_cyan
-UXTerm*color7:                                  S_base2
-UXTerm*color9:                                  S_orange
-UXTerm*color8:                                  S_base03
-UXTerm*color10:                                 S_base01
-UXTerm*color11:                                 S_base00
-UXTerm*color12:                                 S_base0
-UXTerm*color13:                                 S_violet
-UXTerm*color14:                                 S_base1
-UXTerm*color15:                                 S_base3
+UXTerm.vt100.background:                        solarized_base3
+UXTerm.vt100.foreground:                        solarized_base00
+UXTerm*color0:                                  solarized_base02
+UXTerm*color8:                                  solarized_base03
+UXTerm*color1:                                  solarized_red
+UXTerm*color9:                                  solarized_orange
+UXTerm*color2:                                  solarized_green
+UXTerm*color10:                                 solarized_base01
+UXTerm*color3:                                  solarized_yellow
+UXTerm*color11:                                 solarized_base00
+UXTerm*color4:                                  solarized_blue
+UXTerm*color12:                                 solarized_base0
+UXTerm*color5:                                  solarized_magenta
+UXTerm*color13:                                 solarized_violet
+UXTerm*color6:                                  solarized_cyan
+UXTerm*color14:                                 solarized_base1
+UXTerm*color7:                                  solarized_base2
+UXTerm*color15:                                 solarized_base3
 
 ! +----- XEyes related --------------------------------------------------------+
 XEyes.geometry:                                 75x75-2130+50
