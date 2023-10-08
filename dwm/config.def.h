@@ -65,7 +65,7 @@ static char *termcolor[]                    = { termcol0,
                                                 termcol12,
                                                 termcol13,
                                                 termcol14,
-                                                termcol15, };
+                                                termcol15 };
 
 static char *colors[][3] = {
 		/*                                      fg                  bg                  border   */
