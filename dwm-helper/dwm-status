@@ -30,7 +30,7 @@ gpu_amd_card0_dir=""
 SEPA=""
 SEPB=""
 c_bckg="NONE"
-g_bckg=$(cat ${HOME}/.Xresources | grep "dwm.statusbgcolor" | awk '{print $2}')
+g_bckg=$(xrdb -query | grep "dwm.statusbgcolor" | awk '{print $2}')
 dwm_status=""
 
 # +----- Functions ------------------------------------------------------------+
