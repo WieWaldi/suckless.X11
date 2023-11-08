@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#
+# +----------------------------------------------------------------------------+
+# | layoutmenu.sh                                                              |
+# +----------------------------------------------------------------------------+
+# |       Usage: ---                                                           |
+# | Description: Menu to choose layout for dwm                                 |
+# |    Requires: ---                                                           |
+# |       Notes: ---                                                           |
+# |      Author: Waldemar Schroeer                                             |
+# |     Company: Rechenzentrum Amper                                           |
+# |     Version: 1                                                             |
+# |     Created: 07.11.2023                                                    |
+# |    Revision: ---                                                           |
+# |                                                                            |
+# | Copyright © 2022 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
+
+cat <<EOF | xmenu
+    - Tile								0
+    - Float							1
+    - Monocle							2
+    - Spiral							3
+    - Dwindle							4
+    - Deck								5
+    - Bottom Stack						6
+    - Bottom Stack Horizontal			7
+    - Grid								8
+    - nRow Grid						9
+    - Horizontal Grid					10
+    - Gapless Grid 					11
+| | - Centered Master					12
+| | - Centered Floating Master			13
+EOF

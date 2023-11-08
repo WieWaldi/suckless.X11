@@ -242,6 +242,7 @@ static const char *xmenu[]              = { "xmenu.sh", NULL };
 static const char *scratchpad1[]        = { "1", "st", "-t", "ScratchPad1", "-g", "200x40", "-e", "tmux-start.sh", "ScratchPad1", NULL}; 
 static const char *scratchpad2[]        = { "2", "xterm", "-class", "XTermScratchPad", "-title", "ScratchPad2", "-e", "tmux-start.sh", "ScratchPad2", NULL}; 
 static const char *NoteTaking[]         = { "3", "xterm", "-class", "XTermNoteTaking", "-title", "NoteTaking", "-e", "dwm-notetaking", NULL}; 
+static const char *layoutmenu_cmd       = "dwm-layoutmenu";
 
 static const Key keys[] = {
 	/* modifier                     key                         function        argument */
@@ -282,10 +283,10 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,                   togglefloating, {0} },
 	{ MODKEY,                       XK_0,                       view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,                       tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,                   focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period,                  focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,                   tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period,                  tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_comma,                   focusmon,       {.i = +1 } },
+	{ MODKEY,                       XK_period,                  focusmon,       {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_comma,                   tagmon,         {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_period,                  tagmon,         {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_u,                       incrgaps,       {.i = +1 } },
 	{ MODKEY|ControlMask|ShiftMask, XK_u,                       incrgaps,       {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_i,                       incrigaps,      {.i = +1 } },
@@ -323,7 +324,7 @@ static const Key keys[] = {
 static const Button buttons[] = {
 	/* click                        event mask                  button          function        argument */
 	{ ClkLtSymbol,                  0,                          Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,                  0,                          Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,                  0,                          Button3,        layoutmenu,     {0} },
 	{ ClkFollowSymbol,              0,                          Button1,        togglefollow,   {0} },
 	{ ClkWinTitle,                  0,                          Button2,        zoom,           {0} },
 	{ ClkStatusText,                0,                          Button2,        spawn,          {.v = termcmd } },
