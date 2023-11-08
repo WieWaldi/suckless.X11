@@ -81,6 +81,7 @@ suckless.org applications have been patched already.
   - dwm-focusedontop-6.4.diff
   - dwm-focusonclick-20200110-61bb8b2.diff
   - dwm-colorbar-6.3.diff
+  - dwm-layoutmenu-6.2.diff
   - dwm-layoutscroll-6.2.diff
   - dwm-monoclesymbol-6.2.diff
   - dwm-movestack-20211115-a786211.diff
