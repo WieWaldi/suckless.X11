@@ -1,0 +1,100 @@
+# +----------------------------------------------------------------------------+
+# | /etc/X11/xorg.conf.d/10-monitor.conf                                       |
+# +----------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
+
+# +----- General --------------------------------------------------------------+
+Section "ServerFlags"
+    Option "StandbyTime" "0"
+    Option "SuspendTime" "0"
+    Option "OffTime" "0"
+    Option "BlankTime" "0"
+EndSection
+
+Section "ServerLayout"
+    Identifier      "X.org Configured"
+    Screen        0 "Screen0" 0 0
+    InputDevice     "Mouse0" "CorePointer"
+    InputDevice     "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Files"
+    ModulePath      "/usr/lib64/xorg/modules"
+    FontPath        "catalogue:/etc/X11/fontpath.d"
+    FontPath        "built-ins"
+EndSection
+
+Section "Module"
+    Load            "glx"
+EndSection
+
+Section "InputDevice"
+    Identifier      "Keyboard0"
+    Driver          "kbd"
+EndSection
+
+Section "InputDevice"
+    Identifier      "Mouse0"
+    Driver          "mouse"
+    Option          "Protocol" "auto"
+    Option          "Device" "/dev/input/mice"
+    Option          "ZAxisMapping" "4 5 6 7"
+EndSection
+
+Section "Screen"
+    Identifier      "Screen0"
+    Device          "Card0"
+    Monitor         "Monitor1"
+    DefaultDepth    24
+    SubSection "Display"
+        Depth       24
+        Virtual     4920 1920
+    EndSubSection
+EndSection
+
+Section "Device"
+    Identifier      "Card0"
+    Driver          "radeon"
+    BusID           "PCI:1:0:0"
+    Option          "Monitor-DisplayPort-0" "Monitor1"
+    Option          "Monitor-DisplayPort-1" "Monitor2"
+    Option          "Monitor-DisplayPort-2" "Monitor3"
+EndSection
+
+Section "Monitor"
+    Identifier      "Monitor1"
+    VendorName      "Dell"
+    ModelName       "Full HD Monitor"
+    Option          "PreferredMode" "1920x1080"
+    Option          "Position" "0 420"
+    Option          "DPMS" "false"
+    Option          "Primary" "false"
+    Option          "Rotate" "normal"
+EndSection
+
+Section "Monitor"
+    Identifier      "Monitor2"
+    VendorName      "Dell"
+    ModelName       "Full HD Monitor"
+    Option          "PreferredMode" "1920x1080"
+    Option          "Position" "1920 420"
+    Option          "DPMS" "false"
+    Option          "Primary" "true"
+    Option          "Rotate" "normal"
+EndSection
+
+Section "Monitor"
+    Identifier      "Monitor3"
+    VendorName      "Dell"
+    ModelName       "Full HD Monitor"
+    Option          "PreferredMode" "1920x1080"
+    Option          "Position" "3840 0"
+    Option          "DPMS" "false"
+    Option          "Primary" "false"
+    Option          "Rotate" "left"
+EndSection
+
+
+# +----- EOF ------------------------------------------------------------------+

@@ -23,7 +23,7 @@
 # | __echo_Title      __display_Text_File                                      |
 # | __echo_OK                                                                  |
 # | __echo_Done                                                                |
-# | __echo_NotNeeded                                                           |
+# | __echo_NotNeeded  __check_File_Name                                        |
 # | __echo_Skipped                                                             |
 # | __echo_Failed                                                              |
 # | __echo_Error_Msg                                                           |
@@ -40,6 +40,14 @@
 # | cyan          COLOR_CYAN          6           0,max,max                    |
 # | white         COLOR_WHITE         7           max,max,max                  |
 # |                                                                            |
+# +----- __check_File_Name ----------------------------------------------------+
+# | 1 File Name is a writable directory                                        |
+# | 2 File Name is a symbolic link pointing to a directory                     |
+# | 3 File Name does not exist and can be created                              |
+# | 4 File Name is a non writable directory                                    |
+# | 5 File Name is a symbolic link not pointing to a directory                 |
+# | 6 File Name is a regular file                                              |
+# | 7 File Name does not exist and can not be created                          |
 # +----------------------------------------------------------------------------+
 
 # +----- Variables ------------------------------------------------------------+
@@ -362,23 +370,34 @@ __clear_Logfile() {
     fi
 }
 
+# +----- __check_File_Name ----------------------------------------------------+
+# | 1 File Name is a writable directory                                        |
+# | 2 File Name is a symbolic link pointing to a directory                     |
+# | 3 File Name does not exist and can be created                              |
+# | 4 File Name is a non writable directory                                    |
+# | 5 File Name is a symbolic link not pointing to a directory                 |
+# | 6 File Name is a regular file                                              |
+# | 7 File Name does not exist and can not be created                          |
+# +----------------------------------------------------------------------------+
 __check_File_Name() {
-    if [[ -d S{1} ]]; then
-        if [[ -w ${1} ]]; then
+    eval fnchk=${1}
+    if [[ -d ${fnchk} ]]; then
+        if [[ -w ${fnchk} ]]; then
             echo "1"
         else
             echo "4"
         fi
-    elif [[ -L ${1} ]]; then
-        if [[ -d "$(readlink ${1})" ]]; then
+    elif [[ -L ${fnchk} ]]; then
+        if [[ -d "$(readlink ${fnchk})" ]]; then
             echo "2"
         else
             echo "5"
         fi
-    elif [[ -f ${1} ]]; then
+    elif [[ -f ${fnchk} ]]; then
         echo "6"
     else
-        if /bin/mkdir -p ${1} &>/dev/null; then
+        if /bin/mkdir -p ${fnchk} &>/dev/null; then
+            rm -r ${fnchk}
             echo "3"
         else
             echo "7"

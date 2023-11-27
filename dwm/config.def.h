@@ -176,7 +176,7 @@ static const Rule rules[] = {
 	{ "Xsensors",           "xsensors",                             NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "XTerm",              "xterm",                                "cava",                         0,          1,            1,            0,          -1,         0   },
 	{ "XTerm",              "xterm",                                "alsamixer",                    0,          1,            1,            0,          -1,         0   },
-	{ "Zenity",             "zenity",                               "Store Password",               0,          1,            1,            0,          -1,         0   },
+	{ "zenity",             "zenity",                               NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ NULL,                 "outlook.office365.com",                NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ NULL,                 "google-chrome",                        NULL,                           1 << 8,     0,            0,            0,          -1,         0   },
 	{ NULL,                 NULL,                                   "ScratchPad1",                  0,          1,            1,            1,          -1,         '1' },
