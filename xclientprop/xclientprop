@@ -7,9 +7,15 @@
 # |                  waldemar.schroeer(at)rz-amper.de                       |
 # +-------------------------------------------------------------------------+
 
-xprop | awk '
+# xprop | awk '
+#     /^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
+#     /^WM_NAME/{sub(/.* =/, "title:"); print}' | gxmessage -font "GoMono Nerd Font 24" -title "PopUp" -default okay -file -
+
+xproperties=$(xprop | awk '
     /^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
-    /^WM_NAME/{sub(/.* =/, "title:"); print}' | gxmessage -font "GoMono Nerd Font 24" -title "PopUp" -default okay -file -
+    /^WM_NAME/{sub(/.* =/, "title:"); print}')
+
+zenity --info --no-wrap --title="XClient Properties" --text="${xproperties}"
 
 exit 0
 
