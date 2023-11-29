@@ -24,7 +24,7 @@
 ## 1.1 List devices
 To list what xinput devices are available, use:
 ````shell
-xinput list
+$ xinput list
 
 ⎡ Virtual core pointer                          id=2    [master pointer  (3)]
 ⎜   ↳ Virtual core XTEST pointer                id=4    [slave  pointer  (2)]
@@ -54,7 +54,7 @@ as the ID may change following a reboot and lead to inconsistencies.
 ## 1.2 List properties
 To list all the properties of a device that can be set, use the following command:
 ````shell
-xinput list-props "XIUDI XD60v2 Keyboard"
+$ xinput list-props "XIUDI XD60v2 Keyboard"
 
 Device 'XIUDI XD60v2 Keyboard':
         Device Enabled (150):   1
@@ -67,3 +67,54 @@ Device 'XIUDI XD60v2 Keyboard':
         Device Node (266):      "/dev/input/event10"
         Device Product ID (267):        30788, 24672
 ````
+Each property can be identified using its name ("libinput Tapping Enabled") or 
+number (336). As with devices, it is recommended to use the name in startup 
+scripts, as the ID may change, albeit less often.
+
+## 1.3 Set device properties
+Properties of devices can be set one or more (up to three) values.
+The syntax for setting a property to a value is:
+````shell
+$ xinput set-prop device property values
+````
+Where values is replaced with the value(s) of the property.
+For an instance, to enable tapping with the above output. Either of the following
+commands could be used:
+````shell
+$ xinput set-prop "DELL0ABC:DE F123:4567 Touchpad" "libinput Tapping Enabled" 1
+````
+or
+````shell
+$ xinput set-prop 10 338 1
+````
+On success, no output should be produced.
+
+## Usage example: Remove the middle and right mouse buttons
+````shell
+$ xinput set-button-map mouse-device 1 1 1
+````
+The above command will make middle and right mouse button to function like the
+left button. Putting zeros will disable them.
+````shell
+$ xinput set-button-map mouse-device 1 0 0
+````
+
+# Tablet related
+Map  the  tablet's  input  area to a given output (e.g. "VGA1"). Output names may
+either be the name of a head available through the XRandR extension, or an X11
+geometry string of the form WIDTHxHEIGHT+X+Y. To switch to the next available
+output, the "next" keyword is also supported. This will cycle between the individual
+monitors connected to the system, and then the entire desktop. The mapping may
+be reset to the entire desktop at any time with the output name "desktop". Users
+of the NVIDIA binary driver should use the output names "HEAD-0" and "HEAD-1"
+until the driver supports XRandR 1.2 or later.
+
+The output mapping configuration is a onetime setting and does not track output
+reconfigurations; the command needs to be re-run whenever the output configuration
+changes. When used with tablet rotation, the tablet must be rotated before it is
+mapped to the new screen. This parameter is write-only and cannot be queried.
+
+````shell
+$ xsetwacom set 16 MapToOutput 3840x2160+0+720
+````
+
