@@ -24,7 +24,7 @@
 ## 1.1 List devices
 To list what xinput devices are available, use:
 ````shell
-xinput list                                                                                                                                                                                                                                                                                                       17:22 
+xinput list
 
 ⎡ Virtual core pointer                          id=2    [master pointer  (3)]
 ⎜   ↳ Virtual core XTEST pointer                id=4    [slave  pointer  (2)]
@@ -54,7 +54,7 @@ as the ID may change following a reboot and lead to inconsistencies.
 ## 1.2 List properties
 To list all the properties of a device that can be set, use the following command:
 ````shell
-xinput list-props "XIUDI XD60v2 Keyboard"                                                                                                                                                                                                                                                                         18:09 
+xinput list-props "XIUDI XD60v2 Keyboard"
 
 Device 'XIUDI XD60v2 Keyboard':
         Device Enabled (150):   1
