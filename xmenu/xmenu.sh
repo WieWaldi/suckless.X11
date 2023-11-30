@@ -1,6 +1,25 @@
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# +----------------------------------------------------------------------------+
+# | xmenu.sh                                                                   |
+# +----------------------------------------------------------------------------+
+# |       Usage: ---                                                           |
+# | Description: Wrapper script for xmenu                                      |
+# |    Requires: ---                                                           |
+# |       Notes: ---                                                           |
+# |      Author: Waldemar Schroeer                                             |
+# |     Company: Rechenzentrum Amper                                           |
+# |     Version: 3                                                             |
+# |     Created: 10.08.2022                                                    |
+# |    Revision: ---                                                           |
+# |                                                                            |
+# | Copyright © 2022 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
 
 cat <<EOF | xmenu | sh &
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-tasklist.png					Open File									${HOME}/.local/bin/xmenu-openfile.sh
+
 Internet
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-chrome.png					Google Chrome								/bin/google-chrome
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-thunderbird.png			Thunderbird									/bin/thunderbird
@@ -22,6 +41,7 @@ Applications
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-hugin.png					Hugin										/bin/hugin
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-luminance-hdr.png			Luminance									/usr/bin/luminance-hdr
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-okular.png					Okular										/bin/okular
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-veracrypt.png				Veracrypt									/usr/bin/veracrypt
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-vmrc.png					VMware Remote Console						/bin/vmrc
 Office
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-libreoffice-base.png		LibreOffice Base							/bin/libreoffice --base
@@ -41,7 +61,7 @@ System Application
 
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-thunar.png						File Manager (Thunar)						/bin/thunar
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-4Pane.png						File Manager (4Pane)						/bin/4Pane
-IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-file-manager.png				File Manager (Thunar)						/bin/xfe-xfe
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-file-manager.png				File Manager (Xfe)							/bin/xfe-xfe
 
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal (xterm)							/bin/xterm
 IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-xterm.png						Terminal/Login (xterm)						/bin/xterm -ls
