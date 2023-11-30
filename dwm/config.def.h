@@ -149,7 +149,7 @@ static const Rule rules[] = {
 	{ "Firefox",            "Browser",                              "Firefox Preferences",          1 << 8,     0,            1,            0,          -1,         0   },
 	{ "Gcolor3",            "gcolor3",                              NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gimp",               NULL,                                   NULL,                           0,          0,            1,            0,          -1,         0   },
-	{ "Gnome-calculator",   "gnome-calculator",                     "Calculator",                   0,          1,            1,            0,          -1,         0   },
+	{ "gnome-calculator",   "gnome-calculator",                     "Calculator",                   0,          1,            1,            0,          -1,         0   },
 	{ "gnuplot_qt",         NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gpick",              "gpick",                                NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gxmessage",          "gxmessage",                            "PopUp",                        0,          1,            1,            0,          -1,         0   },
