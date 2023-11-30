@@ -20,6 +20,7 @@ Applications
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-freecad.png				FreeCad										${HOME}/.local/bin/freecad
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-gimp.png					Gimp										/bin/gimp
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-hugin.png					Hugin										/bin/hugin
+	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-luminance-hdr.png			Luminance									/usr/bin/luminance-hdr
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-okular.png					Okular										/bin/okular
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-vmrc.png					VMware Remote Console						/bin/vmrc
 Office
