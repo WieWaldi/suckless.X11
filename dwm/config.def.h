@@ -139,7 +139,7 @@ static const Rule rules[] = {
 	/* class                instance                                title                           tags mask   iscentered    isfloating    alwaysontop monitor     scratch key */
 	{ "Arandr",             "arandr",                               NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Blueman-manager",    "blueman-manager",                      NULL,                           0,          1,            1,            0,          -1,         0   },
-	{ "Citrix",             "citrix",                               "Citrix Workspace",             1 << 1,     1,            1,            0,          -1,         0   },
+	{ "Citrix",             "citrix",                               "Citrix Workspace",             1 << 5,     0,            1,            0,          -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "Settings",                     0,          1,            1,            0,          -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "cool-retro-term",              0,          1,            1,            0,          -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "CMatrix",                      0,          1,            1,            0,          -1,         0   },
@@ -153,6 +153,8 @@ static const Rule rules[] = {
 	{ "gnuplot_qt",         NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gpick",              "gpick",                                NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gxmessage",          "gxmessage",                            "PopUp",                        0,          1,            1,            0,          -1,         0   },
+	{ "hugin",              "hugin",                                NULL,                           1 << 2,     0,            1,            0,          -1,         0   },
+	{ "hugin",              "PTBatcherGUI",                         NULL,                           1 << 2,     0,            1,            0,          -1,         0   },
 	{ "Krasses Radio",      NULL,                                   NULL,                           1 << 1,     1,            1,            0,          -1,         0   },
 	{ "mpv",                NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Pavucontrol",        "pavucontrol",                          NULL,                           0,          1,            1,            0,          -1,         0   },
