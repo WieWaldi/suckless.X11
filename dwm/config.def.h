@@ -139,7 +139,7 @@ static const Rule rules[] = {
 	/* class                instance                                title                           tags mask   iscentered    isfloating    alwaysontop monitor     scratch key */
 	{ "Arandr",             "arandr",                               NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Blueman-manager",    "blueman-manager",                      NULL,                           0,          1,            1,            0,          -1,         0   },
-	{ "Citrix",             "citrix",                               "Citrix Workspace",             1 << 1,     1,            1,            0,          -1,         0   },
+	{ "Citrix",             "citrix",                               "Citrix Workspace",             1 << 5,     0,            1,            0,          -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "Settings",                     0,          1,            1,            0,          -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "cool-retro-term",              0,          1,            1,            0,          -1,         0   },
 	{ "cool-retro-term",    "cool-retro-term",                      "CMatrix",                      0,          1,            1,            0,          -1,         0   },
@@ -149,10 +149,12 @@ static const Rule rules[] = {
 	{ "Firefox",            "Browser",                              "Firefox Preferences",          1 << 8,     0,            1,            0,          -1,         0   },
 	{ "Gcolor3",            "gcolor3",                              NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gimp",               NULL,                                   NULL,                           0,          0,            1,            0,          -1,         0   },
-	{ "Gnome-calculator",   "gnome-calculator",                     "Calculator",                   0,          1,            1,            0,          -1,         0   },
+	{ "gnome-calculator",   "gnome-calculator",                     "Calculator",                   0,          1,            1,            0,          -1,         0   },
 	{ "gnuplot_qt",         NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gpick",              "gpick",                                NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Gxmessage",          "gxmessage",                            "PopUp",                        0,          1,            1,            0,          -1,         0   },
+	{ "hugin",              "hugin",                                NULL,                           1 << 2,     0,            1,            0,          -1,         0   },
+	{ "hugin",              "PTBatcherGUI",                         NULL,                           1 << 2,     0,            1,            0,          -1,         0   },
 	{ "Krasses Radio",      NULL,                                   NULL,                           1 << 1,     1,            1,            0,          -1,         0   },
 	{ "mpv",                NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Pavucontrol",        "pavucontrol",                          NULL,                           0,          1,            1,            0,          -1,         0   },
@@ -171,12 +173,13 @@ static const Rule rules[] = {
 	{ "XClock",             "xclock",                               "xclock",                       0,          0,            1,            0,          -1,         0   },
 	{ "XEyes",              "xeyes",                                "xeyes",                        0,          0,            1,            0,          -1,         0   },
 	{ "Xfce4-terminal",     NULL,                                   NULL,                           0,          0,            0,            0,          -1,         0   },
+	{ "Xfe",                "xfe",                                  NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "xfreerdp",           NULL,                                   NULL,                           1 << 4,     1,            1,            0,          -1,         0   },
 	{ "Xmessage",           "xmessage",                             "xmessage",                     0,          1,            1,            0,          -1,         0   },
 	{ "Xsensors",           "xsensors",                             NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "XTerm",              "xterm",                                "cava",                         0,          1,            1,            0,          -1,         0   },
 	{ "XTerm",              "xterm",                                "alsamixer",                    0,          1,            1,            0,          -1,         0   },
-	{ "zenity",             "zenity",                               NULL,                           0,          1,            1,            0,          -1,         0   },
+	{ "zenity",             "zenity",                               NULL,                           0,          1,            1,            1,          -1,         0   },
 	{ NULL,                 "outlook.office365.com",                NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ NULL,                 "google-chrome",                        NULL,                           1 << 8,     0,            0,            0,          -1,         0   },
 	{ NULL,                 NULL,                                   "ScratchPad1",                  0,          1,            1,            1,          -1,         '1' },
@@ -228,9 +231,9 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0";                                                                                  // component of dmenucmd, manipulated in spawn()
-static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-i", "-c", "-l", "15", "-bw", "2", "-p", "Яцп ТЋїѕ Ѕћїт:", NULL };
-static const char *dmenusystem[]        = { "dwm-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ", NULL };
-static const char *dmenumedia[]         = { "dwm-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio", NULL };
+static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-i", "-c", "-l", "15", "-bw", "2", "-p", "Яцп ТЋїѕ Ѕћїт: 󰜎 ", NULL };
+static const char *dmenusystem[]        = { "dwm-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ  ", NULL };
+static const char *dmenumedia[]         = { "dwm-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio 󰐹 ", NULL };
 static const char *termcmd[]            = { "st", NULL };
 static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", "Login", NULL };
 static const char *volumeup[]           = { "dwm-volumectrl", "up", NULL };
