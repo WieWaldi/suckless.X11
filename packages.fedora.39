@@ -12,7 +12,7 @@ dbus-devel
 dbus-x11
 dunst
 elfutils-libelf-devel
-exa
+eza
 exiv2
 ffmpegthumbnailer
 fftw-devel
@@ -30,7 +30,6 @@ glm-devel
 gpick
 gstreamer*
 gtk2-devel
-gxmessage
 htop
 ImageMagick
 ImageMagick-devel
