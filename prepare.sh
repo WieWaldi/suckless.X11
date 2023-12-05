@@ -1,278 +1,226 @@
 #!/usr/bin/env bash
 #
 # +----------------------------------------------------------------------------+
-# | prepare.sh                                                                 |
+# | suckless.X11/prepare.sh                                                    |
 # +----------------------------------------------------------------------------+
-# | Copyright © 2019 Waldemar Schroeer                                         |
+# |       Usage: ---                                                           |
+# | Description: Script to prepare OS for suckless.X11/setup.sh                |
+# |    Requires: bash_framework.sh                                             |
+# |       Notes: ---                                                           |
+# |      Author: Waldemar Schroeer                                             |
+# |     Company: Rechenzentrum Amper                                           |
+# |     Version: 3                                                             |
+# |     Created: 24.08.2023                                                    |
+# |    Revision: ---                                                           |
+# |                                                                            |
+# | Copyright © 2023 Waldemar Schroeer                                         |
 # |                  waldemar.schroeer(at)rz-amper.de                          |
 # +----------------------------------------------------------------------------+
 
-# +----- Variables ------------------------------------------------------------+
-datetime="$(date "+%Y-%m-%d-%H-%M-%S")"
-cdir=$(pwd)
-logfile="/tmp/suckless.X11_prepare_${datetime}.log"
-width=80
-cdir=$(pwd)
 
-RED=$(tput setaf 1)
-BRIGHT=$(tput bold)
-NORMAL=$(tput sgr0)
-YN="(Yes|${BRIGHT}No${NORMAL}) >> "
 
-# +----- Functions ------------------------------------------------------------+
-echo_equals() {
-    counter=0
-    while [  $counter -lt "$1" ]; do
-    printf '='
-    (( counter=counter+1 ))
-    done
-}
 
-echo_title() {
-    title=$1
-    ncols=$(tput cols)
-    nequals=$(((width-${#title})/2-1))
-    tput setaf 4 0 0
-    echo_equals "$nequals"
-    tput setaf 6 0 0
-    printf " %s " "$title"
-    tput setaf 4 0 0
-    echo_equals "$nequals"
-    tput sgr0
-    echo
-}
 
-echo_Right() {
-    text=${1}
-    echo
-    tput cuu1
-    tput cuf "$((${width} - 1))"
-    tput cub ${#text}
-    echo "${text}"
-}
 
-echo_OK() {
-    tput setaf 2 0 0
-    echo_Right "[ OK ]"
-    tput sgr0
-}
+# +----- Help and Usage (Must start at line 25 and must stop with "######" ----+
+#
+# example.sh [options]
+#
+# This script is part of the suckless.X11 repository and is used to prepare
+# the OS to use the setup script afterwards. It gives you options to install
+# software and packages. In addition you may set host name and enable or
+# disable other features.
+#
+# Options...
+#  -h, --help           Print out help
+#
+#####
 
-echo_Done() {
-    tput setaf 2 0 0
-    echo_Right "[ Done ]"
-    tput sgr0
-}
+# +----- Include bash-framework.sh --------------------------------------------+
+# set -o errexit
+# set -o pipefail
+export BASH_FRMWRK_MINVER=4
+export LANG="en_US.UTF-8"
+export base_dir="$(dirname "$(readlink -f "$0")")"
+export cdir=$(pwd)
+export scriptname="${BASH_SOURCE##*/}"
+export scriptdir="${BASH_SOURCE%/*}"
+export datetime="$(date "+%Y-%m-%d-%H-%M-%S")"
+export logfile="${scriptdir}/${datetime}.log"
+export framework_width=80
 
-echo_NotNeeded() {
-    tput setaf 3 0 0
-    echo_Right "[ Not Needed ]"
-    tput sgr0
-}
-
-echo_Skipped() {
-    tput setaf 3 0 0
-    echo_Right "[ Skipped ]"
-    tput sgr0
-}
-
-echo_Failed() {
-    tput setaf 1 0 0
-    echo_Right "[ Failed ]"
-    tput sgr0
-}
-
-echo_Error_Msg() {
-    echo -n -e "\n${RED} [ Error ]${NORMAL} ${1}\n\n"
-}
-
-antwoord() {
-    read -p "${1}" antwoord
-        if [[ ${antwoord} == [yY] || ${antwoord} == [yY][Ee][Ss] ]]; then
-            echo "yes"
-        else
-            echo "no"
-        fi
-}
-
-display_Notice() {
-    clear
-    tput setaf 6
-    cat ${cdir}/notice-prepare.txt
-    tput sgr0
-    proceed="$(antwoord "Do you want to proceed? ${YN}")"
-}
-
-clear_Logfile() {
-    if [[ -f ${logfile} ]]; then
-        rm ${logfile}
-    fi
-}
-
-get_User() {
-    if ! [[ $(id -u) = 0 ]]; then
-        echo_Error_Msg "This script must be run as root."
+if [[ -f "${scriptdir}"/bash-framework.sh ]]; then
+    BASH_FRMWRK_FILE="${scriptdir}/bash-framework.sh"
+else
+    test_file=$(which bash-framework.sh 2>/dev/null)
+    if [[ $? = 0 ]]; then
+        BASH_FRMWRK_FILE="${test_file}"
+        unset test_file
+    else
+        echo -e "\nNo Bash Framework found.\n"
         exit 1
     fi
+fi
+
+source "${BASH_FRMWRK_FILE}"
+if [[ "${BASH_FRMWRK_VER}" -lt "${BASH_FRMWRK_MINVER}" ]]; then
+    echo -e "\nI've found version ${BASH_FRMWRK_VER} of bash_framework.sh, but I'm in need of version ${BASH_FRMWRK_MINVER}."
+    echo -e "You may get the newest version from https://github.com/WieWaldi/bash-framework.sh\n"
+    exit 1
+fi
+
+# +----- Option Handling ------------------------------------------------------+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -\?|-h|-help|--help) __exit_Help ;;                    # Standard help option
+        -doc|--doc)          __exit_Help ;;
+        --) shift; break ;;                                 # Force end of user option
+        -*) __exit_Usage 10 "Unknown option \"${1}\"" ;;    # Unknown command line option
+        *)  break ;;                                        # Unforced end of user options
+    esac
+    shift                                                   # Shift to next option
+done
+
+# +----- Variables ------------------------------------------------------------+
+notice="notice-prepare.txt"
+
+# +----- Functions ------------------------------------------------------------+
+
+Create_Dir() {
+    [[ ! -d "${backupdir}" ]] && mkdir -p ${backupdir}
+    [[ ! -d "${HOME}/tmp" ]] && mkdir -p ${HOME}/tmp
+    [[ ! -d "${HOME}/.config" ]] && mkdir -p ${HOME}/.config
+    [[ ! -d "${HOME}/.config/dunst" ]] && mkdir -p ${HOME}/.config/dunst
+    [[ ! -d "${HOME}/.local/lib" ]] && mkdir -p ${HOME}/.local/lib
+    [[ ! -d "${HOME}/.local/lib64" ]] && mkdir -p ${HOME}/.local/lib64
+    [[ ! -d "${HOME}/Downloads" ]] && mkdir -p ${HOME}/Downloads
+    [[ ! -d "${HOME}/Screenshots" ]] && mkdir -p ${HOME}/Screenshots
 }
 
-get_OperatingSystem() {
-    os=$(uname -s)
-    kernel=$(uname -r)
-    architecture=$(uname -m)
-}
-
-get_Distribution() {
-    if [[ -f /etc/os-release ]]; then
-        . /etc/os-release
-        distribution=$NAME
-        version=$VERSION_ID
-        case ${ID} in
-            rhel|centos)
-                packagelistext="${ID}.${VERSION_ID::1}"
-                ;;
-            fedora)
-                packagelistext="${ID}.${VERSION_ID}"
-                ;;
-        esac
-        echo -e "\nSeems to be:"
-        echo -e "  ${distribution} ${version} ${kernel} ${architecture}\n" 
-    else
-        echo_Error_Msg "I need /etc/os-release to figure what distribution this is."
-        exit 1    
-    fi
-}
-
-LogfileLocation() {
-    echo -n -e "\nLogfile: ${logfile}\r"
-    echo_OK
+GoogleChrome_query() {
+    InstallGoogleChrome="$(__read_Antwoord_YN "Do you want to get Google Chrome installed?")"
 }
 
 HostName_query() {
-    SetHostname="$(antwoord "Do you want to set hostname? ${YN}")"
+    SetHostname="$(__read_Antwoord_YN "Do you want to set hostname?")"
     if [[ "${SetHostname}" = "yes" ]]; then
-        read -p "Hostname: " gethostname
+        gethostname="$(__read_Line "Hostname")"
     fi
 }
 
 HostName_set() {
-    echo -n -e "Setting Hostname to: ${gethostname}\r"
+    __echo_Left "Setting Hostname to: ${gethostname}"
     if [[ "${SetHostname}" = "yes" ]]; then
-        hostnamectl set-hostname ${gethostname}
-        echo_Done
+        hostnamectl set-hostname ${gethostname} >>${logfile} 2>&1
+        __echo_Result
     else
         echo_Skipped
     fi
 }
-
-GoogleChrome_query() {
-    InstallGoogleChrome="$(antwoord "Do you want to get Google Chrome installed? ${YN}")"
-}
-
 GoogleChrome_install() {
-    echo -n -e "Installing Repository: google-chrome\r"
+    __echo_Left "Installing Repository: google-chrome"
     if [[ "${InstallGoogleChrome}" = "yes" ]]; then
-        cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d
+        __echo_Left "Adding google-chrome.repo"
+        cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d >>${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Installing google-chrome-stable"
         dnf install -y google-chrome-stable >> ${logfile} 2>&1
-        echo_Done
+        __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
 VirtualBox_query() {
-    InstallVirtualBox="$(antwoord "Do you want to get VirtualBox installed? ${YN}")"
+    InstallVirtualBox="$(__read_Antwoord_YN "Do you want to get VirtualBox installed?")"
 }
 
 VirtualBox_install() {
-    echo -n -e "Installing Repository: VirtualBox\r"
+    __echo_Left "Installing Repository: VirtualBox"
     if [[ "${InstallVirtualBox}" = "yes" ]]; then
-        cp ${cdir}/etc/yum.repos.d/virtualbox.repo /etc/yum.repos.d
+        __echo_Left "Adding virtualbox.repo"
+        cp ${cdir}/etc/yum.repos.d/virtualbox.repo /etc/yum.repos.d >> ${logfile} 2>&1
+        __echo_Result
         dnf install -y VirtualBox-6.0 >> ${logfile} 2>&1
-        echo_Done
+        __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
 SshRootLogin_query() {
-    DisableSshRoot="$(antwoord "Disable SSH login for root user? "${YN})"
+    DisableSshRoot="$(__read_Antwoord_YN "Disable SSH login for root user? ")"
 }
 
 SshRootLogin_disable() {
-    echo -n -e "Disabling SSH login for root user.\r"
+    __echo_Left "Disabling SSH login for root user"
     if [[ "${DisableSshRoot}" = "yes" ]]; then
         grep "^PermitRootLogin" /etc/ssh/sshd_config > /dev/null 2>&1
         retVal=$?
         if [[ "${retVal}" -ne 0 ]]; then
             echo -e "\nPermitRootLogin no" >> /etc/ssh/sshd_config
-            echo_Done
+            echo_Result
         else
             sed -i "s/^PermitRootLogin\ yes/PermitRootLogin\ no/" /etc/ssh/sshd_config >>${logfile} 2>&1
-            retVal=$?
-            if [[ "${retVal}" -ne 0 ]]; then
-                echo_Failed
-            else
-                echo_Done
-            fi
+            __echo_Result
         fi
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
 SELinux_query() {
-    DisableSELinux="$(antwoord "Disable SELinux? ${YN}")"
+    DisableSELinux="$(__read_Antwoord_YN "Disable SELinux?")"
 }
 
 SELinux_disable() {
-    echo -n -e "Disabling SELinux.\r"
+    __echo_Left "Disabling SELinux."
     if [[ "${DisableSELinux}" = "yes" ]]; then
-        sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
-        echo_Done
+        sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config >> ${logfile} 2>&1
+        __echo_Result
     else
-        echo_Skipped
+        ____echo_Skipped
     fi
 }
 
 SDDM_query() {
-    EnableSDDM="$(antwoord "Enable Simple Desktop Display Manager? ${YN}")"
+    EnableSDDM="$(__read_Antwoord_YN "Enable Simple Desktop Display Manager?")"
 }
 
 SDDM_enable() {
     if [[ "${EnableSDDM}" = "yes" ]]; then
         statusdm="$(systemctl is-active display-manager.service)"
         if [[ "${statusdm}" = "active" ]]; then
-            echo "Disabling current Display Manager."
-            systemctl disable display-manager.service
+            __echo_Left "Disabling current Display Manager"
+            systemctl disable display-manager.service >> ${logfile} 2>&1
+            __echo_Result
         fi
-        echo "Enabling SDDM."
-        systemctl enable sddm.service
-        systemctl set-default graphical.target
+        __echo_Left "Enabling SDDM."
+        systemctl enable sddm.service >> ${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Setting Graphical Target"
+        systemctl set-default graphical.target >> ${logfile} 2>&1
+        __echo_Result
     fi
 }
 
 SUDO_Timeout_query() {
-    SetSudoTimeout="$(antwoord "Set SUDO Password Timeout? ${YN}")"
+    SetSudoTimeout="$(__read_Antwoord_YN "Set SUDO Password Timeout?")"
     if [[ "${SetSudoTimeout}" = "yes" ]]; then
-        read -p "SUDO Password Timeout: " getsudotimeout
+        getsudotimeout="$(__read_Line "SUDO Passwort Timeout")"
     fi
 }
 
 SUDO_Timeout_set() {
-    echo -n -e "Setting SUDO Timeout to: ${getsudotimeout}\r"
+    __echo_Left "Setting SUDO Timeout to: ${getsudotimeout}"
     if [[ "${SetSudoTimeout}" = "yes" ]]; then
-        grep "^Defaults timestamp_timeout=" /etc/sudoers > /dev/null 2>&1
+        grep "^Defaults timestamp_timeout=" /etc/sudoers >> ${logfile} 2>&1
         retVal=$?
         if [[ "${retVal}" -ne 0 ]]; then
             echo -e "\nDefaults timestamp_timeout=${getsudotimeout}" >> /etc/sudoers
         else
-            sed -i "s/^Defaults\ timestamp_timeout=.*$/Defaults\ timestamp_timeout=${getsudotimeout}/" /etc/sudoers
-            retVal=$?
-            if [[ "${retVal}" -ne 0 ]]; then
-                echo_Failed
-            else
-                echo_Done
-            fi
+            sed -i "s/^Defaults\ timestamp_timeout=.*$/Defaults\ timestamp_timeout=${getsudotimeout}/" /etc/sudoers >> ${logfile} 2>&1
+            __echo_Result
         fi
     else
         echo_Skipped
@@ -280,52 +228,61 @@ SUDO_Timeout_set() {
 }
 
 FilesXorg_query() {
-    FilesXorg="$(antwoord "Copy Xorg related files? ${YN}")"
+    FilesXorg="$(__read_Antwoord_YN "Copy Xorg related files?")"
 }
 
 FilesXorg_copy() {
     if [[ "${FilesXorg}" = "yes" ]]; then
-        echo -n -e "Copying Xorg related files.\r"
-        cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d
-        cp ${cdir}/etc/sddm.conf /etc
-        cp ${cdir}/X.org.files/dwm.desktop /usr/share/xsessions
-        cp ${cdir}/X.org.files/xinit-compat.desktop /usr/share/xsessions
+        __echo_Left "Copying files to /etc/X11/xorg.conf.d/"
+        cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d >> ${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Copying /etc/sddm.conf"
+        cp ${cdir}/etc/sddm.conf /etc >> ${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Copying /usr/share/xsessions/dwm.desktop"
+        cp ${cdir}/X.org.files/dwm.desktop /usr/share/xsessions >> ${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Copying /usr/share/xsessions/xinit-compat.dektop"
+        cp ${cdir}/X.org.files/xinit-compat.desktop /usr/share/xsessions >> ${logfile} 2>&1
+        __echo_Result
     fi
 }
 
 PowerTools_query() {
-    EnablePowerTools="$(antwoord "Enable PowerTools? ${YN}")"
+    EnablePowerTools="$(__read_Antwoord_YN "Enable PowerTools?")"
 }
 
 PowerTools_enable() {
+    __echo_Left "Enabling Power Tools"
     if [[ "${EnablePowerTools}" = "yes" ]]; then
-        dnf config-manager --enable powertools
-        echo_Done
+        dnf config-manager --enable powertools >> ${logfile} 2>&1
+        __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
 EPEL_query() {
-    EnableEPEL="$(antwoord "Enable EPEL Repository? ${YN}")"
+    EnableEPEL="$(__read_Antwoord_YN "Enable EPEL Repository?")"
 }
 
 EPEL_enable() {
+    __echo_Left "Enabling EPEL Repository"
     if [[ "${EnableEPEL}" = "yes" ]]; then
-        dnf install --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-        echo_Done
+        dnf install --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm >> ${logfile} 2>&1
+        __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
 RPMFusion_query() {
-    EnableRPMFusionFree="$(antwoord "Enable RPM Fusion Free Repository? ${YN}")"
-    EnableRPMFusionNonFree="$(antwoord "Enable RPM Fusion NonFree Repository? ${YN}")"
+    EnableRPMFusionFree="$(__read_Antwoord_YN "Enable RPM Fusion Free Repository?")"
+    EnableRPMFusionNonFree="$(__read_Antwoord_YN "Enable RPM Fusion NonFree Repository?")"
 }
 
 RPMFusion_enable() {
-    echo -n -e "Enabling RPM Fusion Free Repository.\r"
+    __echo_Left "Enabling RPM Fusion Free Repository."
     if [[ "${EnableRPMFusionFree}" = "yes" ]]; then
         case ${distribution} in
             "Red Hat Enterprise Linux" )
@@ -338,11 +295,11 @@ RPMFusion_enable() {
                 dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm >> ${logfile} 2>&1
             ;;
         esac
-        echo_Done
+        __echo_Result
     else
         echo_Skipped
     fi
-    echo -n -e "Enabling RPM Fusion NonFree Repository.\r"
+    __echo_Left "Enabling RPM Fusion NonFree Repository"
     if [[ "${EnableRPMFusionFree}" = "yes" ]]; then
         case ${distribution} in
             "Red Hat Enterprise Linux" )
@@ -355,72 +312,58 @@ RPMFusion_enable() {
                 dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm >> ${logfile} 2>&1
             ;;
         esac
-        echo_Done
+        __echo_Result
     else
         echo_Skipped
     fi
 }
 
 RHEL8_CodereadyBuilder_query() {
-    EnableCodeReady="$(antwoord "Enable CodeReady Linux Builder? ${YN}")"
+    EnableCodeReady="$(__read_Antwoord_YN "Enable CodeReady Linux Builder?")"
 }
 
 RHEL8_CodereadyBuilder_enable() {
-    echo -n -e "Enabling CodeReady Linux Builder.\r"
+    __echo_Left "Enabling CodeReady Linux Builder"
     if [[ "${EnableCodeReady}" = "yes" ]]; then
         subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms >> ${logfile} 2>&1
-        echo_Done
-    else
-        echo_Skipped
-    fi
-}
-
-SDDM_query() {
-    EnableSDDM="$(antwoord "Enable SDDM instead of GDM? ${YN}")"
-}
-
-SDDM_enable() {
-    if [[ "${EnableSDDM}" = "yes" ]]; then
-        echo -n -e "Disabling GDM."
-        systemctl disable gdm
-        echo_Done
-        echo -n -e "Enabling SDDM."
-        systemctl enable sddm
-        systemctl set-default graphical
-        echo_Done
+        __echo_Result
     else
         echo_Skipped
     fi
 }
 
 DefaultPackages_query() {
-    InstallDefaultPackages="$(antwoord "Install default packages? ${YN}")"
+    InstallDefaultPackages="$(__read_Antwoord_YN "Install default packages?")"
 }
 
 DefaultPackages_install() {
-    echo -n -e "Installing Default Packages.\r"
+    __echo_Left "Installing Default Packages"
     if [[ "${InstallDefaultPackages}" = "yes" ]]; then
         IFS=$'\r\n' GLOBIGNORE='*' command eval 'packages=($(cat ./packages.${packagelistext}))'
         echo -e "\n\nPackage List: ${packagelistext}\n" >> ${logfile} 2>&1
         echo -e "List of packages: ${packages[@]}" >> ${logfile} 2>&1
         dnf install -y ${packages[@]} >> ${logfile} 2>&1
-        echo_Done
+        __echo_Result
     else
         echo_Skipped
     fi
 }
 
 # +----- Main -----------------------------------------------------------------+
-get_User
-display_Notice
-if [[ "${proceed}" = "no" ]]; then
-    exit 1
+
+__display_Text_File blue ${scriptdir}/${notice}
+
+if [[ "$(__read_Antwoord_YN "Do you want to proceed?")" = "no" ]]; then
+    __echo_Title "Exit"
+    exit 0
 fi
 
-echo_title "Choose Options"
+if ! [[ $(id -u) = 0 ]]; then
+    __exit_Error 10 "This script must be run as root."
+fi
 
-get_OperatingSystem
-get_Distribution
+__get_OperatingSystem
+__get_Distribution
 
 if [[ "${os}" = "Linux" ]]; then
     case ${distribution} in
@@ -451,9 +394,9 @@ if [[ "${os}" = "Linux" ]]; then
             ;;
         "Fedora"|"Fedora Linux" )
             if [[ "${version}" != 3* ]]; then
-                echo_Error_Msg "This is not a supported version of Fedora."
-                exit 1
+                __exit_Error 10 "This is not a supported version of Fedora."
             fi
+            echo "Start" >> ${logfile}
             GoogleChrome_query
             VirtualBox_query
             HostName_query
@@ -477,7 +420,7 @@ if [[ "${os}" = "Linux" ]]; then
             DefaultPackages_install
             FilesXorg_copy
             SDDM_enable
-            LogfileLocation
+            echo "End" >> ${logfile}
             ;;
         "CentOS Linux" )
             GoogleChrome_query
@@ -505,19 +448,19 @@ if [[ "${os}" = "Linux" ]]; then
             LogfileLocation
             ;;
         * )
-            echo_Error_Msg "This seems to be an unsupported Linux distribution."
-            exit 1
+            __exit_Error 10 "This seems to be an unsupported Linux distribution."
             ;;
     esac
 elif [[ "${os}" = "SunOS" ]]; then
-    echo_Error_Msg "SunOS/Solaris is currently not supported."
-    exit 1
+    __exit_Error 10 "SunOS/Solaris is currently not supported."
 
 elif [[ "${os}" = "FreeBSD" ]]; then
-    echo_Error_Msg "FreeBSD is currently not supported."
-    exit 1
+    __exit_Error "FreeBSD is currently not supported."
+else
+    __exit_Error 10 "Something's wrong, so I'm exiting here."
 fi
 
-echo_title "I'm done."
+
+__echo_Title "I'm done."
 echo -e "\n\n"
 exit 0
