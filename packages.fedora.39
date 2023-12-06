@@ -22,6 +22,7 @@ ftp
 gcc
 gcc-c++
 gcr-devel
+gcr3-devel
 giflib-devel
 git
 glew-devel
