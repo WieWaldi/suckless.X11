@@ -179,7 +179,7 @@ SELinux_disable() {
         sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config >> ${logfile} 2>&1
         __echo_Result
     else
-        ____echo_Skipped
+        __echo_Skipped
     fi
 }
 
