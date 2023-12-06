@@ -65,7 +65,7 @@ declare -a X11files=(
     ".slocktext"
     )
 
-declare -a sucklesstools=(
+declare -a applist=(
     "dmenu"
     "dwm"
     "dwm-helper"
@@ -109,7 +109,7 @@ install_X11files() {
     cp -r ${cdir}/.config/compton.conf ${HOME}/.config
     cp -r ${cdir}/.config/picom.conf ${HOME}/.config
     cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
-    cp -r ${cdir}/X.org.files/.xsession
+    cp -r ${cdir}/X.org.files/.xsession ${HOME}
     chmod 755 ${HOME}/.local/bin/.xsession
     fc-cache
 }
