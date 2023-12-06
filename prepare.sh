@@ -114,7 +114,7 @@ HostName_set() {
         hostnamectl set-hostname ${gethostname} >>${logfile} 2>&1
         __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 GoogleChrome_install() {
@@ -223,7 +223,7 @@ SUDO_Timeout_set() {
             __echo_Result
         fi
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
@@ -297,7 +297,7 @@ RPMFusion_enable() {
         esac
         __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
     __echo_Left "Enabling RPM Fusion NonFree Repository"
     if [[ "${EnableRPMFusionFree}" = "yes" ]]; then
@@ -314,7 +314,7 @@ RPMFusion_enable() {
         esac
         __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
@@ -328,7 +328,7 @@ RHEL8_CodereadyBuilder_enable() {
         subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms >> ${logfile} 2>&1
         __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
@@ -345,7 +345,7 @@ DefaultPackages_install() {
         dnf install -y ${packages[@]} >> ${logfile} 2>&1
         __echo_Result
     else
-        echo_Skipped
+        __echo_Skipped
     fi
 }
 
