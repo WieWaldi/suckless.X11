@@ -7,6 +7,8 @@
 # |                  waldemar.schroeer(at)rz-amper.de                          |
 # +----------------------------------------------------------------------------+
 
+echo "2"
+
 # +----- Variables ------------------------------------------------------------+
 RED=$(tput setaf 1)
 BRIGHT=$(tput bold)
@@ -89,6 +91,7 @@ antwoord() {
 }
 
 display_Notice() {
+    echo "3"
     clear
     tput setaf 6
     cat ${cdir}/$1
