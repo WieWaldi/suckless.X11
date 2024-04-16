@@ -50,3 +50,6 @@ uninstall:
 	@rm -f ${PREFIX}/bin/dwm-layoutmenu
 	@rm -f ${PREFIX}/share/dwm/autostart.sh
 	@rm -f ${PREFIX}/share/dwm/autostart_blocking.sh
+
+clean:
+	@echo "Nothing to do."

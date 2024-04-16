@@ -23,3 +23,6 @@ uninstall:
 	@rm -f ${PREFIX}/bin/rotwall
 	@echo "Removing manual page from ${MANPREFIX}/man1"
 	@rm -f ${MANPREFIX}/man1/rotwall.1
+
+clean:
+	@echo "Nothing to do."

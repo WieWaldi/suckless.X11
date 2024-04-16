@@ -23,3 +23,6 @@ uninstall:
 	@rm -f ${PREFIX}/bin/xmerge
 	@echo "Removing manual page from ${MANPREFIX}/man1"
 	@rm -f ${MANPREFIX}/man1/xmerge.1
+
+clean:
+	@echo "Nothing to do."
