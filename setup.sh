@@ -1,12 +1,58 @@
 #!/usr/bin/env bash
 #
-# +-------------------------------------------------------------------------+
-# | Setup for suckless.X11 tools                                            |
-# +-------------------------------------------------------------------------+
-# | Copyright © 1996-2019 Waldemar Schroeer                                 |
-# |                       lassmichinruhe@rz-amper.de                        |
-# +-------------------------------------------------------------------------+
+# +----------------------------------------------------------------------------+
+# | setup.sh                                                                   |
+# +----------------------------------------------------------------------------+
+# |       Usage: Executed without any options                                  |
+# | Description: Setup script to compile and install suckless.X11              |
+# |    Requires: bash_framework.sh                                             |
+# |       Notes: ---                                                           |
+# |      Author: Waldemar Schroeer                                             |
+# |     Company: Rechenzentrum Amper                                           |
+# |     Version: 4.1                                                           |
+# |     Created: 05.12.2023                                                    |
+# |    Revision: ---                                                           |
+# |                                                                            |
+# | Copyright © 2023 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
 
+# +----- Include bash-framework.sh --------------------------------------------+
+# set -o errexit
+# set -o pipefail
+export BASH_FRMWRK_MINVER=4
+export LANG="en_US.UTF-8"
+export base_dir="$(dirname "$(readlink -f "$0")")"
+export cdir=$(pwd)
+export scriptname="${BASH_SOURCE##*/}"
+export scriptdir="${BASH_SOURCE%/*}"
+export datetime="$(date "+%Y-%m-%d-%H-%M-%S")"
+export logfile="${scriptdir}/${datetime}.log"
+export framework_width=80
+
+if [[ -f "${scriptdir}"/bash-framework.sh ]]; then
+    BASH_FRMWRK_FILE="${scriptdir}/bash-framework.sh"
+else
+    test_file=$(which bash-framework.sh 2>/dev/null)
+    if [[ $? = 0 ]]; then
+        BASH_FRMWRK_FILE="${test_file}"
+        unset test_file
+    else
+        echo -e "\nNo Bash Framework found.\n"
+        exit 1
+    fi
+fi
+
+source "${BASH_FRMWRK_FILE}"
+if [[ "${BASH_FRMWRK_VER}" -lt "${BASH_FRMWRK_MINVER}" ]]; then
+    echo -e "\nI've found version ${BASH_FRMWRK_VER} of bash_framework.sh, but I'm in need of version ${BASH_FRMWRK_MINVER}."
+    echo -e "You may get the newest version from https://github.com/WieWaldi/bash-framework.sh\n"
+    exit 1
+fi
+
+# +----- Variables ------------------------------------------------------------+
+
+notice="notice-setup.txt"
 backupdir="${HOME}/Backup.X11files.$$"
 cdir="$(dirname "$(readlink -f "${0}")")"
 make="/bin/make -j 4"
@@ -19,7 +65,7 @@ declare -a X11files=(
     ".slocktext"
     )
 
-declare -a sucklesstools=(
+declare -a applist=(
     "dmenu"
     "dwm"
     "dwm-helper"
@@ -33,14 +79,6 @@ declare -a sucklesstools=(
     "surf"
     "tabbed"
     "xssstate"
-    )
-
-declare -a naelstrof=(
-    "slop"
-    "maim"
-    )
-
-declare -a otherstuff=(
     "feh"
     "compton"
     "sxiv"
@@ -51,30 +89,19 @@ declare -a otherstuff=(
     "xmerge"
     )
 
-Display_Warning() {
-    clear && cat ${cdir}/setup-warning.txt
-}
+# +----- Functions ------------------------------------------------------------+
 
-Create_Dir() {
-    [ ! -d "${backupdir}" ] && mkdir -p ${backupdir}
-    [ ! -d "${HOME}/tmp" ] && mkdir -p ${HOME}/tmp
-    [ ! -d "${HOME}/.config" ] && mkdir -p ${HOME}/.config
-    [ ! -d "${HOME}/.config/dunst" ] && mkdir -p ${HOME}/.config/dunst
-    [ ! -d "${HOME}/.local/lib" ] && mkdir -p ${HOME}/.local/lib
-    [ ! -d "${HOME}/.local/lib64" ] && mkdir -p ${HOME}/.local/lib64
-    [ ! -d "${HOME}/Downloads" ] && mkdir -p ${HOME}/Downloads
-    [ ! -d "${HOME}/Screenshots" ] && mkdir -p ${HOME}/Screenshots
-}
-
-Install_X11files() {
+install_X11files() {
     for i in "${X11files[@]}"
     do
         if [ -f ${HOME}/${i} ]; then
-            printf "\n Moving ${i} to ${backupdir}"
+            __echo_Left "Moving ${i} to ${backupdir}"
             mv ${HOME}/${i} ${backupdir}
+            __echo_Result
         fi
-        printf "\n Creating ${i}"
+        __echo_Left "Creating ${i}"
         /bin/cp -r ${cdir}/X.org.files/${i} ${HOME}
+        __echo_Result
     done
     cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
     cp -r ${cdir}/.local/share/wallpapers ${HOME}/.local/share
@@ -82,88 +109,45 @@ Install_X11files() {
     cp -r ${cdir}/.config/compton.conf ${HOME}/.config
     cp -r ${cdir}/.config/picom.conf ${HOME}/.config
     cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
-    cp -r ${cdir}/X.org.files/.xsession
+    cp -r ${cdir}/X.org.files/.xsession ${HOME}
     chmod 755 ${HOME}/.local/bin/.xsession
     fc-cache
 }
 
-Suckless_Install() {
-    for i in "${sucklesstools[@]}"
+install_suckless() {
+    for i in "${applist[@]}"
     do
+        __echo_Left "Compiling and installing ${i}"
         cd ${cdir}/${i}
-        ${make} install
+        ${make} >> ${logfile} 2>&1
+        __echo_Result
     done
 }
 
-Suckless_Clean() {
-    printf "\n Cleaning up.\n"
-    for i in "${sucklesstools[@]}"
+clean_suckless() {
+    for i in "${applist[@]}"
     do
+        __echo_Left "Cleaning up after intalling ${i}"
         cd ${cdir}/${i}
-        ${make} clean
+        ${make} clean >> ${logfile} 2>&1
+        __echo_Result
     done
 }
 
-OtherStuff_Install() {
-    for i in "${otherstuff[@]}"
-    do
-        cd ${cdir}/${i}
-        ${make}
-        ${make} install
-    done
-}
+# +----- Main -----------------------------------------------------------------+
 
-OtherStuff_Clean() {
-    printf "\n Cleaning up.\n"
-    for i in "${otherstuff[@]}"
-    do
-        cd ${cdir}/${i}
-        ${make} clean
-    done
-}
+__display_Text_File blue ${scriptdir}/${notice}
 
-naelstrof_Install() {
-    for i in "${naelstrof[@]}"
-    do
-        cd ${cdir}/${i}
-        ${cmake} -DCMAKE_INSTALL_PREFIX="~/.local" ./
-        ${make} install
-    done
-}
+if [[ "$(__read_Antwoord_YN "Do you want to proceed?")" = "no" ]]; then
+    __echo_Title "Exit"
+    exit 0
+fi
+install_X11files
+install_suckless
+clean_suckless
 
-naelstrof_Clean() {
-    printf "\n Cleaning up.\n"
-    for i in "${naelstrof[@]}"
-    do
-        cd ${cdir}/${i}
-        git clean -fdX
-    done
-}
 
-while true; do
-    Display_Warning
-    printf "\n\n Go ahead? (Yes|No) >> "
-    read antwoord
-    case ${antwoord} in
-        [yY] | [yY][Ee][Ss] )
-            Create_Dir
-            Install_X11files
-            Suckless_Install
-            Suckless_Clean
-            OtherStuff_Install
-            OtherStuff_Clean
-            naelstrof_Install
-            naelstrof_Clean
-            printf "\n I'm done\n\n"
-            break
-            ;;
-        [nN] | [n|N][O|o] )
-            printf "\n Oh Boy, you should reconsider your decision."
-            break
-            ;;
-        *)
-            printf "  Wut?"
-    esac
-done
-
+# +----- End ------------------------------------------------------------------+
+echo -e "\n\n"
 exit 0
+

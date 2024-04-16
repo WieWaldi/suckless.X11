@@ -12,7 +12,7 @@ dbus-devel
 dbus-x11
 dunst
 elfutils-libelf-devel
-exa
+eza
 exiv2
 ffmpegthumbnailer
 fftw-devel
@@ -22,6 +22,7 @@ ftp
 gcc
 gcc-c++
 gcr-devel
+gcr3-devel
 giflib-devel
 git
 glew-devel
@@ -30,7 +31,6 @@ glm-devel
 gpick
 gstreamer*
 gtk2-devel
-gxmessage
 htop
 ImageMagick
 ImageMagick-devel
@@ -75,6 +75,7 @@ ncurses-devel
 ncurses-term
 net-tools
 ninja-build
+pandoc
 pango-devel
 patch
 pavucontrol
@@ -86,6 +87,7 @@ samba-common
 sddm
 sddm-x11
 slop
+ssmtp
 tar
 thunar
 uthash-devel
@@ -122,3 +124,4 @@ xsetroot
 xterm
 xvinfo
 xwininfo
+zenity
