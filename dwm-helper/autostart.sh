@@ -15,7 +15,8 @@ ${HOME}/.local/bin/xclickroot -r ${HOME}/.local/bin/xmenu.sh &
 
 # +----- Start picom-----------------------------------------------------------+
 # /bin/dbus-launch /bin/picom --experimental-backends &
-/bin/dbus-launch /bin/picom &
+# /bin/dbus-launch /bin/picom &
+/bin/dbus-launch ${HOME}/.local/bin/picom &
 
 # +----- Start dwm-status -----------------------------------------------------+
 ${HOME}/.local/bin/dwm-status &
@@ -36,6 +37,10 @@ ${HOME}/.local/bin/st -e ${HOME}/.local/bin/tmux-start.sh Login &
 # +----- Play Windows Startup Sound -------------------------------------------+
 /usr/bin/amixer -q -D pulse sset Master 45% &
 /bin/mplayer ~/.local/share/sounds/Windows/Windows95_Login.ogg & > /dev/null 2>&1
+
+# +----- Mouse Settings -------------------------------------------------------+
+/usr/bin/xinput --set-prop 12 'libinput Accel Profile Enabled' 0 0 0
+/usr/bin/xinput --set-prop 12 'libinput Accel Speed' -0.25
 
 # +----- End ------------------------------------------------------------------+
 exit 0
