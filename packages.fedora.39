@@ -75,6 +75,7 @@ ncurses-devel
 ncurses-term
 net-tools
 ninja-build
+pandoc
 pango-devel
 patch
 pavucontrol
@@ -86,6 +87,7 @@ samba-common
 sddm
 sddm-x11
 slop
+ssmtp
 tar
 thunar
 uthash-devel
@@ -122,3 +124,4 @@ xsetroot
 xterm
 xvinfo
 xwininfo
+zenity
