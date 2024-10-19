@@ -9,7 +9,7 @@
 # |       Notes: ---                                                           |
 # |      Author: Waldemar Schroeer                                             |
 # |     Company: Rechenzentrum Amper                                           |
-# |     Version: 4.1                                                           |
+# |     Version: 4.2                                                           |
 # |     Created: 05.12.2023                                                    |
 # |    Revision: ---                                                           |
 # |                                                                            |
@@ -58,6 +58,24 @@ cdir="$(dirname "$(readlink -f "${0}")")"
 make="/bin/make -j 4"
 cmake="/bin/cmake"
 
+declare -a config_Directories=(
+    "tmp"
+    ".config"
+    ".config/dunst"
+    ".config/password_store"
+    ".local/bin"
+    ".local/lib"
+    ".local/lib64"
+    ".local/share/man/man1"
+    "Downloads"
+    "Notes"
+    "Pictures"
+    "Pictures/Collect"
+    "Pictures/Screenshots"
+    "Music/Youtube/MP3"
+    "Music/Youtube/Source"
+    )
+
 declare -a X11files=(
     ".Xresources"
     ".xinitrc"
@@ -90,6 +108,25 @@ declare -a applist=(
     )
 
 # +----- Functions ------------------------------------------------------------+
+
+create_Config_Directories() {
+    __echo_Left "Config Directories:"
+    if [[ "${get_Config_Directories}" = "yes" ]]; then
+        for i in "${config_Directories[@]}"; do
+            __echo_Left "Preparing Directory: ${i}"
+            if [[ $(__check_File_Name ${HOME}/${i}) = 1 ]]; then
+                __echo_Right "Already in Place"
+            elif [[ $(__check_File_Name ${HOME}/${i}) = 3 ]]; then
+                mkdir -p ${HOME}/${i} >> ${logfile} 2>&1
+                __echo_Result
+            else
+                __echo_Failed
+            fi
+        done
+    else
+        __echo_Skipped
+    fi
+}
 
 install_X11files() {
     for i in "${X11files[@]}"
@@ -142,6 +179,8 @@ if [[ "$(__read_Antwoord_YN "Do you want to proceed?")" = "no" ]]; then
     __echo_Title "Exit"
     exit 0
 fi
+get_Config_Directories="yes"
+create_Config_Directories
 install_X11files
 install_suckless
 clean_suckless

@@ -1,2 +1,3 @@
-.thunar   { font: GoMono Nerd Font;
-            font-size: 14pt }
+.thunar   { font: Latin Modern Math Regular;
+            font-size: 16pt }
+@import 'colors.css';
