@@ -159,6 +159,7 @@ static const Rule rules[] = {
 	{ "mpv",                NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Pavucontrol",        "pavucontrol",                          NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Surf",               NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
+	{ "Sxiv",               NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Teams",              NULL,                                   NULL,                           0,          1,            1,            0,          -1,         0   },
 	{ "Thunderbird",        NULL,                                   NULL,                           1 << 7,     0,            0,            0,          -1,         0   },
 	{ "Thunderbird",        "Calendar",                             NULL,                           1 << 7,     1,            1,            0,          -1,         0   },
@@ -232,8 +233,8 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0";                                                                                  // component of dmenucmd, manipulated in spawn()
 static const char *dmenucmd[]           = { "dmenu_run", "-m", dmenumon, "-i", "-c", "-l", "15", "-bw", "2", "-p", "Яцп ТЋїѕ Ѕћїт: 󰜎 ", NULL };
-static const char *dmenusystem[]        = { "dwm-system", "-i", "-c", "-l", "15", "-bw", "2", "-p", "ЩЋдт тѳ dѳ  ", NULL };
-static const char *dmenumedia[]         = { "dwm-media", "-i", "-c", "-l", "15", "-bw", "2", "-p", "Play Radio 󰐹 ", NULL };
+static const char *dmenusystem[]        = { "dwm-system", NULL };
+static const char *dmenumedia[]         = { "dwm-media", NULL };
 static const char *termcmd[]            = { "st", NULL };
 static const char *tmuxcmd[]            = { "st", "-e", "tmux-start.sh", "Login", NULL };
 static const char *volumeup[]           = { "dwm-volumectrl", "up", NULL };

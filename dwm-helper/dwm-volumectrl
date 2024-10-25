@@ -7,6 +7,29 @@
 # |                  waldemar.schroeer(at)rz-amper.de                       |
 # +-------------------------------------------------------------------------+
 
+# dunstify -a "Change Vol" -u low -i audio-volume-high -h string:x-dunst-stack-tag:MyTag -h int:value:"40" "Volume: 60%"
+
+current_volume() {
+    var="$(amixer sget Master | grep -F 'Left:')"
+    case $var in
+        *'[on]')
+            volume_level="$(echo ${var} | awk -F 'Left:|[][%]' 'BEGIN{RS=""}{ print $3 }' )"
+            if [ "${volume_level}" -le 31 ]; then
+                volume_status="audio-volume-low"
+            elif [ "${volume_level}" -gt 59 ]; then
+                volume_status="audio-volume-high"
+            else
+                volume_status="audio-volume-medium"
+            fi
+        ;;
+        *'[off]')
+            volume_status="audio-volume-muted"
+            volume_level="0"
+        ;;
+    esac
+}
+
+
 if [ $# -ne 1 ]; then
     printf "usage: dwm_volumctrl ( up|down|mute )\n\n"
     exit 1
@@ -14,15 +37,19 @@ fi
 
 if [ $1 == "up" ]; then
     amixer -q -D pulse sset Master 5%+
-    # amixer -q sset 'Master' 5%+
-    notify-send 'Info' 'Volume Up 5%'
+    current_volume
+    dunstify -a "dwm-volumectrl" -u low -i "${volume_status}" -h string:x-dunst-stack-tag:MyVolume -h int:value:"${volume_level}" "Volume: ${volume_level}%"
+    # notify-send 'Volume' 'increased by 5%'
 elif [ $1 == "down" ]; then
     amixer -q -D pulse sset Master 5%-
-    # amixer -q sset 'Master' 5%-
-    notify-send 'Info' 'Volume Down 5%'
+    current_volume
+    dunstify -a "dwm-volumectrl" -u low -i "${volume_status}" -h string:x-dunst-stack-tag:MyVolume -h int:value:"${volume_level}" "Volume: ${volume_level}%"
+    # notify-send 'Volume' 'decreased by 5%'
 elif [ $1 == "mute" ]; then
     amixer -q -D pulse sset Master toggle
-    notify-send 'Info' 'Volume mute toggle'
+    current_volume
+    dunstify -a "dwm-volumectrl" -u low -i "${volume_status}" -h string:x-dunst-stack-tag:MyVolume -h int:value:"${volume_level}" "Volume: ${volume_level}%"
+    # notify-send 'Volume' 'Toggle mute ...'
 fi
 
 exit
