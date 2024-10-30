@@ -6,9 +6,9 @@
 # +----------------------------------------------------------------------------+
 
 # +----- Main Configuration ---------------------------------------------------+
-[global]
 
     # --- Display -------------------------------------------------------------+
+[global]
     title = Dunst
     class = Dunst
     monitor = 0
@@ -38,7 +38,7 @@
     show_indicators = yes
 
     # --- Text ----------------------------------------------------------------+
-    font = FiraMono 12
+    font = GoMono Nerd Font 12
     line_height = 0
     markup = full
     alignment = left
@@ -52,25 +52,32 @@
     max_icon_size = 32
 
 [urgency_low]
-    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b> <i>(%a)</i>\n%b"
+    # format = "<b><span size='larger' foreground='#268bd2'>%s</span></b> <i>(%a)</i>\n%b"
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b>\n<i>(%a)</i>\n%b"
     background = "#eee8d5"
     foreground = "#657b83"
     frame_color = "#b58900"
     timeout = 3
 
 [urgency_normal]
-    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b> <i>(%a)</i>\n%b"
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b>\n<i>(%a)</i>\n%b"
     background = "#eee8d5"
     foreground = "#657b83"
     frame_color = "#b58900"
     timeout = 10
 
 [urgency_critical]
-    format = "<b><span size='larger' foreground='#6c71c4'>%s</span></b> <i>(%a)</i>\n%b"
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b> <i>(%a)</i>\n%b"
     background = "#eee8d5"
     foreground = "#657b83"
     frame_color = "#cb4b16"
     timeout = 0
 
+[calendar]
+    appname = dwm-calendar
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b>\n%b"
+    background = "#eee8d5"
+    foreground = "#657b83"
+    frame_color = "#b58900"
+    timeout = 30
 # +----- End ------------------------------------------------------------------+
-
