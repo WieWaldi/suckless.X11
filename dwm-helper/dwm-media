@@ -7,11 +7,19 @@
 # |                  waldemar.schroeer(at)rz-amper.de                          |
 # +----------------------------------------------------------------------------+
 
+# How to treat dmenu
+dmenuOption="-c -l 30 -i"
+
+# Location of mplayer
 mplayer=/bin/mplayer
+
+# Location of mpv
 mpv=/bin/mpv
+
+# Location of st
 st=~/.local/bin/st
-url=$1
-antwoord="$( printf " Kill MPlayer\nBayern 2\nBayern 3\nBayern 5\nDEFJAY\nMDR Aktuell\nMDR Jump\nMDR Jump in the Mix\nARD (SD)\nARD (HD)\nARTE (SD)\nARTE (HD)\nZDF (SD)\nZDF (HD)\nZDF neo (SD)\nZDF neo (HD)\nZDF info (SD)\nZDF info (HD)\nIPCam cam1 (HD)\nIPCam cam1 (SD)\n" | dmenu "$@" )"
+
+antwoord="$( printf " Kill MPlayer\nBayern 2\nBayern 3\nBayern 5\nDEFJAY\nMDR Aktuell\nMDR Jump\nMDR Jump in the Mix\nARD (SD)\nARD (HD)\nARTE (SD)\nARTE (HD)\nZDF (SD)\nZDF (HD)\nZDF neo (SD)\nZDF neo (HD)\nZDF info (SD)\nZDF info (HD)\nIPCam cam1 (HD)\nIPCam cam1 (SD)\n" | dmenu -p "What to play?" ${dmenuOption} )"
 
 case ${antwoord} in
     " Kill MPlayer")

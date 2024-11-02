@@ -7,23 +7,6 @@ prepare.log
 config.h
 test.sh
 
-#======== dunst ================================================================
-dunst/*.o
-dunst/*.d
-dunst/*.gcda
-dunst/*.gcno
-dunst/*.gcov
-dunst/core
-dunst/vgcore.*
-dunst/docs/dunst.1
-dunst/docs/internal/coverage
-dunst/docs/internal/html
-dunst/dunst
-dunst/dunstify
-dunst/dunst.systemd.service
-dunst/org.knopwob.dunst.service
-dunst/test/test
-
 #======== maim =================================================================
 maim/src/cmdline.h
 maim/CMakeFiles/*
@@ -57,7 +40,7 @@ sent/sent
 surf/surf
 stw/stw
 
-#======== slop =================================================================
+#======== sxiv =================================================================
 sxiv/sxiv
 sxiv/version.h
 

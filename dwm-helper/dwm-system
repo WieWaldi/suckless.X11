@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# +-------------------------------------------------------------------------+
-# | ~/.local/bin/dwm-system                                                 |
-# +-------------------------------------------------------------------------+
-# | Copyright © 2019 Waldemar Schroeer                                      |
-# |                  waldemar.schroeer(at)rz-amper.de                       |
-# +-------------------------------------------------------------------------+
+# +---------------------------------------------------------------------------+
+# | ~/.local/bin/dwm-system                                                   |
+# +---------------------------------------------------------------------------+
+# | Copyright © 2019 Waldemar Schroeer                                        |
+# |                  waldemar.schroeer(at)rz-amper.de                         |
+# +---------------------------------------------------------------------------+
 
 # +---------- Configuration starts here ------------------------------------+
 # Array of actions to choose from
@@ -17,6 +17,7 @@ declare -a actions=(
     ""
     "Store Password for edc\a_wschroeer"
     "Store Password for edc\da_wschroeer"
+    "Youtube Donwload Audio"
     ""
     "Connect AZ09"
     "Connect Speaker"
@@ -28,6 +29,9 @@ declare -a actions=(
     "Screenshot of selection --> JPG"
     "Screenshot of selection --> PNG"
 )
+
+# How to treat dmenu
+dmenuOption="-c -l 30 -i"
 
 # The directory to store screenshots
 # Don't use ~ for your home directory but rather ${HOME}
@@ -78,36 +82,43 @@ checkformaim () {
 if [ ! -d ${ScrnShtDir} ]; then
     mkdir -p ${ScrnShtDir}
 fi
-antwoord="$( printf "%s\n" "${actions[@]}" | dmenu "$@" )"
+# antwoord="$( printf "%s\n" "${actions[@]}" | dmenu "${dmenuOption}" "${@}" )"
+echo "${dmenuOption}" >> ${HOME}/tmp/dwm.log
+antwoord="$( printf "%s\n" "${actions[@]}" | dmenu -p "What to do:" ${dmenuOption} )"
 case ${antwoord} in
     "Lock Screen (Good Boy)")
-        notify-send 'Info' 'Locking screen in 5 seconds.'
+        dunstify -a "dwm-system" -u normal -i video-display "Good Boy" "Locking screen in 5 seconds ..."
         sleep 5
         ${ScreenLock}
         ;;
     "Fuck things up even worse (Shutdown)")
-        notify-send 'Info' 'Shutting down in 5 seconds.'
+        dunstify -a "dwm-system" -u normal -i computer-fail "Fuck things up even worse" "Shutting down in 5 seconds ..."
         sleep 5
         # ${ShutDown}
         ;;
     "Fuck things up (Reboot)")
-        notify-send 'Info' 'Rebooting in 5 second.'
+        dunstify -a "dwm-system" -u normal -i computer-fail "Fuck things up" "Rebooting in 5 seconds ..."
         sleep 5
         # ${Reboot}
         ;;
     "Piss off (Exit from DE)")
         notify-send "Info" "Quitting all apps\nand pissing off in 5 seconds."
+        dunstify -a "dwm-system" -u normal -i computer-fail "Piss off" "Killing all apps and quitting DE."
         sleep 5
         # ${Exit}
         ;;
     "Store Password for edc\a_wschroeer")
-        zenity --entry --title="Store Password" --text="Enter Password for edc\a_wschroeer" > ~/.config/password_store/password_1
+        zenity --entry --title="Store Password" --text="Enter Password for a_wschroeer" > ~/.config/password_store/password_1
         ;;
     "Store Password for edc\da_wschroeer")
-        zenity --entry --title="Store Password" --text="Enter Password for edc\a_wschroeer" > ~/.config/password_store/password_2
+        zenity --entry --title="Store Password" --text="Enter Password for da_wschroeer" > ~/.config/password_store/password_2
+        ;;
+    "Youtube Donwload Audio")
+        ${HOME}/.local/bin/yt-dmenu.sh &
         ;;
     "Connect AZ09")
-        bluetoothctl connect 00:00:00:00:05:88
+        # bluetoothctl connect 00:00:00:00:05:88
+        bluetoothctl connect 1A:38:B4:5E:AB:D6
         ;;
     "Connect Speaker")
         bluetoothctl connect 00:16:94:47:4D:2E
@@ -115,38 +126,56 @@ case ${antwoord} in
     "Screenshot of Desktop --> JPG")
         checkformaim
         ${maim} ${MaimOptions} --format=jpg --quality 10 ${ScrnShtDir}/${ScrnSht}.jpg
-        notify-send 'Info' "Screenshot of whole Desktop taken.\n${ScrnSht}"
+        action="$(dunstify -a "dwm-system" -u normal -i image-missing -A "sxiv,SXIV" "Screenshot" "Screenshot of whole desktop taken\n\nDir.:${ScrnShtDir}\nFile:${ScrnSht}.jpg")"
+        if [ ${action} == "sxiv" ]; then
+            sxiv ${ScrnShtDir}/${ScrnSht}.jpg
+        fi
         ;;
     "Screenshot of Desktop --> PNG")
         checkformaim
         ${maim} ${MaimOptions} --format=png --quality 1 ${ScrnShtDir}/${ScrnSht}.png
-        notify-send 'Info' "Screenshot of whole Desktop taken.\n${ScrnSht}"
+        action="$(dunstify -a "dwm-system" -u normal -i image-missing -A "sxiv,SXIV" "Screenshot" "Screenshot of whole desktop taken\n\nDir.:${ScrnShtDir}\nFile:${ScrnSht}.png")"
+        if [ ${action} == "sxiv" ]; then
+            sxiv ${ScrnShtDir}/${ScrnSht}.png
+        fi
         ;;
     "Screenshot of active window --> JPG")
         checkformaim
         checkforxdotool
         activewindow=$(${xdotool} getactivewindow)
         ${maim} ${MaimOptions} --format=jpg --quality 10 -i $activewindow ${ScrnShtDir}/${ScrnSht}.jpg
-        notify-send 'Info' "Screenshot of active window taken.\n${ScrnSht}.jpg"
+        action="$(dunstify -a "dwm-system" -u normal -i image-missing -A "sxiv,SXIV" "Screenshot" "Screenshot of active window taken\n\nDir.:${ScrnShtDir}\nFile:${ScrnSht}.jpg")"
+        if [ ${action} == "sxiv" ]; then
+            sxiv ${ScrnShtDir}/${ScrnSht}.jpg
+        fi
         ;;
     "Screenshot of active window --> PNG")
         checkformaim
         checkforxdotool
         activewindow=$(${xdotool} getactivewindow)
         ${maim} ${MaimOptions} --format=png --quality 1 -i $activewindow ${ScrnShtDir}/${ScrnSht}.png
-        notify-send 'Info' "Screenshot of active window taken.\n${ScrnSht}.png"
+        action="$(dunstify -a "dwm-system" -u normal -i image-missing -A "sxiv,SXIV" "Screenshot" "Screenshot of active window taken\n\nDir.:${ScrnShtDir}\nFile:${ScrnSht}.png")"
+        if [ ${action} == "sxiv" ]; then
+            sxiv ${ScrnShtDir}/${ScrnSht}.png
+        fi
         ;;
     "Screenshot of selection --> JPG")
         checkformaim
         checkforxdotool
         ${maim} ${MaimOptions} --format=jpg --quality 10 --select ${ScrnShtDir}/${ScrnSht}.jpg
-        notify-send 'Info' "Screenshot of selection taken.\n${ScrnSht}.jpg"
+        action="$(dunstify -a "dwm-system" -u normal -i image-missing -A "sxiv,SXIV" "Screenshot" "Screenshot of selection\n\nDir.:${ScrnShtDir}\nFile:${ScrnSht}.jpg")"
+        if [ ${action} == "sxiv" ]; then
+            sxiv ${ScrnShtDir}/${ScrnSht}.jpg
+        fi
         ;;
     "Screenshot of selection --> PNG")
         checkformaim
         checkforxdotool
         ${maim} ${MaimOptions} --format=png --quality 10 --select ${ScrnShtDir}/${ScrnSht}.png
-        notify-send 'Info' "Screenshot of selection taken.\n${ScrnSht}.png"
+        action="$(dunstify -a "dwm-system" -u normal -i image-missing -A "sxiv,SXIV" "Screenshot" "Screenshot of selection\n\nDir.:${ScrnShtDir}\nFile:${ScrnSht}.png")"
+        if [ ${action} == "sxiv" ]; then
+            sxiv ${ScrnShtDir}/${ScrnSht}.png
+        fi
         ;;
 esac
 

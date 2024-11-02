@@ -1,0 +1,83 @@
+# +----------------------------------------------------------------------------+
+# | ~/.config/dunst/dunstrc                                                    |
+# +----------------------------------------------------------------------------+
+# | Copyright © 2024 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
+
+# +----- Main Configuration ---------------------------------------------------+
+
+    # --- Display -------------------------------------------------------------+
+[global]
+    title = Dunst
+    class = Dunst
+    monitor = 0
+    follow = none
+    width = 400
+    origin = top-right
+    offset = 75x75
+    scale = 0
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+    progress_bar_corner_radius = 5
+    highlight = "#93a1a1"
+    indicate_hidden = yes
+    shrink = no
+    transparency = 0
+    gap_size = 20
+    padding = 10
+    horizontal_padding = 10
+    text_icon_padding = 0
+    frame_width = 5
+    dmenu = ~/.local/bin/dmenu -c -l 10 -p dunst:
+    corner_radius = 10
+    stack_duplicates = false
+    show_indicators = yes
+
+    # --- Text ----------------------------------------------------------------+
+    font = GoMono Nerd Font 12
+    line_height = 0
+    markup = full
+    alignment = left
+    vertical_alignment = center
+
+    # --- Icons ---------------------------------------------------------------+
+    enable_recursive_icon_lookup = false
+    icon_theme = Adwaita
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 32
+
+[urgency_low]
+    # format = "<b><span size='larger' foreground='#268bd2'>%s</span></b> <i>(%a)</i>\n%b"
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b>\n<i>(%a)</i>\n%b"
+    background = "#eee8d5"
+    foreground = "#657b83"
+    frame_color = "#b58900"
+    timeout = 3
+
+[urgency_normal]
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b>\n<i>(%a)</i>\n%b"
+    background = "#eee8d5"
+    foreground = "#657b83"
+    frame_color = "#b58900"
+    timeout = 10
+
+[urgency_critical]
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b> <i>(%a)</i>\n%b"
+    background = "#eee8d5"
+    foreground = "#657b83"
+    frame_color = "#cb4b16"
+    timeout = 0
+
+[calendar]
+    appname = dwm-calendar
+    format = "<b><span size='larger' foreground='#268bd2'>%s</span></b>\n%b"
+    background = "#eee8d5"
+    foreground = "#657b83"
+    frame_color = "#b58900"
+    timeout = 30
+# +----- End ------------------------------------------------------------------+

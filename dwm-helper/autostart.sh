@@ -8,15 +8,13 @@
 # +----------------------------------------------------------------------------+
 
 # +----- Start Dunst Notification ---------------------------------------------+
-/usr/local/bin/dunst & > /dev/null 2>&1 &
+/usr/bin/dunst & > /dev/null 2>&1 &
 
 # +----- Start xclickroot to support xmenu ------------------------------------+
 ${HOME}/.local/bin/xclickroot -r ${HOME}/.local/bin/xmenu.sh &
 
 # +----- Start picom-----------------------------------------------------------+
-# /bin/dbus-launch /bin/picom --experimental-backends &
-# /bin/dbus-launch /bin/picom &
-/bin/dbus-launch ${HOME}/.local/bin/picom &
+${HOME}/.local/bin/picom &
 
 # +----- Start dwm-status -----------------------------------------------------+
 ${HOME}/.local/bin/dwm-status &
