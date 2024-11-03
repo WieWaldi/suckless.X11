@@ -144,7 +144,7 @@ getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc)
 {
 	unsigned int n, oe, ie;
 	#if PERTAG_PATCH
-	oe = ie = selmon->pertag->enablegaps[selmon->pertag->curtag];
+	oe = ie = m->pertag->enablegaps[m->pertag->curtag];
 	#else
 	oe = ie = enablegaps;
 	#endif // PERTAG_PATCH
