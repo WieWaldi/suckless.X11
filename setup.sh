@@ -108,6 +108,11 @@ declare -a applist=(
 
 # +----- Functions ------------------------------------------------------------+
 
+create_Backup_Directory() {
+    __echo_left "Creating Backup Directory:"
+    mkdir -p ${backupdir}
+    __echo_Result
+}
 create_Config_Directories() {
     __echo_Left "Config Directories:"
     if [[ "${get_Config_Directories}" = "yes" ]]; then
@@ -179,6 +184,7 @@ if [[ "$(__read_Antwoord_YN "Do you want to proceed?")" = "no" ]]; then
 fi
 get_Config_Directories="yes"
 create_Config_Directories
+create Backup_Directory
 install_X11files
 install_suckless
 clean_suckless
