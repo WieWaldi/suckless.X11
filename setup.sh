@@ -27,7 +27,7 @@ export cdir=$(pwd)
 export scriptname="${BASH_SOURCE##*/}"
 export scriptdir="${BASH_SOURCE%/*}"
 export datetime="$(date "+%Y-%m-%d-%H-%M-%S")"
-export logfile="${scriptdir}/${datetime}.log"
+export logfile="${cdir}/${datetime}.log"
 export framework_width=80
 
 if [[ -f "${scriptdir}"/bash-framework.sh ]]; then
@@ -88,22 +88,22 @@ declare -a applist=(
     "dwm"
     "dwm-helper"
     "farbfeld"
+    "feh"
     "lsw"
+    "rotwall"
     "sent"
     "slock"
     "sselp"
     "st"
     "stw"
     "surf"
-    "tabbed"
-    "xssstate"
-    "feh"
     "sxiv"
+    "tabbed"
     "xdotool"
-    "rotwall"
     "xclickroot"
     "xmenu"
     "xmerge"
+    "xssstate"
     )
 
 # +----- Functions ------------------------------------------------------------+
