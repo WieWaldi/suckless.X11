@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+#
+# +----------------------------------------------------------------------------+
+# | ~/.local/bin/dwm-statuscmd                                                 |
+# +----------------------------------------------------------------------------+
+# |       Usage: ---                                                           |
+# | Description: dwm status command script                                     |
+# |    Requires: ---                                                           |
+# |       Notes: ---                                                           |
+# |      Author: Waldemar Schroeer                                             |
+# |     Company: Rechenzentrum Amper                                           |
+# |     Version: 1                                                             |
+# |     Created: 28.10.2024                                                    |
+# |    Revision: ---                                                           |
+# |                                                                            |
+# | Copyright © 2022 Waldemar Schroeer                                         |
+# |                  waldemar.schroeer(at)rz-amper.de                          |
+# +----------------------------------------------------------------------------+
+
+# +----- Variables ------------------------------------------------------------+
+# application="dwm-statuscmd"
+hints="string:x-canonical-private-synchronous:calendar"
+tmp=${XDG_RUNTIME_DIR:-/tmp}/"$UID"_calendar_notification_month
+
+# +----- Main -----------------------------------------------------------------+
+
+send_errormsg(){
+    urgency="critical"
+    summary="Error"
+    body="Take a closer look at your options. Something's wrong\n\nYour Options: ${1}; ${2};"
+    send_notification "${summary}" "${body}" "" "${urgency}" "string:x-dunst-stack-tag:${RANDOM}"
+    # dunstify -a "${application}" "Error" "Take a closer look at your options. Something's wrong.\n\nYour Options: ${1}; ${2};"
+}
+
+send_notification(){
+    dunstify -a "${3:-dwm-statuscmd}" -u "${4:-normal}" -h "${5:-string:x-dunst-stack-tag:Status}" "${1}" "${2}"
+
+}
+if [[ "${#}" != "2" ]]; then
+    send_errormsg ${1} ${2}
+    exit 1
+fi
+
+# First option is given by the clicked selection
+case ${1} in
+    1)
+        # Second option is the mouse button 1:Left, 2:Middle, 3:Right
+        case ${2} in
+            1)
+                summary="Power Options"
+                body="Nummer: 1; ${2}"
+                ;;
+            2)
+                summary="Power Options"
+                body="Nummer: 1; ${2}"
+                ;;
+            3)
+                summary="Power Options"
+                body="Nummer: 1; ${2}"
+                ;;
+            *)
+                send_errormsg "${1}" "${2}"
+                exit 1
+        esac
+        send_notification "${summary}" "${body}" "affe"
+        ;;
+    2)
+        send_notification "Not in use." "You may come up with a new idea."
+        ;;
+    3)
+        send_notification "Not in use." "You may come up with a new idea."
+        ;;
+    4)
+        send_notification "Not in use." "You may come up with a new idea."
+        ;;
+    5)
+        send_notification "Not in use." "You may come up with a new idea."
+        ;;
+    6)
+        send_notification "Not in use." "You may come up with a new idea."
+        ;;
+    7)
+        send_notification "Not in use." "You may come up with a new idea."
+        ;;
+    8)
+        send_notification "Not in use." "You may come up with a new idea."
+        ;;
+    9)
+        touch "${tmp}"
+        today=$(date '+%-d')
+        footer="\n<i>       ~ calendar</i> 󰸗 "
+        diff=$(<"${tmp}")
+        case ${2} in
+            1) diff=0;;
+            2) diff=$((diff+1));;
+            3) diff=$((diff-1));;
+            *)
+                send_errormsg "${1}" "${2}"
+                exit 1
+                ;;
+        esac
+        echo "${diff}" > "${tmp}"
+        if [[ "${diff}" -ge 0 ]]; then
+            header=$(cal "+${diff} months" | head -n1)
+            body=$(cal "+${diff} months" | tail -n7 | sed -z "s|${today}|<u><b>${today}</b></u>|1")
+        else
+            header=$(cal "$((-diff)) months ago" | head -n1)
+            body=$(cal "$((-diff)) months ago" | tail -n7 | sed -z "s|${today}|<u><b>${today}</b></u>|1")
+        fi
+        echo "$((-diff)) months"
+        send_notification "${header}" "${body}${footer}" "dwm-calendar"
+        ;;
+    *)
+        send_errormsg "${1}" "${2}"
+        ;;
+esac
+
+# +----- End ------------------------------------------------------------------+
+exit 0
+

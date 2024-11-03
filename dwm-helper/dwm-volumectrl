@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # +-------------------------------------------------------------------------+
-# | dwm_volumectrl                                                          |
+# | ~/.local/bin/dwm-volumectrl                                             |
 # +-------------------------------------------------------------------------+
 # | Copyright © 2019 Waldemar Schroeer                                      |
 # |                  waldemar.schroeer(at)rz-amper.de                       |

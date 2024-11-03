@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # +----------------------------------------------------------------------------+
-# | dwm_status                                                                 |
+# | ~/.local/bin/dwm-status                                                    |
 # +----------------------------------------------------------------------------+
 # |       Usage: No options needed, simply start it through .xinitrc           |
 # | Description: Stores status in WM_NAME X11 property of the root window      |
@@ -25,28 +25,59 @@ tmp_gpu_string="radeon"
 tmp_hdd_string="HDD"
 
 
+tbo_color0="#680000"
+tbo_color1="#7c2b00"
+tbo_color2="#695700"
+tbo_color3="#044f00"
+tbo_color4="#00505e"
+tbo_color5="#000d63"
+tbo_color6="#360063"
+tbo_color7="#6e0039"
+tbo_color8="#000000"
+tbo_color9="#000000"
+tbo_color10="#000000"
+tbo_color11="#af00d7"
+tbo_color12="#af87d7"
+tbo_color13="#444444"
+tbo_color14="#bcbcbc"
+tbo_color15="#eeeeee"
 
 gpu_amd_card0_dir=""
 SEPA=""
 SEPB=""
 c_bckg="NONE"
-g_bckg=$(xrdb -query | grep "dwm.statusbgcolor" | awk '{print $2}')
+dwm_bckg=$(xrdb -query | grep "dwm.statusbgcolor" | awk '{print $2}')
 dwm_status=""
 
 # +----- Functions ------------------------------------------------------------+
+# prompt_segment() {
+#     local bckg forg cont
+#     bckg="${1}"
+#     forg="${2}"
+#     cont="${3}"
+#     if [[ ${c_bckg} = 'NONE' ]];then
+#         echo -e -n "^b${g_bckg}^^C${bckg}^${SEPA}"
+#     else
+#         echo -e -n "^B${c_bckg}^^C${bckg}^${SEPA}"
+#     fi
+#     c_bckg=${bckg}
+#     # echo -e -n "^B${bckg}^^C${forg}^${SEPB} ${cont}"
+#     echo -e -n "^B${bckg}^^C${forg}^ ${cont}"
+# }
+
 prompt_segment() {
     local bckg forg cont
     bckg="${1}"
     forg="${2}"
     cont="${3}"
     if [[ ${c_bckg} = 'NONE' ]];then
-        echo -e -n "^b${g_bckg}^^C${bckg}^${SEPA}"
+        echo -e -n "^b${dwm_bckg}^^c${bckg}^${SEPA}"
     else
-        echo -e -n "^B${c_bckg}^^C${bckg}^${SEPA}"
+        echo -e -n "^b${c_bckg}^^c${bckg}^${SEPA}"
     fi
     c_bckg=${bckg}
     # echo -e -n "^B${bckg}^^C${forg}^${SEPB} ${cont}"
-    echo -e -n "^B${bckg}^^C${forg}^ ${cont}"
+    echo -e -n "^b${bckg}^^c${forg}^ ${cont}"
 }
 
 print_mem_used() {
@@ -61,8 +92,8 @@ print_date() {
 }
 
 print_time() {
-    # printf "󱑎 %s   %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
-    printf "󱑎 %s" "$(date "+%H:%M")"
+    printf "󱑎 %s   %s" "$(date "+%H:%M")" "$(TZ=US/Central date "+%H:%M")"
+    # printf "󱑎 %s" "$(date "+%H:%M")"
 }
 
 print_date_time() {
@@ -178,15 +209,29 @@ print_appleicons() {
     printf "    "
 }
 
+# Build status with colors
 build_dwm_status() {
-    prompt_segment 0 15 "$(print_battery)"
-    prompt_segment 1 15 "$(print_volume)"
-    prompt_segment 2 15 "$(print_network)"
-    prompt_segment 3 15 "$(print_temperature)"
-    prompt_segment 5 15 "$(print_cpu_used)"
-    prompt_segment 6 15 "$(print_mem_used)"
-    prompt_segment 7 15 "$(print_date_time)"
+    prompt_segment ${tbo_color0} ${tbo_color15} "\x01$(print_battery)"
+    prompt_segment ${tbo_color1} ${tbo_color15} "\x02$(print_volume)"
+    prompt_segment ${tbo_color2} ${tbo_color15} "\x03$(print_network)"
+    prompt_segment ${tbo_color3} ${tbo_color15} "\x04$(print_temperature)"
+    prompt_segment ${tbo_color5} ${tbo_color15} "\x05$(print_cpu_used)"
+    prompt_segment ${tbo_color6} ${tbo_color15} "\x06$(print_mem_used)"
+    prompt_segment ${tbo_color7} ${tbo_color15} "\x09$(print_date_time)"
 }
+
+# Build status without colors
+# build_dwm_status(){
+#     printf '\x01[%s]' "$(print_battery)"
+#     printf '\x02[%s]' "$(print_volume)"
+#     printf '\x03[%s]' "$(print_network)"
+#     printf '\x04[%s]' "$(print_temperature)"
+#     printf '\x05[%s]' "$(print_cpu_used)"
+#     printf '\x06[%s]' "$(print_mem_used)"
+#     printf '\x07[%s]' "$(print_stuff)"
+#     printf '\x08[%s]' "$(print_stuff)"
+#     printf '\x09[%s]' "$(print_date_time)"
+# }
 
 while true; do
     # get new cpu idle and total usage

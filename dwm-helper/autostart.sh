@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # +----------------------------------------------------------------------------+
-# | autostart.sh (for dwm)                                                     |
+# | ~/.local/bin/autostart.sh (for dwm)                                        |
 # +----------------------------------------------------------------------------+
 # | Copyright © 2019 Waldemar Schroeer                                         |
 # |                  waldemar.schroeer(at)rz-amper.de                          |
@@ -30,15 +30,15 @@ ${HOME}/.local/bin/st -e ${HOME}/.local/bin/tmux-start.sh Login &
 # /usr/bin/oneko -name "oneko" -tofocus -sakura -bg pink -speed 32 -time 75000 &
 
 # +----- Start Google Chrome --------------------------------------------------+
-/bin/google-chrome &
+# /bin/google-chrome &
 
 # +----- Play Windows Startup Sound -------------------------------------------+
-/usr/bin/amixer -q -D pulse sset Master 45% &
-/bin/mplayer ~/.local/share/sounds/Windows/Windows95_Login.ogg & > /dev/null 2>&1
+# /usr/bin/amixer -q -D pulse sset Master 45% &
+# /bin/mplayer ~/.local/share/sounds/Windows/Windows95_Login.ogg & > /dev/null 2>&1
 
 # +----- Mouse Settings -------------------------------------------------------+
-/usr/bin/xinput --set-prop 12 'libinput Accel Profile Enabled' 0 0 0
-/usr/bin/xinput --set-prop 12 'libinput Accel Speed' -0.25
+# /usr/bin/xinput --set-prop 12 'libinput Accel Profile Enabled' 0 0 0
+# /usr/bin/xinput --set-prop 12 'libinput Accel Speed' -0.25
 
 # +----- End ------------------------------------------------------------------+
 exit 0

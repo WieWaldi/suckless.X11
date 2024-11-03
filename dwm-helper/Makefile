@@ -9,11 +9,12 @@ options:
 	@echo "This build options:"
 	@echo "PREFIX     = ${PREFIX}"
 	@echo "MANPREFIX  = ${MANPREFIX}"
+	@echo "CONFDIR    = ${CONFDIR}"
 
 install:
 	@echo "Installing executable file to ${PREFIX}/bin"
 	@mkdir -p ${PREFIX}/bin
-	@mkdir -p ${PREFIX}/share/dwm
+	@mkdir -p ${CONFDIR}
 	@cp -f dwm-brightness ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dwm-brightness
 	@cp -f dwm-media ${PREFIX}/bin
@@ -22,6 +23,8 @@ install:
 	@chmod 755 ${PREFIX}/bin/dwm-notetaking
 	@cp -f dwm-status ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dwm-status
+	@cp -f dwm-statuscmd ${PREFIX}/bin
+	@chmod 755 ${PREFIX}/bin/dwm-statuscmd
 	@cp -f dwm-system ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dwm-system
 	@cp -f dwm-volumectrl ${PREFIX}/bin
@@ -32,10 +35,10 @@ install:
 	@chmod 755 ${PREFIX}/bin/dwm-xsession
 	@cp -f dwm-layoutmenu ${PREFIX}/bin
 	@chmod 755 ${PREFIX}/bin/dwm-layoutmenu
-	@cp -f autostart.sh ${PREFIX}/share/dwm
-	@chmod 755 ${PREFIX}/share/dwm/autostart.sh
-	@cp -f autostart_blocking.sh ${PREFIX}/share/dwm
-	@chmod 755 ${PREFIX}/share/dwm/autostart_blocking.sh
+	@cp -f autostart.sh ${CONFDIR}
+	@chmod 755 ${CONFDIR}/autostart.sh
+	@cp -f autostart_blocking.sh ${CONFDIR}
+	@chmod 755 ${CONFDIR}/autostart_blocking.sh
 
 uninstall:
 	@echo "Removing executable file from ${PREFIX}/bin"
@@ -48,8 +51,8 @@ uninstall:
 	@rm -f ${PREFIX}/bin/dwm-wrapper
 	@rm -f ${PREFIX}/bin/dwm-xsession
 	@rm -f ${PREFIX}/bin/dwm-layoutmenu
-	@rm -f ${PREFIX}/share/dwm/autostart.sh
-	@rm -f ${PREFIX}/share/dwm/autostart_blocking.sh
+	@rm -f ${CONFDIR}/autostart.sh
+	@rm -f ${CONFDIR}/autostart_blocking.sh
 
 clean:
 	@echo "Nothing to do."

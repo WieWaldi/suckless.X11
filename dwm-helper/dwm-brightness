@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # +-------------------------------------------------------------------------+
-# | dwm-brightness                                                          |
+# | ~/.local/bin/dwm-brightness                                             |
 # +-------------------------------------------------------------------------+
 # | Copyright © 2022 Waldemar Schroeer                                      |
 # |                  waldemar.schroeer(at)rz-amper.de                       |
