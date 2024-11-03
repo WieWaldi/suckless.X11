@@ -157,10 +157,12 @@ install_X11files() {
 install_suckless() {
     for i in "${applist[@]}"
     do
-        __echo_Left "Compiling and installing ${i}"
-        cd ${cdir}/${i}
         echo -ne "\n\n=== ${i} ===\n" >> ${logfile} 2>&1
+        cd ${cdir}/${i}
+        __echo_Left "Compiling ${i}"
         ${make} >> ${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Installing ${i}"
         ${make} install >> ${logfile} 2>&1
         __echo_Result
     done
@@ -169,8 +171,8 @@ install_suckless() {
 clean_suckless() {
     for i in "${applist[@]}"
     do
-        __echo_Left "Cleaning up after intalling ${i}"
         cd ${cdir}/${i}
+        __echo_Left "Cleaning up after intalling ${i}"
         ${make} clean >> ${logfile} 2>&1
         __echo_Result
     done
