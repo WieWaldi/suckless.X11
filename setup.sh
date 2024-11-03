@@ -159,7 +159,7 @@ install_suckless() {
     do
         __echo_Left "Compiling and installing ${i}"
         cd ${cdir}/${i}
-        __echo_Title "${i}" >> ${logfile} 2>&1
+        echo -ne "\n\n=== ${i} ===" >> ${logfile} 2>&1
         ${make} install >> ${logfile} 2>&1
         __echo_Result
     done
