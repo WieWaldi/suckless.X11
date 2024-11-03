@@ -189,7 +189,7 @@ if [[ "$(__read_Antwoord_YN "Do you want to proceed?")" = "no" ]]; then
 fi
 get_Config_Directories="yes"
 create_Config_Directories
-create Backup_Directory
+create_Backup_Directory
 install_X11files
 install_suckless
 clean_suckless
