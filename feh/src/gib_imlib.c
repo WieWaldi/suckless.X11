@@ -27,6 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "utils.h"
 #include "debug.h"
 
+/*
 int
 gib_imlib_load_image(Imlib_Image * im, char *filename)
 {
@@ -38,7 +39,6 @@ gib_imlib_load_image(Imlib_Image * im, char *filename)
    *im = imlib_load_image_with_error_return(filename, &err);
    if ((err) || (!im))
    {
-      /* Check error code */
       switch (err)
       {
         case IMLIB_LOAD_ERROR_FILE_DOES_NOT_EXIST:
@@ -91,6 +91,7 @@ gib_imlib_load_image(Imlib_Image * im, char *filename)
    }
    return (1);
 }
+*/
 
 int
 gib_imlib_image_get_width(Imlib_Image im)
@@ -322,7 +323,7 @@ gib_imlib_text_draw(Imlib_Image im, Imlib_Font fn, gib_style * s, int x,
       gib_style_bit *bb;
       gib_list *l;
 
-      /* here we shift the draw to accomodate bits with negative offsets,
+      /* here we shift the draw to accommodate bits with negative offsets,
        * which would be drawn at negative coords otherwise */
       l = s->bits;
       while (l)

@@ -1,7 +1,7 @@
 /* imlib.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -44,6 +44,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "exif.h"
 #endif
 
+#ifdef HAVE_LIBMAGIC
+#include <magic.h>
+
+magic_t magic = NULL;
+#endif
+
 Display *disp = NULL;
 Visual *vis = NULL;
 Screen *scr = NULL;
@@ -59,6 +65,8 @@ XineramaScreenInfo *xinerama_screens = NULL;
 int xinerama_screen;
 int num_xinerama_screens;
 #endif				/* HAVE_LIBXINERAMA */
+
+gib_hash* conversion_cache = NULL;
 
 int childpid = 0;
 
@@ -162,11 +170,31 @@ int feh_load_image_char(Imlib_Image * im, char *filename)
 	return(i);
 }
 
-void feh_imlib_print_load_error(char *file, winwidget w, Imlib_Load_Error err)
+void feh_print_load_error(char *file, winwidget w, Imlib_Load_Error err, enum feh_load_error feh_err)
 {
 	if (err == IMLIB_LOAD_ERROR_OUT_OF_FILE_DESCRIPTORS)
 		eprintf("%s - Out of file descriptors while loading", file);
 	else if (!opt.quiet || w) {
+		switch (feh_err) {
+			case LOAD_ERROR_IMLIB:
+				// handled in the next switch/case statement
+				break;
+			case LOAD_ERROR_IMAGEMAGICK:
+				im_weprintf(w, "%s - No ImageMagick loader for that file format", file);
+				break;
+			case LOAD_ERROR_CURL:
+				im_weprintf(w, "%s - libcurl was unable to retrieve the file", file);
+				break;
+			case LOAD_ERROR_DCRAW:
+				im_weprintf(w, "%s - Unable to open preview via dcraw", file);
+				break;
+			case LOAD_ERROR_MAGICBYTES:
+				im_weprintf(w, "%s - Does not look like an image (magic bytes missing)", file);
+				break;
+		}
+		if (feh_err != LOAD_ERROR_IMLIB) {
+			return;
+		}
 		switch (err) {
 		case IMLIB_LOAD_ERROR_FILE_DOES_NOT_EXIST:
 			im_weprintf(w, "%s - File does not exist", file);
@@ -205,6 +233,14 @@ void feh_imlib_print_load_error(char *file, winwidget w, Imlib_Load_Error err)
 		case IMLIB_LOAD_ERROR_OUT_OF_DISK_SPACE:
 			im_weprintf(w, "%s - Cannot write - out of disk space", file);
 			break;
+#if defined(IMLIB2_VERSION_MAJOR) && defined(IMLIB2_VERSION_MINOR) && (IMLIB2_VERSION_MAJOR > 1 || IMLIB2_VERSION_MINOR > 7)
+		case IMLIB_LOAD_ERROR_IMAGE_READ:
+			im_weprintf(w, "%s - Invalid image file", file);
+			break;
+		case IMLIB_LOAD_ERROR_IMAGE_FRAME:
+			im_weprintf(w, "%s - Requested frame not in image", file);
+			break;
+#endif
 		default:
 			im_weprintf(w, "While loading %s - Unknown error (%d)",
 					file, err);
@@ -213,9 +249,87 @@ void feh_imlib_print_load_error(char *file, winwidget w, Imlib_Load_Error err)
 	}
 }
 
+#ifdef HAVE_LIBMAGIC
+void uninit_magic(void)
+{
+	if (!magic) {
+		return;
+	}
+
+	magic_close(magic);
+	magic = NULL;
+}
+void init_magic(void)
+{
+	if (getenv("FEH_SKIP_MAGIC")) {
+		return;
+	}
+
+	if (!(magic = magic_open(MAGIC_NONE))) {
+		weprintf("unable to initialize magic library\n");
+		return;
+	}
+
+	if (magic_load(magic, NULL) != 0) {
+		weprintf("cannot load magic database: %s\n", magic_error(magic));
+		uninit_magic();
+	}
+}
+
+/*
+ * This is a workaround for an Imlib2 regression, causing unloadable image
+ * detection to be excessively slow (and, thus, causing feh to hang for a while
+ * when encountering an unloadable image). We use magic byte detection to
+ * avoid calling Imlib2 for files it probably cannot handle. See
+ * <https://phab.enlightenment.org/T8739> and
+ * <https://github.com/derf/feh/issues/505>.
+ */
+int feh_is_image(feh_file * file, int magic_flags)
+{
+	const char * mime_type = NULL;
+
+	if (!magic) {
+		return 1;
+	}
+
+	magic_setflags(magic, MAGIC_MIME_TYPE | MAGIC_SYMLINK | magic_flags);
+	mime_type = magic_file(magic, file->filename);
+
+	if (!mime_type) {
+		return 0;
+	}
+
+	D(("file %s has mime type: %s\n", file->filename, mime_type));
+
+	if (strncmp(mime_type, "image/", 6) == 0) {
+		return 1;
+	}
+
+	/* no infinite loop on compressed content, please */
+	if (magic_flags) {
+		return 0;
+	}
+
+	/* imlib2 supports loading compressed images, let's have a look inside */
+	if (strcmp(mime_type, "application/gzip") == 0 ||
+	    strcmp(mime_type, "application/x-bzip2") == 0 ||
+	    strcmp(mime_type, "application/x-xz") == 0) {
+		return feh_is_image(file, MAGIC_COMPRESS);
+	}
+
+	return 0;
+}
+#else
+int feh_is_image(__attribute__((unused)) feh_file * file, __attribute__((unused)) int magic_flags)
+{
+	return 1;
+}
+#endif
+
 int feh_load_image(Imlib_Image * im, feh_file * file)
 {
 	Imlib_Load_Error err = IMLIB_LOAD_ERROR_NONE;
+	enum feh_load_error feh_err = LOAD_ERROR_IMLIB;
 	enum { SRC_IMLIB, SRC_HTTP, SRC_MAGICK, SRC_DCRAW } image_source = SRC_IMLIB;
 	char *tmpname = NULL;
 	char *real_filename = NULL;
@@ -228,23 +342,37 @@ int feh_load_image(Imlib_Image * im, feh_file * file)
 	if (path_is_url(file->filename)) {
 		image_source = SRC_HTTP;
 
-		if ((tmpname = feh_http_load_image(file->filename)) == NULL)
+		if ((tmpname = feh_http_load_image(file->filename)) == NULL) {
+			feh_err = LOAD_ERROR_CURL;
 			err = IMLIB_LOAD_ERROR_FILE_DOES_NOT_EXIST;
+		}
 	}
-	else if (opt.conversion_timeout >= 0 && feh_file_is_raw(file->filename)) {
-		image_source = SRC_DCRAW;
-		tmpname = feh_dcraw_load_image(file->filename);
-		if (!tmpname)
+	else {
+		if (feh_is_image(file, 0)) {
+			*im = imlib_load_image_with_error_return(file->filename, &err);
+		} else {
+			feh_err = LOAD_ERROR_MAGICBYTES;
 			err = IMLIB_LOAD_ERROR_NO_LOADER_FOR_FILE_FORMAT;
+		}
 	}
-	else
-		*im = imlib_load_image_with_error_return(file->filename, &err);
 
 	if (opt.conversion_timeout >= 0 && (
 			(err == IMLIB_LOAD_ERROR_UNKNOWN) ||
 			(err == IMLIB_LOAD_ERROR_NO_LOADER_FOR_FILE_FORMAT))) {
-		image_source = SRC_MAGICK;
-		tmpname = feh_magick_load_image(file->filename);
+		if (feh_file_is_raw(file->filename)) {
+			image_source = SRC_DCRAW;
+			tmpname = feh_dcraw_load_image(file->filename);
+			if (!tmpname) {
+				feh_err = LOAD_ERROR_DCRAW;
+			}
+		} else {
+			image_source = SRC_MAGICK;
+			feh_err = LOAD_ERROR_IMLIB;
+			tmpname = feh_magick_load_image(file->filename);
+			if (!tmpname) {
+				feh_err = LOAD_ERROR_IMAGEMAGICK;
+			}
+		}
 	}
 
 	if (tmpname) {
@@ -252,16 +380,51 @@ int feh_load_image(Imlib_Image * im, feh_file * file)
 		if (!err && im) {
 			real_filename = file->filename;
 			file->filename = tmpname;
+
+			/*
+			 * feh does not associate a non-native image with its temporary
+			 * filename and may delete the temporary file right after loading.
+			 * To ensure that it is still aware of image size, dimensions, etc.,
+			 * file_info is preloaded here. To avoid a memory leak when loading
+			 * a non-native file multiple times in a slideshow, the file_info
+			 * struct is freed first. If file->info is not set, feh_file_info_free
+			 * is a no-op.
+			 */
+			feh_file_info_free(file->info);
 			feh_file_info_load(file, *im);
+
 			file->filename = real_filename;
 #ifdef HAVE_LIBEXIF
-			file->ed = exif_get_data(tmpname);
+			/*
+			 * if we're called from within feh_reload_image, file->ed is already
+			 * populated.
+			 */
+			if (file->ed) {
+				exif_data_unref(file->ed);
+			}
+			file->ed = exif_data_new_from_file(tmpname);
 #endif
 		}
-		if ((image_source != SRC_HTTP) || !opt.keep_http)
+		if (!opt.use_conversion_cache && ((image_source != SRC_HTTP) || !opt.keep_http))
 			unlink(tmpname);
+		// keep_http already performs an add_file_to_rm_filelist call
+		else if (opt.use_conversion_cache && !opt.keep_http)
+			// add_file_to_rm_filelist duplicates tmpname
+			add_file_to_rm_filelist(tmpname);
 
-		free(tmpname);
+		if (!opt.use_conversion_cache)
+			free(tmpname);
+	} else if (im) {
+#ifdef HAVE_LIBEXIF
+		/*
+			* if we're called from within feh_reload_image, file->ed is already
+			* populated.
+			*/
+		if (file->ed) {
+			exif_data_unref(file->ed);
+		}
+		file->ed = exif_data_new_from_file(file->filename);
+#endif
 	}
 
 	if ((err) || (!im)) {
@@ -269,7 +432,7 @@ int feh_load_image(Imlib_Image * im, feh_file * file)
 			fputs("\n", stderr);
 			reset_output = 1;
 		}
-		feh_imlib_print_load_error(file->filename, NULL, err);
+		feh_print_load_error(file->filename, NULL, err, feh_err);
 		D(("Load *failed*\n"));
 		return(0);
 	}
@@ -286,14 +449,13 @@ int feh_load_image(Imlib_Image * im, feh_file * file)
 
 #ifdef HAVE_LIBEXIF
 	int orientation = 0;
-	ExifData *exifData = exif_data_new_from_file(file->filename);
-	if (exifData) {
-		ExifByteOrder byteOrder = exif_data_get_byte_order(exifData);
-		ExifEntry *exifEntry = exif_data_get_entry(exifData, EXIF_TAG_ORIENTATION);
-		if (exifEntry && opt.auto_rotate)
+	if (file->ed) {
+		ExifByteOrder byteOrder = exif_data_get_byte_order(file->ed);
+		ExifEntry *exifEntry = exif_data_get_entry(file->ed, EXIF_TAG_ORIENTATION);
+		if (exifEntry && opt.auto_rotate) {
 			orientation = exif_get_short(exifEntry->data, byteOrder);
+		}
 	}
-	file->ed = exifData;
 
 	if (orientation == 2)
 		gib_imlib_image_flip_horizontal(*im);
@@ -319,6 +481,89 @@ int feh_load_image(Imlib_Image * im, feh_file * file)
 	return(1);
 }
 
+void feh_reload_image(winwidget w, int resize, int force_new)
+{
+	char *new_title;
+	int len;
+	Imlib_Image tmp;
+	int old_w, old_h;
+
+	if (!w->file) {
+		im_weprintf(w, "couldn't reload, this image has no file associated with it.");
+		winwidget_render_image(w, 0, 0);
+		return;
+	}
+
+	D(("resize %d, force_new %d\n", resize, force_new));
+
+	free(FEH_FILE(w->file->data)->caption);
+	FEH_FILE(w->file->data)->caption = NULL;
+
+	len = strlen(w->name) + sizeof("Reloading: ") + 1;
+	new_title = emalloc(len);
+	snprintf(new_title, len, "Reloading: %s", w->name);
+	winwidget_rename(w, new_title);
+	free(new_title);
+
+	old_w = gib_imlib_image_get_width(w->im);
+	old_h = gib_imlib_image_get_height(w->im);
+
+	/*
+	 * If we don't free the old image before loading the new one, Imlib2's
+	 * caching will get in our way.
+	 * However, if --reload is used (force_new == 0), we want to continue if
+	 * the new image cannot be loaded, so we must not free the old image yet.
+	 */
+	if (force_new)
+		winwidget_free_image(w);
+
+	// if it's an external image, our own cache will also get in your way
+	char *sfn;
+	if (opt.use_conversion_cache && conversion_cache && (sfn = gib_hash_get(conversion_cache, FEH_FILE(w->file->data)->filename)) != NULL) {
+		free(sfn);
+		gib_hash_set(conversion_cache, FEH_FILE(w->file->data)->filename, NULL);
+	}
+
+	if ((feh_load_image(&tmp, FEH_FILE(w->file->data))) == 0) {
+		if (force_new)
+			eprintf("failed to reload image\n");
+		else {
+			im_weprintf(w, "Couldn't reload image. Is it still there?");
+			winwidget_render_image(w, 0, 0);
+		}
+		return;
+	}
+
+	if (!resize && ((old_w != gib_imlib_image_get_width(tmp)) ||
+			(old_h != gib_imlib_image_get_height(tmp))))
+		resize = 1;
+
+	if (!force_new)
+		winwidget_free_image(w);
+
+	w->im = tmp;
+	winwidget_reset_image(w);
+
+	w->mode = MODE_NORMAL;
+	if ((w->im_w != gib_imlib_image_get_width(w->im))
+	    || (w->im_h != gib_imlib_image_get_height(w->im)))
+		w->had_resize = 1;
+	if (w->has_rotated) {
+		Imlib_Image temp;
+
+		temp = gib_imlib_create_rotated_image(w->im, 0.0);
+		w->im_w = gib_imlib_image_get_width(temp);
+		w->im_h = gib_imlib_image_get_height(temp);
+		gib_imlib_free_image_and_decache(temp);
+	} else {
+		w->im_w = gib_imlib_image_get_width(w->im);
+		w->im_h = gib_imlib_image_get_height(w->im);
+	}
+	winwidget_render_image(w, resize, 0);
+
+	return;
+}
+
 static int feh_file_is_raw(char *filename)
 {
 	childpid = fork();
@@ -328,11 +573,9 @@ static int feh_file_is_raw(char *filename)
 	}
 
 	if (childpid == 0) {
-		if (opt.quiet) {
-			int devnull = open("/dev/null", O_WRONLY);
-			dup2(devnull, 1);
-			dup2(devnull, 2);
-		}
+		int devnull = open("/dev/null", O_WRONLY);
+		dup2(devnull, 1);
+		dup2(devnull, 2);
 		execlp("dcraw", "dcraw", "-i", filename, NULL);
 		_exit(1);
 	} else {
@@ -354,6 +597,13 @@ static char *feh_dcraw_load_image(char *filename)
 	char *tmpname;
 	char *sfn;
 	int fd = -1;
+
+	if (opt.use_conversion_cache) {
+		if (!conversion_cache)
+			conversion_cache = gib_hash_new();
+		if ((sfn = gib_hash_get(conversion_cache, filename)) != NULL)
+			return sfn;
+	}
 
 	basename = strrchr(filename, '/');
 
@@ -385,9 +635,7 @@ static char *feh_dcraw_load_image(char *filename)
 		close(fd);
 		return NULL;
 	} else if (childpid == 0) {
-
-		close(1);
-		dup(fd);
+		dup2(fd, STDOUT_FILENO);
 		close(fd);
 
 		alarm(opt.conversion_timeout);
@@ -405,6 +653,9 @@ static char *feh_dcraw_load_image(char *filename)
 			weprintf("%s - Conversion took too long, skipping", filename);
 	}
 
+	if ((sfn != NULL) && opt.use_conversion_cache)
+		gib_hash_set(conversion_cache, filename, sfn);
+
 	return sfn;
 }
 
@@ -418,6 +669,13 @@ static char *feh_magick_load_image(char *filename)
 	int fd = -1, devnull = -1;
 	int status;
 	char created_tempdir = 0;
+
+	if (opt.use_conversion_cache) {
+		if (!conversion_cache)
+			conversion_cache = gib_hash_new();
+		if ((sfn = gib_hash_get(conversion_cache, filename)) != NULL)
+			return sfn;
+	}
 
 	basename = strrchr(filename, '/');
 
@@ -537,12 +795,20 @@ static char *feh_magick_load_image(char *filename)
 	}
 
 	free(argv_fn);
+
+	if ((sfn != NULL) && opt.use_conversion_cache)
+		gib_hash_set(conversion_cache, filename, sfn);
+
 	return sfn;
 }
 
 #ifdef HAVE_LIBCURL
 
+#if LIBCURL_VERSION_NUM >= 0x072000 /* 07.32.0 */
 static int curl_quit_function(void *clientp,  curl_off_t dltotal,  curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
+#else
+static int curl_quit_function(void *clientp,  double dltotal,  double dlnow, double ultotal, double ulnow)
+#endif
 {
 	// ignore "unused parameter" warnings
 	(void)clientp;
@@ -572,6 +838,13 @@ static char *feh_http_load_image(char *url)
 	char *basename;
 	char *path = NULL;
 
+	if (opt.use_conversion_cache) {
+		if (!conversion_cache)
+			conversion_cache = gib_hash_new();
+		if ((sfn = gib_hash_get(conversion_cache, url)) != NULL)
+			return sfn;
+	}
+
 	if (opt.keep_http) {
 		if (opt.output_dir)
 			path = opt.output_dir;
@@ -587,15 +860,32 @@ static char *feh_http_load_image(char *url)
 	}
 
 	basename = strrchr(url, '/') + 1;
-	tmpname = feh_unique_filename(path, basename);
 
-	if (strlen(tmpname) > (NAME_MAX-6))
-		tmpname[NAME_MAX-7] = '\0';
+#ifdef HAVE_MKSTEMPS
+	tmpname = estrjoin("_", "feh_curl_XXXXXX", basename, NULL);
 
-	sfn = estrjoin("_", tmpname, "XXXXXX", NULL);
+	if (strlen(tmpname) > NAME_MAX) {
+		tmpname[NAME_MAX] = '\0';
+	}
+#else
+	if (strlen(basename) > NAME_MAX-7) {
+		tmpname = estrdup("feh_curl_XXXXXX");
+	} else {
+		tmpname = estrjoin("_", "feh_curl", basename, "XXXXXX", NULL);
+	}
+#endif
+
+	sfn = estrjoin("", path, tmpname, NULL);
 	free(tmpname);
 
+	D(("sfn is %s\n", sfn))
+
+#ifdef HAVE_MKSTEMPS
+	fd = mkstemps(sfn, strlen(basename) + 1);
+#else
 	fd = mkstemp(sfn);
+#endif
+
 	if (fd != -1) {
 		sfp = fdopen(fd, "w+");
 		if (sfp != NULL) {
@@ -604,8 +894,8 @@ static char *feh_http_load_image(char *url)
 #endif
 			/*
 			 * Do not allow requests to take longer than 30 minutes.
-			 * This should be sufficiently high to accomodate use cases with
-			 * unusually high latencies, while at the sime time avoiding
+			 * This should be sufficiently high to accommodate use cases with
+			 * unusually high latencies, while at the same time avoiding
 			 * feh hanging indefinitely in unattended slideshows.
 			 */
 			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1800);
@@ -613,9 +903,14 @@ static char *feh_http_load_image(char *url)
 			curl_easy_setopt(curl, CURLOPT_WRITEDATA, sfp);
 			ebuff = emalloc(CURL_ERROR_SIZE);
 			curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, ebuff);
+			curl_easy_setopt(curl, CURLOPT_USERAGENT, PACKAGE "/" VERSION);
 			curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+#if LIBCURL_VERSION_NUM >= 0x072000 /* 07.32.0 */
 			curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, curl_quit_function);
+#else
+			curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, curl_quit_function);
+#endif
 			curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
 			if (opt.insecure_ssl) {
 				curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -640,6 +935,8 @@ static char *feh_http_load_image(char *url)
 
 			free(ebuff);
 			fclose(sfp);
+			if (opt.use_conversion_cache)
+				gib_hash_set(conversion_cache, url, sfn);
 			return sfn;
 		} else {
 			weprintf("open url: fdopen failed:");
@@ -648,7 +945,11 @@ static char *feh_http_load_image(char *url)
 			close(fd);
 		}
 	} else {
+#ifdef HAVE_MKSTEMPS
+		weprintf("open url: mkstemps failed:");
+#else
 		weprintf("open url: mkstemp failed:");
+#endif
 		free(sfn);
 	}
 	curl_easy_cleanup(curl);
@@ -878,7 +1179,7 @@ void feh_draw_exif(winwidget w)
 
 	if (buffer[0] == '\0')
 	{
-		snprintf(buffer, EXIF_MAX_DATA, "%s", estrdup("Failed to run exif command"));
+		snprintf(buffer, EXIF_MAX_DATA, "%s", "Failed to run exif command");
 		gib_imlib_get_text_size(fn, buffer, NULL, &width, &height, IMLIB_TEXT_TO_RIGHT);
 		info_buf[no_lines] = estrdup(buffer);
 		no_lines++;
@@ -890,29 +1191,28 @@ void feh_draw_exif(winwidget w)
 		{
 			/* max 128 lines */
 			pos2 = 0;
-			while ( pos2 < 256 ) /* max 256 chars per line */
+			while ( pos2 < 255 ) /* max 255 chars + 1 null byte per line */
 			{
 				if ( (buffer[pos] != '\n')
 				      && (buffer[pos] != '\0') )
 				{
-			    info_line[pos2] = buffer[pos];
-			  }
-			  else if ( buffer[pos] == '\0' )
-			  {
-			    pos = EXIF_MAX_DATA; /* all data seen */
-			    info_line[pos2] = '\0';
+					info_line[pos2] = buffer[pos];
 				}
-			  else
-			  {
-			  	info_line[pos2] = '\0'; /* line finished, continue with next line*/
+				else if ( buffer[pos] == '\0' )
+				{
+					pos = EXIF_MAX_DATA; /* all data seen */
+					break;
+				}
+				else
+				{
+					pos++; /* line finished, continue with next line*/
+					break;
+				}
 
-			    pos++;
-			    break;
-			  }
-
-			   pos++;
-			   pos2++;
+				pos++;
+				pos2++;
 			}
+			info_line[pos2] = '\0';
 
 			gib_imlib_get_text_size(fn, info_line, NULL, &line_width,
                               &line_height, IMLIB_TEXT_TO_RIGHT);
@@ -947,6 +1247,7 @@ void feh_draw_exif(winwidget w)
 				info_buf[i], IMLIB_TEXT_TO_RIGHT, 0, 0, 0, 255);
 		gib_imlib_text_draw(im, fn, NULL, 1, (i * line_height) + 1,
 				info_buf[i], IMLIB_TEXT_TO_RIGHT, 255, 255, 255, 255);
+		free(info_buf[i]);
 
 	}
 
@@ -1242,9 +1543,11 @@ void feh_edit_inplace(winwidget w, int op)
 			imlib_image_flip_horizontal();
 		else {
 			imlib_image_orientate(op);
-			tmp = w->im_w;
-			w->im_w = w->im_h;
-			w->im_h = tmp;
+			if(op != 2) {
+				tmp = w->im_w;
+				w->im_w = w->im_h;
+				w->im_h = tmp;
+			}
 			if (FEH_FILE(w->file->data)->info) {
 				FEH_FILE(w->file->data)->info->width = w->im_w;
 				FEH_FILE(w->file->data)->info->height = w->im_h;
@@ -1254,8 +1557,10 @@ void feh_edit_inplace(winwidget w, int op)
 		return;
 	}
 
-	if (!strcmp(gib_imlib_image_format(w->im), "jpeg") &&
-			!path_is_url(FEH_FILE(w->file->data)->filename)) {
+	// Imlib2 <= 1.5 returns "jpeg", Imlib2 >= 1.6 uses "jpg"
+	if ((!strcmp(gib_imlib_image_format(w->im), "jpeg")
+				|| !strcmp(gib_imlib_image_format(w->im), "jpg"))
+			&& !path_is_url(FEH_FILE(w->file->data)->filename)) {
 		feh_edit_inplace_lossless(w, op);
 		feh_reload_image(w, 1, 1);
 		return;
@@ -1275,8 +1580,8 @@ void feh_edit_inplace(winwidget w, int op)
 			FEH_FILE(w->file->data)->filename, &err);
 		gib_imlib_free_image(old);
 		if (err)
-			feh_imlib_print_load_error(FEH_FILE(w->file->data)->filename,
-				w, err);
+			feh_print_load_error(FEH_FILE(w->file->data)->filename,
+				w, err, LOAD_ERROR_IMLIB);
 		feh_reload_image(w, 1, 1);
 	} else {
 		/*

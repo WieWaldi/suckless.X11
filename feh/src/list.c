@@ -1,7 +1,7 @@
 /* list.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -50,7 +50,7 @@ void init_list_mode(void)
 					file->info->height,
 					format_size(file->info->pixels));
 			printf("\t%s\t%c\t%s\n",
-					format_size(file->info->size),
+					format_size(file->size),
 					file->info->has_alpha ? 'X' : '-', file->filename);
 		}
 

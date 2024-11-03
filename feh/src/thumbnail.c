@@ -1,7 +1,7 @@
 /* thumbnail.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -183,8 +183,6 @@ void init_thumbnail_mode(void)
 		winwidget_show(winwid);
 	}
 
-	/* make sure we have an ~/.thumbnails/normal directory for storing
-	   permanent thumbnails */
 	td.cache_thumbnails = opt.cache_thumbnails;
 
 	if (td.cache_thumbnails) {
@@ -193,9 +191,15 @@ void init_thumbnail_mode(void)
 		else
 			td.cache_dim = opt.thumb_h;
 
-		if (td.cache_dim > 256) {
-			/* No caching as specified by standard. Sort of. */
+		if (td.cache_dim > 1024) {
+			/* Not specified by XDG thumbnail standard */
 			td.cache_thumbnails = 0;
+		} else if (td.cache_dim > 512) {
+			td.cache_dim = 1024;
+			td.cache_dir = estrdup("xx-large");
+		} else if (td.cache_dim > 256) {
+			td.cache_dim = 512;
+			td.cache_dir = estrdup("x-large");
 		} else if (td.cache_dim > 128) {
 			td.cache_dim = 256;
 			td.cache_dir = estrdup("large");
@@ -392,7 +396,7 @@ void init_thumbnail_mode(void)
 		}
 		gib_imlib_save_image_with_error_return(td.im_main, output_buf, &err);
 		if (err) {
-			feh_imlib_print_load_error(output_buf, td.im_main, err);
+			feh_print_load_error(output_buf, td.im_main, err, LOAD_ERROR_IMLIB);
 		}
 		else if (opt.verbose) {
 			int tw, th;
@@ -411,6 +415,7 @@ void init_thumbnail_mode(void)
 	else if (opt.start_list_at) {
 		for (l = thumbnails; l; l = l->next) {
 			if (!strcmp(opt.start_list_at, FEH_THUMB(l->data)->file->filename)) {
+				free(opt.start_list_at);
 				opt.start_list_at = NULL;
 				feh_thumbnail_select(winwid, FEH_THUMB(l->data));
 				break;
@@ -592,7 +597,7 @@ int feh_thumbnail_get_thumbnail(Imlib_Image * image, feh_file * file,
 	return status;
 }
 
-static char *feh_thumbnail_get_prefix()
+static char *feh_thumbnail_get_prefix(void)
 {
 	char *dir = NULL, *home, *xdg_cache_home;
 
@@ -635,9 +640,9 @@ char *feh_thumbnail_get_name_uri(char *name)
 	/* FIXME: what happens with http, https, and ftp? MTime etc */
 	if (!path_is_url(name)) {
 
-		/* make sure it's an absoulte path */
+		/* make sure it's an absolute path */
 		/* FIXME: add support for ~, need to investigate if it's expanded
-		   somewhere else before adding (unecessary) code */
+		   somewhere else before adding (unnecessary) code */
 		if (name[0] != '/') {
 			/* work around /some/path/./image.ext */
 			if ((strncmp(name, "./", 2)) == 0)
@@ -698,6 +703,13 @@ int feh_thumbnail_generate(Imlib_Image * image, feh_file * file,
 				thumb_h = td.cache_dim / ratio;
 			else if (ratio != 1.0)
 				thumb_w = td.cache_dim * ratio;
+		} else {
+			/*
+			 * The image is smaller than the specified thumbnail size.
+			 * Do not cache or transform it.
+			 */
+			*image = im_temp;
+			return 1;
 		}
 
 		*image = gib_imlib_create_cropped_scaled_image(im_temp, 0, 0, w, h,
@@ -881,13 +893,13 @@ void feh_thumbnail_select_prev(winwidget winwid, int jump)
 	}
 }
 
-void feh_thumbnail_show_selected()
+void feh_thumbnail_show_selected(void)
 {
 	if (td.selected && td.selected->file)
 		feh_thumbnail_show_fullsize(td.selected->file);
 }
 
-feh_file* feh_thumbnail_get_selected_file()
+feh_file* feh_thumbnail_get_selected_file(void)
 {
 	if (td.selected)
 		return td.selected->file;

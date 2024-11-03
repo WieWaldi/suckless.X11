@@ -1,7 +1,7 @@
 /* filelist.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -24,20 +24,19 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-#ifdef HAVE_LIBEXIF
-#include <libexif/exif-data.h>
-#endif
-
 #include "feh.h"
 #include "filelist.h"
 #include "signals.h"
 #include "options.h"
 
+#ifdef HAVE_LIBCURL
+#include <curl/curl.h>
+#endif
+
 gib_list *filelist = NULL;
 gib_list *original_file_items = NULL; /* original file items from argv */
 int filelist_len = 0;
 gib_list *current_file = NULL;
-extern int errno;
 
 static gib_list *rm_filelist = NULL;
 
@@ -54,6 +53,8 @@ feh_file *feh_file_new(char *filename)
 		newfile->name = estrdup(s + 1);
 	else
 		newfile->name = estrdup(filename);
+	newfile->size = -1;
+	newfile->mtime = 0;
 	newfile->info = NULL;
 #ifdef HAVE_LIBEXIF
 	newfile->ed = NULL;
@@ -90,7 +91,6 @@ feh_file_info *feh_file_info_new(void)
 
 	info->width = 0;
 	info->height = 0;
-	info->size = 0;
 	info->pixels = 0;
 	info->has_alpha = 0;
 	info->format = NULL;
@@ -156,7 +156,7 @@ static void feh_print_stat_error(char *path)
 	}
 }
 
-static void add_stdin_to_filelist()
+static void add_stdin_to_filelist(void)
 {
 	char buf[1024];
 	size_t readsize;
@@ -181,6 +181,7 @@ static void add_stdin_to_filelist()
 	while ((readsize = fread(buf, sizeof(char), sizeof(buf), stdin)) > 0) {
 		if (fwrite(buf, sizeof(char), readsize, outfile) < readsize) {
 			free(sfn);
+			fclose(outfile);
 			return;
 		}
 	}
@@ -198,7 +199,7 @@ void add_file_to_filelist_recursively(char *origpath, unsigned char level)
 	struct stat st;
 	char *path;
 
-	if (!origpath)
+	if (!origpath || *origpath == '\0')
 		return;
 
 	path = estrdup(origpath);
@@ -305,7 +306,7 @@ void delete_rm_files(void)
 	return;
 }
 
-gib_list *feh_file_info_preload(gib_list * list)
+gib_list *feh_file_info_preload(gib_list * list, int load_images)
 {
 	gib_list *l;
 	feh_file *file = NULL;
@@ -314,20 +315,27 @@ gib_list *feh_file_info_preload(gib_list * list)
 	for (l = list; l; l = l->next) {
 		file = FEH_FILE(l->data);
 		D(("file %p, file->next %p, file->name %s\n", l, l->next, file->name));
-		if (feh_file_info_load(file, NULL)) {
-			D(("Failed to load file %p\n", file));
-			remove_list = gib_list_add_front(remove_list, l);
-			if (opt.verbose)
-				feh_display_status('x');
-		} else if (((unsigned int)file->info->width < opt.min_width)
-				|| ((unsigned int)file->info->width > opt.max_width)
-				|| ((unsigned int)file->info->height < opt.min_height)
-				|| ((unsigned int)file->info->height > opt.max_height)) {
-			remove_list = gib_list_add_front(remove_list, l);
-			if (opt.verbose)
-				feh_display_status('s');
-		} else if (opt.verbose)
-			feh_display_status('.');
+		if (load_images) {
+			if (feh_file_info_load(file, NULL)) {
+				D(("Failed to load file %p\n", file));
+				remove_list = gib_list_add_front(remove_list, l);
+				if (opt.verbose)
+					feh_display_status('x');
+			} else if (((unsigned int)file->info->width < opt.min_width)
+					|| ((unsigned int)file->info->width > opt.max_width)
+					|| ((unsigned int)file->info->height < opt.min_height)
+					|| ((unsigned int)file->info->height > opt.max_height)) {
+				remove_list = gib_list_add_front(remove_list, l);
+				if (opt.verbose)
+					feh_display_status('s');
+			} else if (opt.verbose)
+				feh_display_status('.');
+		} else {
+			if (feh_file_stat(file)) {
+				D(("Failed to stat file %p\n", file));
+				remove_list = gib_list_add_front(remove_list, l);
+			}
+		}
 		if (sig_exit) {
 			feh_display_status(0);
 			exit(sig_exit);
@@ -348,22 +356,35 @@ gib_list *feh_file_info_preload(gib_list * list)
 	return(list);
 }
 
-int feh_file_info_load(feh_file * file, Imlib_Image im)
+int feh_file_stat(feh_file * file)
 {
 	struct stat st;
-	int need_free = 1;
-	Imlib_Image im1;
-
-	D(("im is %p\n", im));
-
-	if (im)
-		need_free = 0;
 
 	errno = 0;
 	if (stat(file->filename, &st)) {
 		feh_print_stat_error(file->filename);
 		return(1);
 	}
+
+	file->mtime = st.st_mtime;
+
+	file->size = st.st_size;
+
+	return(0);
+}
+
+int feh_file_info_load(feh_file * file, Imlib_Image im)
+{
+	int need_free = 1;
+	Imlib_Image im1;
+
+	if (feh_file_stat(file))
+		return(1);
+
+	D(("im is %p\n", im));
+
+	if (im)
+		need_free = 0;
 
 	if (im)
 		im1 = im;
@@ -381,8 +402,6 @@ int feh_file_info_load(feh_file * file, Imlib_Image im)
 
 	file->info->format = estrdup(gib_imlib_image_format(im1));
 
-	file->info->size = st.st_size;
-
 	if (need_free)
 		gib_imlib_free_image_and_decache(im1);
 	return(0);
@@ -398,11 +417,10 @@ void feh_file_dirname(char *dst, feh_file * f, int maxlen)
 		return;
 	}
 
-	strncpy(dst, f->filename, n);
+	memcpy(dst, f->filename, n);
 	dst[n] = '\0';
 }
 
-#ifdef HAVE_VERSCMP
 static inline int strcmp_or_strverscmp(const char *s1, const char *s2)
 {
 	if (!opt.version_sort)
@@ -410,9 +428,6 @@ static inline int strcmp_or_strverscmp(const char *s1, const char *s2)
 	else
 		return(strverscmp(s1, s2));
 }
-#else
-#define strcmp_or_strverscmp strcmp
-#endif
 
 int feh_cmp_filename(void *file1, void *file2)
 {
@@ -438,20 +453,8 @@ int feh_cmp_dirname(void *file1, void *file2)
 /* Return -1 if file1 is _newer_ than file2 */
 int feh_cmp_mtime(void *file1, void *file2)
 {
-	struct stat s1, s2;
-
-	if (stat(FEH_FILE(file1)->filename, &s1)) {
-		feh_print_stat_error(FEH_FILE(file1)->filename);
-		return(-1);
-	}
-
-	if (stat(FEH_FILE(file2)->filename, &s2)) {
-		feh_print_stat_error(FEH_FILE(file2)->filename);
-		return(-1);
-	}
-
 	/* gib_list_sort is not stable, so explicitly return 0 as -1 */
-	return(s1.st_mtime >= s2.st_mtime ? -1 : 1);
+	return(FEH_FILE(file1)->mtime >= FEH_FILE(file2)->mtime ? -1 : 1);
 }
 
 int feh_cmp_width(void *file1, void *file2)
@@ -471,7 +474,7 @@ int feh_cmp_pixels(void *file1, void *file2)
 
 int feh_cmp_size(void *file1, void *file2)
 {
-	return((FEH_FILE(file1)->info->size - FEH_FILE(file2)->info->size));
+	return((FEH_FILE(file1)->size - FEH_FILE(file2)->size));
 }
 
 int feh_cmp_format(void *file1, void *file2)
@@ -490,10 +493,16 @@ void feh_prepare_filelist(void)
 	 * is set and we're in thumbnail mode, we need to filter images first so
 	 * we can create a properly sized thumbnail list.
 	 */
-	if (opt.list || opt.preload || opt.customlist || (opt.sort > SORT_MTIME)
+	if (opt.list || opt.preload || opt.customlist || (opt.sort >= SORT_WIDTH)
 			|| (opt.filter_by_dimensions && (opt.index || opt.thumbs || opt.bgmode))) {
 		/* For these sort options, we have to preload images */
-		filelist = feh_file_info_preload(filelist);
+		filelist = feh_file_info_preload(filelist, TRUE);
+		if (!gib_list_length(filelist))
+			show_mini_usage();
+	} else if (opt.sort >= SORT_SIZE) {
+		/* For these sort options, we need stat(2) information on the files,
+		 * but there is no need to load the images. */
+		filelist = feh_file_info_preload(filelist, FALSE);
 		if (!gib_list_length(filelist))
 			show_mini_usage();
 	}
@@ -645,12 +654,13 @@ char *feh_absolute_path(char *path)
 	   filelist file can be saved anywhere and feh will still find the
 	   images */
 	D(("Need to convert %s to an absolute form\n", path));
-	/* I SHOULD be able to just use a simple realpath() here, but dumb * 
+	/* I SHOULD be able to just use a simple realpath() here, but dumb *
 	   old Solaris's realpath doesn't return an absolute path if the
 	   path you give it is relative. Linux and BSD get this right... */
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		eprintf("Cannot determine working directory:");
-	snprintf(temp, sizeof(temp), "%s/%s", cwd, path);
+	if ((size_t) snprintf(temp, sizeof(temp), "%s/%s", cwd, path) >= sizeof(temp))
+		eprintf("Absolute path for working directory was truncated");
 	if (realpath(temp, fullpath) != NULL) {
 		ret = estrdup(fullpath);
 	} else {
@@ -660,11 +670,20 @@ char *feh_absolute_path(char *path)
 	return(ret);
 }
 
-void feh_save_filelist()
+void feh_save_filelist(void)
 {
 	char *tmpname;
+	char *base_dir = "";
 
-	tmpname = feh_unique_filename("", "filelist");
+	if (opt.output_dir) {
+		base_dir = estrjoin("", opt.output_dir, "/", NULL);
+	}
+
+	tmpname = feh_unique_filename(base_dir, "filelist");
+
+	if (opt.output_dir) {
+		free(base_dir);
+	}
 
 	if (opt.verbose)
 		fprintf(stderr, "saving filelist to filename '%s'\n", tmpname);
@@ -673,3 +692,27 @@ void feh_save_filelist()
 	free(tmpname);
 	return;
 }
+
+#ifdef HAVE_LIBCURL
+
+char *feh_http_unescape(char *url)
+{
+	CURL *curl = curl_easy_init();
+	if (!curl) {
+		return NULL;
+	}
+	char *tmp_url = curl_easy_unescape(curl, url, 0, NULL);
+	char *new_url = estrdup(tmp_url);
+	curl_free(tmp_url);
+	curl_easy_cleanup(curl);
+	return new_url;
+}
+
+#else
+
+char *feh_http_unescape(char *url)
+{
+	return NULL;
+}
+
+#endif

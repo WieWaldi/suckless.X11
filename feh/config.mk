@@ -6,6 +6,8 @@ curl ?= 1
 debug ?= 0
 exif ?= 0
 help ?= 0
+magic ?= 0
+mkstemps ?= 1
 verscmp ?= 1
 xinerama ?= 1
 
@@ -38,7 +40,7 @@ CFLAGS ?= -g -O2
 CFLAGS += -Wall -Wextra -pedantic
 
 # Settings for glibc >= 2.19 - may need to be adjusted for other systems
-CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700
+CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -D_DARWIN_C_SOURCE
 
 ifeq (${curl},1)
 	CFLAGS += -DHAVE_LIBCURL
@@ -63,11 +65,20 @@ ifeq (${stat64},1)
 	CFLAGS += -D_FILE_OFFSET_BITS=64
 endif
 
-ifeq (${verscmp},1)
-	CFLAGS += -DHAVE_VERSCMP
-	MAN_VERSCMP = available
+ifeq (${mkstemps},1)
+	CFLAGS += -DHAVE_MKSTEMPS
+endif
+
+ifeq (${magic},1)
+	CFLAGS += -DHAVE_LIBMAGIC
+	LDLIBS += -lmagic
+	MAN_MAGIC = enabled
 else
-	MAN_VERSCMP = not available
+	MAN_MAGIC = disabled
+endif
+
+ifeq (${verscmp},1)
+	CFLAGS += -DHAVE_STRVERSCMP
 endif
 
 ifeq (${xinerama},1)

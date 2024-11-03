@@ -1,7 +1,7 @@
 /* options.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -63,6 +63,8 @@ void init_parse_options(int argc, char **argv)
 	opt.font = NULL;
 	opt.max_height = opt.max_width = UINT_MAX;
 
+	opt.zoom_rate = 1.25;
+
 	opt.start_list_at = NULL;
 	opt.jump_on_resort = 1;
 
@@ -76,6 +78,7 @@ void init_parse_options(int argc, char **argv)
 #ifdef HAVE_INOTIFY
 	opt.auto_reload = 1;
 #endif				/* HAVE_INOTIFY */
+	opt.use_conversion_cache = 1;
 
 	feh_getopt_theme(argc, argv);
 
@@ -329,107 +332,112 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 
 	/* (*name, has_arg, *flag, val) See: struct option in getopts.h */
 	static struct option lopts[] = {
-		{"debug"         , 0, 0, '+'},
-		{"scale-down"    , 0, 0, '.'},
-		{"max-dimension" , 1, 0, '<'},
-		{"min-dimension" , 1, 0, '>'},
-		{"title-font"    , 1, 0, '@'},
-		{"action"        , 1, 0, 'A'},
-		{"image-bg"      , 1, 0, 'B'},
-		{"fontpath"      , 1, 0, 'C'},
-		{"slideshow-delay",1, 0, 'D'},
-		{"thumb-height"  , 1, 0, 'E'},
-		{"full-screen"   , 0, 0, 'F'}, /* deprecated */
-		{"fullscreen"    , 0, 0, 'F'},
-		{"draw-actions"  , 0, 0, 'G'},
-		{"limit-height"  , 1, 0, 'H'},
-		{"fullindex"     , 0, 0, 'I'},
-		{"thumb-redraw"  , 1, 0, 'J'},
-		{"caption-path"  , 1, 0, 'K'},
-		{"customlist"    , 1, 0, 'L'},
-		{"menu-font"     , 1, 0, 'M'},
-		{"no-menus"      , 0, 0, 'N'},
-		{"output-only"   , 1, 0, 'O'},
-		{"cache-thumbnails", 0, 0, 'P'},
-		{"reload"        , 1, 0, 'R'},
-		{"sort"          , 1, 0, 'S'},
-		{"theme"         , 1, 0, 'T'},
-		{"loadable"      , 0, 0, 'U'},
-		{"verbose"       , 0, 0, 'V'},
-		{"limit-width"   , 1, 0, 'W'},
-		{"ignore-aspect" , 0, 0, 'X'},
-		{"hide-pointer"  , 0, 0, 'Y'},
-		{"auto-zoom"     , 0, 0, 'Z'},
-		{"title"         , 1, 0, '^'},
-		{"alpha"         , 1, 0, 'a'},
-		{"bg"            , 1, 0, 'b'},
-		{"draw-filename" , 0, 0, 'd'},
-		{"font"          , 1, 0, 'e'},
-		{"filelist"      , 1, 0, 'f'},
-		{"geometry"      , 1, 0, 'g'},
-		{"help"          , 0, 0, 'h'},
-		{"index"         , 0, 0, 'i'},
-		{"output-dir"    , 1, 0, 'j'},
-		{"keep-http"     , 0, 0, 'k'},
-		{"list"          , 0, 0, 'l'},
-		{"montage"       , 0, 0, 'm'},
-		{"reverse"       , 0, 0, 'n'},
-		{"output"        , 1, 0, 'o'},
-		{"preload"       , 0, 0, 'p'},
-		{"quiet"         , 0, 0, 'q'},
-		{"recursive"     , 0, 0, 'r'},
-		{"stretch"       , 0, 0, 's'},
-		{"thumbnails"    , 0, 0, 't'},
-		{"unloadable"    , 0, 0, 'u'},
-		{"version"       , 0, 0, 'v'},
-		{"multiwindow"   , 0, 0, 'w'},
-		{"borderless"    , 0, 0, 'x'},
-		{"thumb-width"   , 1, 0, 'y'},
-		{"randomize"     , 0, 0, 'z'},
-		{"start-at"      , 1, 0, '|'},
-		{"thumb-title"   , 1, 0, '~'},
-		{"bg-tile"       , 0, 0, 200},
-		{"bg-center"     , 0, 0, 201},
-		{"bg-scale"      , 0, 0, 202},
-		{"zoom"          , 1, 0, 205},
-		{"no-screen-clip", 0, 0, 206},
-		{"index-info"    , 1, 0, 207},
-		{"magick-timeout", 1, 0, 208},
-		{"action1"       , 1, 0, 209},
-		{"action2"       , 1, 0, 210},
-		{"action3"       , 1, 0, 211},
-		{"action4"       , 1, 0, 212},
-		{"action5"       , 1, 0, 213},
-		{"action6"       , 1, 0, 214},
-		{"action7"       , 1, 0, 215},
-		{"action8"       , 1, 0, 216},
-		{"action9"       , 1, 0, 217},
-		{"bg-fill"       , 0, 0, 218},
-		{"bg-max"        , 0, 0, 219},
-		{"no-jump-on-resort", 0, 0, 220},
-		{"edit"          , 0, 0, 221},
+		{"debug"         , 0, 0, OPTION_debug},
+		{"scale-down"    , 0, 0, OPTION_scale_down},
+		{"max-dimension" , 1, 0, OPTION_max_dimension},
+		{"min-dimension" , 1, 0, OPTION_min_dimension},
+		{"title-font"    , 1, 0, OPTION_title_font},
+		{"action"        , 1, 0, OPTION_action},
+		{"image-bg"      , 1, 0, OPTION_image_bg},
+		{"fontpath"      , 1, 0, OPTION_fontpath},
+		{"slideshow-delay",1, 0, OPTION_slideshow_delay},
+		{"thumb-height"  , 1, 0, OPTION_thumb_height},
+		{"full-screen"   , 0, 0, OPTION_fullscreen}, /* deprecated */
+		{"fullscreen"    , 0, 0, OPTION_fullscreen},
+		{"draw-actions"  , 0, 0, OPTION_draw_actions},
+		{"limit-height"  , 1, 0, OPTION_limit_height},
+		{"fullindex"     , 0, 0, OPTION_fullindex},
+		{"thumb-redraw"  , 1, 0, OPTION_thumb_redraw},
+		{"caption-path"  , 1, 0, OPTION_caption_path},
+		{"customlist"    , 1, 0, OPTION_customlist},
+		{"menu-font"     , 1, 0, OPTION_menu_font},
+		{"no-menus"      , 0, 0, OPTION_no_menus},
+		{"output-only"   , 1, 0, OPTION_output_only},
+		{"cache-thumbnails", 0, 0, OPTION_cache_thumbnails},
+		{"reload"        , 1, 0, OPTION_reload},
+		{"sort"          , 1, 0, OPTION_sort},
+		{"theme"         , 1, 0, OPTION_theme},
+		{"loadable"      , 0, 0, OPTION_loadable},
+		{"verbose"       , 0, 0, OPTION_verbose},
+		{"limit-width"   , 1, 0, OPTION_limit_width},
+		{"ignore-aspect" , 0, 0, OPTION_ignore_aspect},
+		{"hide-pointer"  , 0, 0, OPTION_hide_pointer},
+		{"auto-zoom"     , 0, 0, OPTION_auto_zoom},
+		{"title"         , 1, 0, OPTION_title},
+		{"alpha"         , 1, 0, OPTION_alpha},
+		{"bg"            , 1, 0, OPTION_bg},
+		{"draw-filename" , 0, 0, OPTION_draw_filename},
+		{"font"          , 1, 0, OPTION_font},
+		{"filelist"      , 1, 0, OPTION_filelist},
+		{"geometry"      , 1, 0, OPTION_geometry},
+		{"help"          , 0, 0, OPTION_help},
+		{"index"         , 0, 0, OPTION_index},
+		{"output-dir"    , 1, 0, OPTION_output_dir},
+		{"keep-http"     , 0, 0, OPTION_keep_http},
+		{"list"          , 0, 0, OPTION_list},
+		{"montage"       , 0, 0, OPTION_montage},
+		{"reverse"       , 0, 0, OPTION_reverse},
+		{"output"        , 1, 0, OPTION_output},
+		{"preload"       , 0, 0, OPTION_preload},
+		{"quiet"         , 0, 0, OPTION_quiet},
+		{"recursive"     , 0, 0, OPTION_recursive},
+		{"stretch"       , 0, 0, OPTION_stretch},
+		{"thumbnails"    , 0, 0, OPTION_thumbnails},
+		{"unloadable"    , 0, 0, OPTION_unloadable},
+		{"version"       , 0, 0, OPTION_version},
+		{"multiwindow"   , 0, 0, OPTION_multiwindow},
+		{"borderless"    , 0, 0, OPTION_borderless},
+		{"thumb-width"   , 1, 0, OPTION_thumb_width},
+		{"randomize"     , 0, 0, OPTION_randomize},
+		{"start-at"      , 1, 0, OPTION_start_at},
+		{"thumb-title"   , 1, 0, OPTION_thumb_title},
+		{"bg-tile"       , 0, 0, OPTION_bg_title},
+		{"bg-center"     , 0, 0, OPTION_bg_center},
+		{"bg-scale"      , 0, 0, OPTION_bg_scale},
+		{"zoom"          , 1, 0, OPTION_zoom},
+		{"zoom-step"     , 1, 0, OPTION_zoom_step},
+		{"no-screen-clip", 0, 0, OPTION_no_screen_clip},
+		{"index-info"    , 1, 0, OPTION_index_info},
+		{"magick-timeout", 1, 0, OPTION_magick_timeout},
+		{"action1"       , 1, 0, OPTION_action1},
+		{"action2"       , 1, 0, OPTION_action2},
+		{"action3"       , 1, 0, OPTION_action3},
+		{"action4"       , 1, 0, OPTION_action4},
+		{"action5"       , 1, 0, OPTION_action5},
+		{"action6"       , 1, 0, OPTION_action6},
+		{"action7"       , 1, 0, OPTION_action7},
+		{"action8"       , 1, 0, OPTION_action8},
+		{"action9"       , 1, 0, OPTION_action9},
+		{"bg-fill"       , 0, 0, OPTION_bg_fill},
+		{"bg-max"        , 0, 0, OPTION_bg_max},
+		{"no-jump-on-resort", 0, 0, OPTION_no_jump_on_resort},
+		{"edit"          , 0, 0, OPTION_edit},
 #ifdef HAVE_LIBEXIF
-		{"draw-exif"     , 0, 0, 223},
-		{"auto-rotate"   , 0, 0, 242},
+		{"draw-exif"     , 0, 0, OPTION_draw_exif},
+		{"auto-rotate"   , 0, 0, OPTION_auto_rotate},
 #endif
-		{"no-xinerama"   , 0, 0, 225},
-		{"draw-tinted"   , 0, 0, 229},
-		{"info"          , 1, 0, 234},
-		{"force-aliasing", 0, 0, 235},
-		{"no-fehbg"      , 0, 0, 236},
-		{"keep-zoom-vp"  , 0, 0, 237},
-		{"scroll-step"   , 1, 0, 238},
-		{"xinerama-index", 1, 0, 239},
-		{"insecure"      , 0, 0, 240},
-		{"no-recursive"  , 0, 0, 241},
-		{"cache-size"    , 1, 0, 243},
-		{"on-last-slide" , 1, 0, 244},
-		{"conversion-timeout" , 1, 0, 245},
-		{"version-sort"  , 0, 0, 246},
-		{"offset"        , 1, 0, 247},
+		{"no-xinerama"   , 0, 0, OPTION_no_xinerama},
+		{"draw-tinted"   , 0, 0, OPTION_draw_tinted},
+		{"info"          , 1, 0, OPTION_info},
+		{"tap-zones"     , 0, 0, OPTION_tap_zones},
+		{"force-aliasing", 0, 0, OPTION_force_aliasing},
+		{"no-fehbg"      , 0, 0, OPTION_no_fehbg},
+		{"keep-zoom-vp"  , 0, 0, OPTION_keep_zoom_vp},
+		{"scroll-step"   , 1, 0, OPTION_scroll_step},
+		{"xinerama-index", 1, 0, OPTION_xinerama_index},
+		{"insecure"      , 0, 0, OPTION_insecure},
+		{"no-recursive"  , 0, 0, OPTION_no_recursive},
+		{"cache-size"    , 1, 0, OPTION_cache_size},
+		{"on-last-slide" , 1, 0, OPTION_on_last_slide},
+		{"conversion-timeout" , 1, 0, OPTION_conversion_timeout},
+		{"version-sort"  , 0, 0, OPTION_version_sort},
+		{"offset"        , 1, 0, OPTION_offset},
 #ifdef HAVE_INOTIFY
-		{"auto-reload"   , 0, 0, 248},
+		{"auto-reload"   , 0, 0, OPTION_auto_reload},
 #endif
+		{"class"         , 1, 0, OPTION_class},
+		{"no-conversion-cache", 0, 0, OPTION_no_conversion_cache},
+		{"window-id", 1, 0, OPTION_window_id},
 		{0, 0, 0, 0}
 	};
 	int optch = 0, cmdx = 0;
@@ -439,10 +447,10 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 		switch (optch) {
 		case 0:
 			break;
-		case '+':
+		case OPTION_debug:
 			opt.debug = 1;
 			break;
-		case '<':
+		case OPTION_max_dimension:
 			opt.filter_by_dimensions = 1;
 			XParseGeometry(optarg, &discard, &discard, &opt.max_width, &opt.max_height);
 			if (opt.max_width == 0)
@@ -450,27 +458,27 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 			if (opt.max_height == 0)
 				opt.max_height = UINT_MAX;
 			break;
-		case '>':
+		case OPTION_min_dimension:
 			opt.filter_by_dimensions = 1;
 			XParseGeometry(optarg, &discard, &discard, &opt.min_width, &opt.min_height);
 			break;
-		case '.':
+		case OPTION_scale_down:
 			opt.scale_down = 1;
 			break;
-		case '@':
+		case OPTION_title_font:
 			opt.title_font = estrdup(optarg);
 			break;
-		case 'A':
+		case OPTION_action:
 			opt.actions[0] = estrdup(optarg);
 			break;
-		case 'B':
+		case OPTION_image_bg:
 			opt.image_bg = estrdup(optarg);
 			break;
-		case 'C':
+		case OPTION_fontpath:
 			D(("adding fontpath %s\n", optarg));
 			imlib_add_path_to_font_path(optarg);
 			break;
-		case 'D':
+		case OPTION_slideshow_delay:
 			opt.slideshow_delay = atof(optarg);
 			if (opt.slideshow_delay < 0.0) {
 				opt.slideshow_delay *= (-1);
@@ -479,56 +487,59 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 				opt.paused = 0;
 			}
 			break;
-		case 'E':
+		case OPTION_thumb_height:
 			opt.thumb_h = atoi(optarg);
 			break;
-		case 'F':
+		case OPTION_fullscreen:
 			opt.full_screen = 1;
 			break;
-		case 'G':
+		case OPTION_draw_actions:
 			opt.draw_actions = 1;
 			break;
-		case 'H':
+		case OPTION_limit_height:
 			opt.limit_h = atoi(optarg);
 			break;
-		case 'I':
+		case OPTION_fullindex:
 			opt.index = 1;
 			opt.index_info = estrdup("%n\n%S\n%wx%h");
 			break;
-		case 'J':
+		case OPTION_thumb_redraw:
 			opt.thumb_redraw = atoi(optarg);
 			break;
-		case 'K':
+		case OPTION_caption_path:
 			opt.caption_path = estrdup(optarg);
 			break;
-		case 'L':
+		case OPTION_customlist:
 			opt.customlist = estrdup(optarg);
 			opt.display = 0;
 			break;
-		case 'M':
+		case OPTION_menu_font:
 			free(opt.menu_font);
 			opt.menu_font = estrdup(optarg);
 			break;
-		case 'N':
+		case OPTION_no_menus:
 			opt.no_menus = 1;
 			break;
-		case 'O':
+		case OPTION_output_only:
 			opt.output = 1;
 			opt.output_file = estrdup(optarg);
 			opt.display = 0;
 			break;
-		case 'P':
+		case OPTION_cache_thumbnails:
 			opt.cache_thumbnails = 1;
 			break;
-		case 'R':
+		case OPTION_reload:
 			opt.reload = atof(optarg);
+			opt.use_conversion_cache = 0;
 #ifdef HAVE_INOTIFY
 			opt.auto_reload = 0;
 #endif
 			break;
-		case 'S':
+		case OPTION_sort:
 			if (!strcasecmp(optarg, "name"))
 				opt.sort = SORT_NAME;
+			else if (!strcasecmp(optarg, "none"))
+				opt.sort = SORT_NONE;
 			else if (!strcasecmp(optarg, "filename"))
 				opt.sort = SORT_FILENAME;
 			else if (!strcasecmp(optarg, "dirname"))
@@ -556,116 +567,116 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 				opt.randomize = 0;
 			}
 			break;
-		case 'T':
+		case OPTION_theme:
 			theme = estrdup(optarg);
 			break;
-		case 'U':
+		case OPTION_loadable:
 			opt.loadables = 1;
 			opt.display = 0;
 			break;
-		case 'V':
+		case OPTION_verbose:
 			opt.verbose = 1;
 			break;
-		case 'W':
+		case OPTION_limit_width:
 			opt.limit_w = atoi(optarg);
 			break;
-		case 'X':
+		case OPTION_ignore_aspect:
 			opt.aspect = 0;
 			break;
-		case 'Y':
+		case OPTION_hide_pointer:
 			opt.hide_pointer = 1;
 			break;
-		case 'Z':
+		case OPTION_auto_zoom:
 			opt.zoom_mode = ZOOM_MODE_MAX;
 			break;
-		case '^':
+		case OPTION_title:
 			opt.title = estrdup(optarg);
 			break;
-		case 'a':
+		case OPTION_alpha:
 			opt.alpha = 1;
 			opt.alpha_level = 255 - atoi(optarg);
 			break;
-		case 'b':
+		case OPTION_bg:
 			opt.bg = 1;
 			opt.bg_file = estrdup(optarg);
 			break;
-		case 'd':
+		case OPTION_draw_filename:
 			opt.draw_filename = 1;
 			break;
-		case 'e':
+		case OPTION_font:
 			opt.font = estrdup(optarg);
 			break;
-		case 'f':
+		case OPTION_filelist:
 			if (!strcmp(optarg, "-"))
 				opt.filelistfile = estrdup("/dev/stdin");
 			else
 				opt.filelistfile = estrdup(optarg);
 			break;
-		case 'g':
+		case OPTION_geometry:
 			opt.geom_enabled = 1;
 			opt.geom_flags = XParseGeometry(optarg, &opt.geom_x,
 					&opt.geom_y, &opt.geom_w, &opt.geom_h);
 			break;
-		case 'h':
+		case OPTION_help:
 			show_usage();
 			break;
-		case 'i':
+		case OPTION_index:
 			opt.index = 1;
 			opt.index_info = estrdup("%n");
 			break;
-		case 'j':
+		case OPTION_output_dir:
 			opt.output_dir = estrdup(optarg);
 			break;
-		case 'k':
+		case OPTION_keep_http:
 			opt.keep_http = 1;
 			break;
-		case 'l':
+		case OPTION_list:
 			opt.list = 1;
 			opt.display = 0;
 			break;
-		case 'm':
+		case OPTION_montage:
 			opt.index = 1;
 			break;
-		case 'n':
+		case OPTION_reverse:
 			opt.reverse = 1;
 			break;
-		case 'o':
+		case OPTION_output:
 			opt.output = 1;
 			opt.output_file = estrdup(optarg);
 			break;
-		case 'p':
+		case OPTION_preload:
 			opt.preload = 1;
 			break;
-		case 'q':
+		case OPTION_quiet:
 			opt.quiet = 1;
 			break;
-		case 'r':
+		case OPTION_recursive:
 			opt.recursive = 1;
 			break;
-		case 's':
+		case OPTION_stretch:
 			opt.stretch = 1;
 			break;
-		case 't':
+		case OPTION_thumbnails:
 			opt.thumbs = 1;
 			opt.index_info = estrdup("%n");
 			break;
-		case 'u':
+		case OPTION_unloadable:
 			opt.unloadables = 1;
 			opt.display = 0;
 			break;
-		case 'v':
+		case OPTION_version:
 			show_version();
 			break;
-		case 'w':
+		case OPTION_multiwindow:
 			opt.multiwindow = 1;
 			break;
-		case 'x':
+		case OPTION_borderless:
 			opt.borderless = 1;
 			break;
-		case 'y':
+		case OPTION_thumb_width:
 			opt.thumb_w = atoi(optarg);
 			break;
-		case 'z':
+		case OPTION_randomize:
 			opt.randomize = 1;
 			if (opt.sort != SORT_NONE) {
 				weprintf("commandline contains --sort and --randomize. "
@@ -673,22 +684,22 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 				opt.sort = SORT_NONE;
 			}
 			break;
-		case '|':
+		case OPTION_start_at:
 			opt.start_list_at = estrdup(optarg);
 			break;
-		case '~':
+		case OPTION_thumb_title:
 			opt.thumb_title = estrdup(optarg);
 			break;
-		case 200:
+		case OPTION_bg_title:
 			opt.bgmode = BG_MODE_TILE;
 			break;
-		case 201:
+		case OPTION_bg_center:
 			opt.bgmode = BG_MODE_CENTER;
 			break;
-		case 202:
+		case OPTION_bg_scale:
 			opt.bgmode = BG_MODE_SCALE;
 			break;
-		case 205:
+		case OPTION_zoom:
 			if (!strcmp("fill", optarg))
 				opt.zoom_mode = ZOOM_MODE_FILL;
 			else if (!strcmp("max", optarg))
@@ -696,70 +707,75 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 			else
 				opt.default_zoom = atoi(optarg);
 			break;
-		case 206:
+		case OPTION_no_screen_clip:
 			opt.screen_clip = 0;
 			break;
-		case 207:
+		case OPTION_index_info:
 			opt.index_info = estrdup(optarg);
 			break;
-		case 208:
+		case OPTION_magick_timeout:
 			weprintf("--magick-timeout is deprecated, please use --conversion-timeout instead");
 			opt.conversion_timeout = atoi(optarg);
 			break;
-		case 209:
+		case OPTION_action1:
 			opt.actions[1] = estrdup(optarg);
 			break;
-		case 210:
+		case OPTION_action2:
 			opt.actions[2] = estrdup(optarg);
 			break;
-		case 211:
+		case OPTION_action3:
 			opt.actions[3] = estrdup(optarg);
 			break;
-		case 212:
+		case OPTION_action4:
 			opt.actions[4] = estrdup(optarg);
 			break;
-		case 213:
+		case OPTION_action5:
 			opt.actions[5] = estrdup(optarg);
 			break;
-		case 214:
+		case OPTION_action6:
 			opt.actions[6] = estrdup(optarg);
 			break;
-		case 215:
+		case OPTION_action7:
 			opt.actions[7] = estrdup(optarg);
 			break;
-		case 216:
+		case OPTION_action8:
 			opt.actions[8] = estrdup(optarg);
 			break;
-		case 217:
+		case OPTION_action9:
 			opt.actions[9] = estrdup(optarg);
 			break;
-		case 218:
+		case OPTION_bg_fill:
 			opt.bgmode = BG_MODE_FILL;
 			break;
-		case 219:
+		case OPTION_bg_max:
 			opt.bgmode = BG_MODE_MAX;
 			break;
-		case 220:
+		case OPTION_no_jump_on_resort:
 			opt.jump_on_resort = 0;
 			break;
-		case 221:
+		case OPTION_edit:
 			opt.edit = 1;
 			break;
 #ifdef HAVE_LIBEXIF
-		case 223:
+		case OPTION_draw_exif:
 			opt.draw_exif = 1;
 			break;
-		case 242:
+		case OPTION_auto_rotate:
+#if defined(IMLIB2_VERSION_MAJOR) && defined(IMLIB2_VERSION_MINOR) && defined(IMLIB2_VERSION_MICRO) && (IMLIB2_VERSION_MAJOR > 1 || IMLIB2_VERSION_MINOR > 7 || IMLIB2_VERSION_MICRO >= 5)
+			weprintf("This feh release was built with Imlib2 version %d.%d.%d, which transparently adjusts for image orientation according to EXIF data.", IMLIB2_VERSION_MAJOR, IMLIB2_VERSION_MINOR, IMLIB2_VERSION_MICRO);
+			weprintf("--auto-rotate would rotate an already correctly oriented image, resulting in incorrect orientation. It has been disabled in this build. Rebuild feh with Imlib2 <1.7.5 to enable --auto-rotate.");
+#else
 			opt.auto_rotate = 1;
+#endif
 			break;
 #endif
-		case 225:
+		case OPTION_no_xinerama:
 			opt.xinerama = 0;
 			break;
-		case 229:
+		case OPTION_draw_tinted:
 			opt.text_bg = TEXT_BG_TINTED;
 			break;
-		case 234:
+		case OPTION_info:
 			opt.info_cmd = estrdup(optarg);
 			if (opt.info_cmd[0] == ';') {
 				opt.draw_info = 0;
@@ -768,35 +784,38 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 				opt.draw_info = 1;
 			}
 			break;
-		case 235:
+		case OPTION_tap_zones:
+			opt.tap_zones = 1;
+			break;
+		case OPTION_force_aliasing:
 			opt.force_aliasing = 1;
 			break;
-		case 236:
+		case OPTION_no_fehbg:
 			opt.no_fehbg = 1;
 			break;
-		case 237:
+		case OPTION_keep_zoom_vp:
 			opt.keep_zoom_vp = 1;
 			break;
-		case 238:
+		case OPTION_scroll_step:
 			opt.scroll_step = atoi(optarg);
 			break;
-		case 239:
+		case OPTION_xinerama_index:
 			opt.xinerama_index = atoi(optarg);
 			break;
-		case 240:
+		case OPTION_insecure:
 			opt.insecure_ssl = 1;
 			break;
-		case 241:
+		case OPTION_no_recursive:
 			opt.recursive = 0;
 			break;
-		case 243:
+		case OPTION_cache_size:
 			opt.cache_size = atoi(optarg);
 			if (opt.cache_size < 0)
 				opt.cache_size = 0;
 			if (opt.cache_size > 2048)
 				opt.cache_size = 2048;
 			break;
-		case 244:
+		case OPTION_on_last_slide:
 			if (!strcmp(optarg, "quit")) {
 				opt.on_last_slide = ON_LAST_SLIDE_QUIT;
 			} else if (!strcmp(optarg, "hold")) {
@@ -808,21 +827,39 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 						"Supported actions: hold, resume, quit\n", optarg);
 			}
 			break;
-		case 245:
+		case OPTION_conversion_timeout:
 			opt.conversion_timeout = atoi(optarg);
 			break;
-		case 246:
+		case OPTION_version_sort:
 			opt.version_sort = 1;
 			break;
-		case 247:
+		case OPTION_offset:
 			opt.offset_flags = XParseGeometry(optarg, &opt.offset_x,
 					&opt.offset_y, (unsigned int *)&discard, (unsigned int *)&discard);
 			break;
 #ifdef HAVE_INOTIFY
-		case 248:
+		case OPTION_auto_reload:
 			opt.auto_reload = 1;
 			break;
 #endif
+		case OPTION_class:
+			opt.x11_class = estrdup(optarg);
+			break;
+		case OPTION_no_conversion_cache:
+			opt.use_conversion_cache = 0;
+			break;
+		case OPTION_window_id:
+			opt.x11_windowid = strtol(optarg, NULL, 0);
+			break;
+		case OPTION_zoom_step:
+			opt.zoom_rate = atof(optarg);
+			if ((opt.zoom_rate <= 0)) {
+				weprintf("Zooming disabled due to --zoom-step=%f", opt.zoom_rate);
+				opt.zoom_rate = 1.0;
+			} else {
+				opt.zoom_rate = 1 + ((float)opt.zoom_rate / 100);
+			}
+			break;
 		default:
 			break;
 		}
@@ -839,13 +876,40 @@ static void feh_parse_option_array(int argc, char **argv, int finalrun)
 		}
 	}
 	else if (finalrun && !opt.filelistfile && !opt.bgmode) {
-		if (opt.start_list_at && !path_is_url(opt.start_list_at) && strrchr(opt.start_list_at, '/')) {
+		/*
+		 * if --start-at is a non-local URL (i.e., does not start with file:///),
+		 * behave as if "feh URL" was called (there is no directory we can load)
+		 */
+		if (opt.start_list_at && path_is_url(opt.start_list_at) && (strlen(opt.start_list_at) <= 8 || strncmp(opt.start_list_at, "file:///", 8) != 0)) {
+			add_file_to_filelist_recursively(opt.start_list_at, FILELIST_FIRST);
+		/*
+		 * Otherwise, make "feh --start-at dir/file.jpg" behave like
+		 * "feh --start-at dir/file.jpg dir".
+		 */
+		} else if (opt.start_list_at && strrchr(opt.start_list_at, '/')) {
+			/*
+			 * feh can't candle urlencoded path components ("some%20dir" etc).
+			 * Use libcurl to unescape them if --start-at is file://...
+			 */
+			if (strlen(opt.start_list_at) > 8 && strncmp(opt.start_list_at, "file:///", 8) == 0) {
+				char *unescaped_path = feh_http_unescape(opt.start_list_at);
+				if (unescaped_path != NULL) {
+					free(opt.start_list_at);
+					opt.start_list_at = estrdup(unescaped_path + 7);
+					free(unescaped_path);
+				} else {
+					char *new_path = estrdup(opt.start_list_at + 7);
+					free(opt.start_list_at);
+					opt.start_list_at = new_path;
+				}
+			}
 			char *target_directory = estrdup(opt.start_list_at);
 			char *filename_start = strrchr(target_directory, '/');
 			if (filename_start) {
 				*filename_start = '\0';
 			}
 			add_file_to_filelist_recursively(target_directory, FILELIST_FIRST);
+			original_file_items = gib_list_add_front(original_file_items, estrdup(target_directory));
 			free(target_directory);
 		} else {
 			add_file_to_filelist_recursively(".", FILELIST_FIRST);
@@ -918,12 +982,16 @@ static void show_version(void)
 		"help "
 #endif
 
+#ifdef HAVE_LIBMAGIC
+		"magic "
+#endif
+
 #if _FILE_OFFSET_BITS == 64
 		"stat64 "
 #endif
 
-#ifdef HAVE_VERSCMP
-		"verscmp "
+#ifdef HAVE_STRVERSCMP
+         "verscmp "
 #endif
 
 #ifdef HAVE_LIBXINERAMA

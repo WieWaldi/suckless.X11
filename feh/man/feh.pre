@@ -13,6 +13,7 @@
 .
 .Nm
 .Op Ar options
+.Op Cm --
 .Op Ar files | Ar directories | Ar URLs ...
 .
 .
@@ -29,19 +30,19 @@ Compile-time switches in this build:
 .Bl -bullet -compact
 .
 .It
-remote file support: libcurl $MAN_CURL$
-.
-.It
-natural sorting option $MAN_VERSCMP$
+libcurl remote file support $MAN_CURL$
 .
 .It
 Xinerama multi-monitor support $MAN_XINERAMA$
 .
 .It
-builtin EXIF reader $MAN_EXIF$
+libexif builtin EXIF reader $MAN_EXIF$
 .
 .It
 inotify-based auto-reload of changed files $MAN_INOTIFY$
+.
+.It
+libmagic $MAN_MAGIC$
 .
 .El
 .
@@ -153,18 +154,42 @@ pnm, tiff, and bmp.
 The gif format is also supported, but only for static images.
 In case of animations, only the first frame will be shown.
 .
-If the convert binary
-.Pq supplied by ImageMagick
-is available, it also has limited support for many other file types, such as
-svg, xcf and otf.
-If dcraw is available,
-.Nm
-also supports RAW files provided by cameras and will display the embedded
-thumbnails.
-Use
-.Cm --conversion-timeout Ar timeout
-with a non-negative value to enable support for these formats.
+.Pp
 .
+When invoked with
+.Cm --conversion-timeout Ar timeout
+.Po
+and a non-negative
+.Ar timeout
+value
+.Pc ,
+.Nm
+also has limited support for various other file types by means of external
+conversion programs.
+If the dcraw binary is available,
+.Nm
+will use it to display the thumbnails embedded into RAW files provided by
+digital cameras and similar.
+If the ImageMagick convert binary is available,
+.Nm
+will use it to load file types such as svg, xcf, and otf.
+.
+.Pp
+.
+.Pq optional feature, $MAN_MAGIC$ in this build
+.Nm
+can use libmagic to only pass image files to Imlib2.
+When using
+.Nm
+with lots of non-image files
+.Pq especially with Imlib2 version 1.6.x or 1.7.0 ,
+this can speed up the detection of non-image files significantly.
+If you think that Imlib2 can load a file which
+.Nm
+has determined to be likely not an image, set the environment variable
+.Qq FEH_SKIP_MAGIC
+to pass all files directly to Imlib2, bypassing this check.
+The environment variable's value does not matter, it just needs to be set.
 .
 .Sh OPTIONS
 .
@@ -221,7 +246,7 @@ Use format specifiers to refer to image info, see
 .Sx FORMAT SPECIFIERS
 for details.
 Example usage:
-.Qq feh -A Qo mv ~/images/%N Qc * .
+.Qq feh -A Qo mv %F ~/images/%N Qc * .
 .
 .It Cm --action1 No .. Cm --action9 Oo Ar flag Oc Ns Oo [ Ar title ] Oc Ns Ar action
 .
@@ -239,11 +264,22 @@ disabled by a preceding
 .Cm --reload=0
 option.
 .
+.Pp
+.
+Automatic reload is not supported in montage, index, or thumbnail mode.
+.
 .It Cm --auto-rotate
 .
 .Pq optional feature, $MAN_EXIF$ in this build
+.Pq deprecated in favor of Imlib2's auto-orientation support
 Automatically rotate images based on EXIF data.
 Does not alter the image files.
+.
+.Pp
+.
+Note that Imlib2 version 1.7.5+ performs auto-rotation by itself, so this option is obsolete on systems with Imlib2 version 1.7.5 or later.
+.Nm
+currently cannot detect this at runtime.
 .
 .It Cm -Z , --auto-zoom
 .
@@ -303,6 +339,13 @@ zero causes
 to try indefinitely.
 Negative values restore the default by disabling conversion altogether.
 .
+.It Cm --class Ar class
+.
+Set the X11 class hint to
+.Ar class .
+.
+Default: feh
+.
 .It Cm -L , --customlist Ar format
 .
 Don't display images, print image info according to
@@ -320,7 +363,7 @@ Draw the defined actions and what they do at the top-left of the image.
 .Pq optional feature, $MAN_EXIF$ in this build
 display some EXIF information in the bottom left corner, similar to using
 .Cm --info
-with exiv2 / exifgrep .
+with exiv2 / exifgrep.
 .
 .It Cm -d , --draw-filename
 .
@@ -330,7 +373,7 @@ Draw the file name at the top-left of the image.
 .
 Show overlay texts
 .Pq as created by Cm --draw-filename No et al
-on a semi-transparent background to improve their readability
+on a semi-transparent background to improve their readability.
 .
 .It Cm --edit
 .
@@ -383,8 +426,9 @@ will read the filelist from its standard input.
 .
 Set global font.
 Should be a truetype font, resident in the current directory or the font
-directory, and should be defined in the form fontname/points, like
-.Qq myfont/12 .
+directory, and should be defined in the form fontname/size, like
+.Qq yudit/12
+.Pq which is the default .
 .
 .It Cm -C , --fontpath Ar path
 .
@@ -392,6 +436,10 @@ Specify
 .Ar path
 as extra directory in which to search for fonts; can be used multiple times to
 add multiple paths.
+.
+.It Cm --tap-zones
+.
+Enable tap zones for previous/next file in slide show mode
 .
 .It Cm --force-aliasing
 .
@@ -461,6 +509,8 @@ Use
 as background for transparent image parts and the like.
 Accepted values: default, checks, or an XColor
 .Pq e.g. Qo black Qc or Qo #428bdd Qc .
+Note that some shells treat the hash symbol as a special character, so you
+may need to quote or escape it for the XColor code to work.
 .
 In windowed mode, the default is checks
 .Pq a checkered background so transparent image parts are easy to see .
@@ -529,6 +579,9 @@ Useful in scripts to hunt out images of a certain size/resolution/type etc.
 Don't display images.
 Just print out their names if imlib2 can successfully load them.
 Returns false if at least one image failed to load.
+When combined with
+.Cm --action ,
+the specified action will be run for each loadable image.
 .
 .It Cm --max-dimension Ar width No x Ar height
 .
@@ -568,6 +621,20 @@ See
 Disable slideshow mode.
 With this setting, instead of opening multiple files in slideshow mode,
 multiple windows will be opened; one per file.
+.
+.It Cm --no-conversion-cache
+.
+When loading images via HTTP, ImageMagick or dcraw,
+.Nm
+will only load/convert them once and re-use the cached file on subsequent
+slideshow passes.
+This option disables the cache.
+It is also disabled when
+.Cm --reload
+is used.
+Use it if you rely on frequently changing files loaded via one of these
+sources.
+Note that it will impair performance.
 .
 .It Cm --no-jump-on-resort
 .
@@ -611,7 +678,10 @@ and next image.
 .Cm quit
 will cause
 .Nm
-to quit when trying to advance past the last image in the slide show.
+to quit when trying to advance past the last image in the slide show. This is
+the behavior of the obsolete
+.Cm --cycle-once
+option.
 .
 .Pp
 .
@@ -630,7 +700,7 @@ Save files to
 .Ar directory
 when using
 .Cm --keep-http
-or the save_image command.
+or the save_image or save_filelist command.
 By default, files are saved in the current working directory.
 .
 .It Cm -p , --preload
@@ -689,6 +759,7 @@ will continue to try loading it.
 .Pp
 .
 Setting this option causes inotify-based auto-reload to be disabled.
+Reload is not supported in montage, index, or thumbnail mode.
 .
 .It Cm -n , --reverse
 .
@@ -738,9 +809,9 @@ in paused mode.
 .
 Sort file list according to image parameters.
 Allowed sort types are:
-.Cm name , filename , dirname , mtime , width , height , pixels , size , format .
+.Cm name , none , filename , dirname , mtime , width , height , pixels , size , format .
 For sort modes other than
-.Cm name , filename , dirname ,
+.Cm name , none , filename , dirname ,
 or
 .Cm mtime ,
 a preload run is
@@ -768,6 +839,11 @@ you can use
 .Cm --version-sort
 to sort numbers naturally, so that e.g. 10.jpg comes after 2.jpg.
 .
+.Pp
+.
+.Cm none
+is the default; you can specify it explicitly to discard a sort mode that has
+been specified at an earlier point in the command line arguments.
 .It Cm -| , --start-at Ar filename
 .
 Start the filelist at
@@ -782,6 +858,13 @@ keys to browse through the directory.
 See
 .Sx USAGE EXAMPLES
 for examples.
+If
+.Ar filename
+is a remote URL and no files or filelists were specified,
+.Nm
+will show
+.Ar filename
+and not attempt to load additional files or directories.
 .
 .Pp
 .
@@ -847,6 +930,9 @@ See
 Don't display images.
 Just print out their names if imlib2 can NOT successfully load them.
 Returns false if at least one image was loadable.
+When combined with
+.Cm --action ,
+the specified action will be run for each unloadable file.
 .
 .It Cm -V , --verbose
 .
@@ -858,7 +944,6 @@ output version information and exit.
 .
 .It Cm --version-sort
 .
-.Pq optional feature, $MAN_VERSCMP$ in this build
 When combined with
 .Cm --sort name , --sort filename ,
 or
@@ -871,32 +956,51 @@ comes before
 Note that this option only has an effect when a sort mode is set using
 .Cm --sort .
 .
-.It Cm --xinerama-index Ar screen
+.It Cm --window-id Ar windowid
+.
+Draw to an existing X11 window by its ID
+.Ar windowid .
+This option is intended for use with software such as xcreensaver or
+xsecurelock, which provide a window for other applications to draw into.
+Unexpected things will happen if you specify a window belonging to software
+which does not expect
+.Nm
+to draw into it or attempt to use options or keybindings which affect window
+attributes, such as full-screen mode.
+.
+.It Cm --xinerama-index Ar monitor
 .
 .Pq optional feature, $MAN_XINERAMA$ in this build
 Override
 .Nm Ns No 's
-idea of the active Xinerama screen.
+idea of the active Xinerama monitor.
 May be useful in certain circumstances where the window manager places the feh
-window on Xinerama screen A while
+window on Xinerama monitor A while
 .Nm
-assumes that it will be placed on screen B.
+assumes that it will be placed on monitor B.
 .
 .Pp
 .
 In background setting mode: When used with any option other than
 .Cm --bg-tile :
 Only set wallpaper on
-.Ar screen .
-All other screens will be filled black/white.
+.Ar monitor .
+All other monitors will be filled black/white.
 .
-This is most useful in a Xinerama configuration with overlapping screens.
+This is most useful in a Xinerama configuration with overlapping monitors.
 For instance, assume you have two overlapping displays (index 0 and 1),
 where index 0 is smaller.
 To center a background on the display with index 0 and fill the extra space
 on index 1 black/white, use
 .Qq --xinerama-index 0
 when setting the wallpaper.
+.
+.Pp
+.
+Use
+.Cm xrandr --listmonitors
+to determine how Xinerama monitor IDs map to screens/monitors in your setup.
+.
 .
 .It Cm --zoom Ar percent | Cm max | Cm fill
 .
@@ -919,8 +1023,14 @@ zoom the image like the
 .Cm --bg-fill
 mode.
 .
-.El
+.It Cm --zoom-step Ar percent
 .
+Zoom images in and out by
+.Ar percent
+.Pq default: 25
+when using the zoom keys and buttons.
+.
+.El
 .
 .Sh MONTAGE MODE OPTIONS
 .
@@ -1075,6 +1185,12 @@ So to have your background restored every time you start X, you can add
 .Qq ~/.fehbg &
 to your X startup script
 .Pq such as Pa ~/.xinitrc .
+Note that the commandline written to
+.Pa ~/.fehbg
+always includes the
+.Cm --no-fehbg
+option to ensure that it is not inadvertently changed by differences in
+X11 screen layout or similar.
 .
 .Pp
 .
@@ -1093,7 +1209,7 @@ and
 .Cm --bg-max ,
 you can use
 .Cm --geometry
-to specify an offset from one side of the screen instead of centering the image.
+to specify an offset from one side of the monitor instead of centering the image.
 Positive values will offset from the left/top side, negative values from the
 bottom/right.
 +0 and -0 are both valid and distinct values.
@@ -1103,23 +1219,26 @@ bottom/right.
 Note that all options except
 .Cm --bg-tile
 support Xinerama.
-For instance, if you have multiple screens connected and use e.g.
+For instance, if you have multiple monitors connected and use e.g.
 .Cm --bg-center ,
 .Nm
-will center or appropriately offset the image on each screen.
+will center or appropriately offset the image on each monitor.
 You may even specify more than one file, in that case, the first file is set
-on screen 0, the second on screen 1, and so on.
+on monitor 0, the second on monitor 1, and so on.
+Use
+.Cm xrandr --listmonitors
+to determine how Xinerama monitor IDs map to screens / monitors in your setup.
 .
 .Pp
 .
 Use
 .Cm --no-xinerama
-to treat the whole X display as one screen when setting wallpapers.
+to treat the whole X display as one monitor when setting wallpapers.
 You may also use
 .Cm --xinerama-index
 to use
 .Nm
-as a background setter for a specific screen.
+as a background setter for a specific monitor.
 .
 .Bl -tag -width indent
 .
@@ -1168,6 +1287,10 @@ file
 .Sh FORMAT SPECIFIERS
 .
 .Bl -tag -width indent
+.
+.It %a
+.
+Information about slideshow state (playing/paused)
 .
 .It %f
 .
@@ -1246,6 +1369,14 @@ Number of current file
 .It %w
 .
 Image width
+.
+.\" .It %W
+.\" .
+.\" Window dimensions and offset as WxH+x+y
+.\" .Pq X11 geometry format .
+.\" Note that this is currently only properly updated when changing images;
+.\" offsets for the first image after starting feh and after changing window
+.\" geometry may be bogus.
 .
 .It %v
 .
@@ -1518,7 +1649,10 @@ will keep zoom and X, Y offset when switching images.
 .It L Bq save_filelist
 .
 Save the current filelist as
-.Qq feh_PID_ID_filelist
+.Qq feh_PID_ID_filelist .
+It is saved in the directory specified by
+.Cm --output-dir ,
+if set, and in the current working directory otherwise.
 .
 .It m Bq toggle_menu
 .
@@ -1554,7 +1688,10 @@ Useful for webcams
 .It s Bq save_image
 .
 Save the current image as
-.Qq feh_PID_ID_FILENAME
+.Qq feh_PID_ID_FILENAME .
+It is saved in the directory specified by
+.Cm --output-dir ,
+if set, and in the current working directory otherwise.
 .
 .It w Bq size_to_image
 .
@@ -1811,6 +1948,13 @@ section can also be bound to a button.
 .
 Reload current image
 .
+.It 0 Ao cursor movement while not panning, zooming, or similar Ac
+.
+Does not have a default binding.
+By binding it to
+.Cm quit ,
+you can turn feh into a simple screensaver.
+.
 .It 1 Ao left mouse button Ac Bq pan
 .
 pan the current image
@@ -2024,10 +2168,26 @@ for lossless JPEG rotation.
 To view images from URLs such as "http://",
 .Nm
 must be compiled with libcurl support.
-It is $MAN_CURL$ in this build
+It is $MAN_CURL$ in this build.
 .
 .
 .Sh KNOWN BUGS
+.
+Imlib2 releases prior to 1.7.4 are unable to load gif, tiff, and webp images
+if the filename does not end with gif, tiff, or webp, respectively.
+Notably, this means that feh is unable to show gif, tiff, and webp images from
+stdin or network URLs on systems using an Imlib2 version older than 1.7.4.
+.
+.Pp
+.
+Imlib2 releases 1.7.5+ automatically rotate images based on their EXIF tags.
+When combined with the
+.Cm --auto-rotate
+option, this causes images to be rotated twice and end up in an incorrect orientation.
+As a workaround, do not use
+.Cm --auto-rotate
+on systems with Imlib2 version 1.7.5 or later.
+.Pp
 .
 On systems with giflib 5.1.2,
 .Nm
@@ -2068,33 +2228,22 @@ If you find a bug, please report it to
 .Aq derf+feh@finalrewind.org
 or via
 .Aq https://github.com/derf/feh/issues .
-You are also welcome to direct any feh-related comments/questions/... to #feh
-on irc.oftc.net.
 .
 .Pp
 .
 Please include the feh version
 .Aq the output of Qq feh --version ,
 steps to reproduce the bug and, if necessary, images to reproduce it.
-.
-.
-.Sh FUTURE PLANS
-.
-Plans for the following releases:
-.
-.Bl -bullet -compact
-.
-.It
-Make zoom options more intuitive
-.
-.El
+Note that
+.Nm
+is a hobby project, so bug reports may be addressed with significant delays.
 .
 .
 .Sh LICENSE
 .
 Copyright (C) 1999, 2000 by Paul Duncan.
-Copyright (C) 1999, 2000 by Tom Gilbert (and various contributors).
-Copyright (C) 2010-2018 by Daniel Friesel (and even more contributors).
+Copyright (C) 1999, 2000 by Tom Gilbert and contributors.
+Copyright (C) 2010-2024 by Birte Kristina Friesel and contributors.
 .
 .Pp
 .
@@ -2124,7 +2273,7 @@ SOFTWARE.
 .
 .Pp
 .
-Current developer: Daniel Friesel
+Current developer: Birte Friesel
 .Aq derf@finalrewind.org
 .
 .Pp
@@ -2136,5 +2285,5 @@ Tom Gilbert
 .
 .Pp
 .
-See also:
+Website:
 https://feh.finalrewind.org

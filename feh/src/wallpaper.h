@@ -1,7 +1,7 @@
 /* wallpaper.h
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -42,7 +42,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 extern Window ipc_win;
 extern Atom ipc_atom;
 
-_XFUNCPROTOBEGIN extern Window enl_ipc_get_win(void);
+extern Window enl_ipc_get_win(void);
 extern void enl_ipc_send(char *);
 extern char *enl_wait_for_reply(void);
 extern char *enl_ipc_get(const char *);
@@ -53,5 +53,4 @@ extern int feh_wm_get_num_desks(void);
 extern signed char feh_wm_get_wm_is_e(void);
 void feh_wm_set_bg_filelist(unsigned char bgmode);
 
-_XFUNCPROTOEND
 #endif

@@ -1,6 +1,6 @@
 /* signals.h
 
-Copyright (C) 2010 by Daniel Friesel
+Copyright (C) 2010 by Birte Kristina Friesel
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -26,6 +26,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef SIGNALS_H
 #define SIGNALS_H
 
-void setup_signal_handlers();
+void setup_signal_handlers(void);
 extern volatile int sig_exit;
+extern volatile int sig_received;
 #endif

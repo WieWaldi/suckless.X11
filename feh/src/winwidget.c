@@ -1,7 +1,7 @@
 /* winwidget.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -29,6 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "winwidget.h"
 #include "options.h"
 #include "events.h"
+#include "timers.h"
 
 #ifdef HAVE_INOTIFY
 #include <sys/inotify.h>
@@ -103,8 +104,13 @@ winwidget winwidget_create_from_image(Imlib_Image im, char type)
 	ret->w = ret->im_w = gib_imlib_image_get_width(ret->im);
 	ret->h = ret->im_h = gib_imlib_image_get_height(ret->im);
 
-	if (opt.full_screen && (type != WIN_TYPE_THUMBNAIL))
+	if (opt.full_screen && (type != WIN_TYPE_THUMBNAIL)) {
 		ret->full_screen = True;
+	} else if (opt.default_zoom) {
+		ret->zoom = 0.01 * opt.default_zoom;
+		ret->w *= ret->zoom;
+		ret->h *= ret->zoom;
+	}
 	winwidget_create_window(ret, ret->w, ret->h);
 	winwidget_render_image(ret, 1, 0);
 
@@ -132,8 +138,13 @@ winwidget winwidget_create_from_file(gib_list * list, char type)
 		ret->w = ret->im_w = gib_imlib_image_get_width(ret->im);
 		ret->h = ret->im_h = gib_imlib_image_get_height(ret->im);
 		D(("image is %dx%d pixels, format %s\n", ret->w, ret->h, gib_imlib_image_format(ret->im)));
-		if (opt.full_screen)
+		if (opt.full_screen) {
 			ret->full_screen = True;
+		} else if (opt.default_zoom) {
+			ret->zoom = 0.01 * opt.default_zoom;
+			ret->w *= ret->zoom;
+			ret->h *= ret->zoom;
+		}
 		winwidget_create_window(ret, ret->w, ret->h);
 		winwidget_render_image(ret, 1, 0);
 	}
@@ -143,6 +154,7 @@ winwidget winwidget_create_from_file(gib_list * list, char type)
 
 void winwidget_create_window(winwidget ret, int w, int h)
 {
+	XWindowAttributes window_attr;
 	XSetWindowAttributes attr;
 	XEvent ev;
 	XClassHint *xch;
@@ -249,11 +261,31 @@ void winwidget_create_window(winwidget ret, int w, int h)
 		}
 	}
 
-	ret->win =
-	    XCreateWindow(disp, DefaultRootWindow(disp), x, y, w, h, 0,
-			  depth, InputOutput, vis,
-			  CWOverrideRedirect | CWSaveUnder | CWBackingStore
-			  | CWColormap | CWBackPixel | CWBorderPixel | CWEventMask, &attr);
+	if (opt.x11_windowid == 0) {
+		ret->win =
+		  XCreateWindow(disp, DefaultRootWindow(disp), x, y, w, h, 0,
+		                depth, InputOutput, vis,
+		                CWOverrideRedirect | CWSaveUnder | CWBackingStore
+		                | CWColormap | CWBackPixel | CWBorderPixel | CWEventMask,
+		                &attr);
+	} else {
+		/* x11_windowid is a pointer to the window */
+		ret->win = (Window) opt.x11_windowid;
+
+		/* set our attributes on the window */
+		XChangeWindowAttributes(disp, ret->win,
+                            CWOverrideRedirect | CWSaveUnder | CWBackingStore
+                            | CWColormap | CWBackPixel | CWBorderPixel
+                            | CWEventMask, &attr);
+
+		/* determine the size and visibility of the window */
+		XGetWindowAttributes(disp, ret->win, &window_attr);
+		ret->visible = (window_attr.map_state == IsViewable);
+		ret->x = window_attr.x;
+		ret->y = window_attr.y;
+		ret->w = window_attr.width;
+		ret->h = window_attr.height;
+	}
 
 	if (mwmhints.flags) {
 		XChangeProperty(disp, ret->win, prop, prop, 32,
@@ -305,7 +337,7 @@ void winwidget_create_window(winwidget ret, int w, int h)
 	winwidget_update_title(ret);
 	xch = XAllocClassHint();
 	xch->res_name = "feh";
-	xch->res_class = "feh";
+	xch->res_class = opt.x11_class ? opt.x11_class : "feh";
 	XSetClassHint(disp, ret->win, xch);
 	XFree(xch);
 
@@ -432,7 +464,12 @@ void winwidget_render_image(winwidget winwid, int resize, int force_alias)
 	int antialias = 0;
 
 	if (!winwid->full_screen && resize) {
-		winwidget_resize(winwid, winwid->im_w, winwid->im_h, 0);
+		if (opt.default_zoom) {
+			winwid->zoom = 0.01 * opt.default_zoom;
+			winwidget_resize(winwid, winwid->im_w * winwid->zoom, winwid->im_h * winwid->zoom, 0);
+		} else {
+			winwidget_resize(winwid, winwid->im_w, winwid->im_h, 0);
+		}
 		winwidget_reset_image(winwid);
 	}
 
@@ -673,6 +710,9 @@ void winwidget_destroy(winwidget winwid)
 #ifdef HAVE_INOTIFY
     winwidget_inotify_remove(winwid);
 #endif
+	if (opt.reload > 0 && opt.multiwindow) {
+		feh_remove_timer_by_data(winwid);
+	}
 	winwidget_destroy_xwin(winwid);
 	if (winwid->name)
 		free(winwid->name);
@@ -699,7 +739,7 @@ void winwidget_inotify_remove(winwidget winwid)
 #ifdef HAVE_INOTIFY
 void winwidget_inotify_add(winwidget winwid, feh_file * file)
 {
-    if (opt.auto_reload) {
+    if (opt.auto_reload && !path_is_url(file->filename)) {
         D(("Adding inotify watch for %s\n", file->filename));
         char dir[PATH_MAX];
         feh_file_dirname(dir, file, PATH_MAX);
@@ -738,7 +778,7 @@ void feh_event_handle_inotify(void)
         for (int j = 0; j < window_num; j++) {
             if(windows[j]->inotify_wd == event->wd) {
                 if (event->mask & IN_IGNORED) {
-                    D(("inotify watch was implicitely removed\n"));
+                    D(("inotify watch was implicitly removed\n"));
                     windows[j]->inotify_wd = -1;
                 } else if (event->mask & (IN_CLOSE_WRITE | IN_MOVED_TO)) {
                     if (strcmp(event->name, FEH_FILE(windows[j]->file->data)->name) == 0) {
@@ -811,6 +851,8 @@ void winwidget_show(winwidget winwid)
 		/* wait for the window to map */
 		D(("Waiting for window to map\n"));
 		XMaskEvent(disp, StructureNotifyMask, &ev);
+		winwidget_get_geometry(winwid, NULL);
+
 		/* Unfortunately, StructureNotifyMask does not only mask
 		 * the events of type MapNotify (which we want to mask here)
 		 * but also such of type ConfigureNotify (and others, see
@@ -910,6 +952,8 @@ void winwidget_resize(winwidget winwid, int w, int h, int force_resize)
 		winwid->had_resize = 1;
 		XFlush(disp);
 
+		winwidget_get_geometry(winwid, NULL);
+
 		if (force_resize && (opt.geom_flags & (WidthValue | HeightValue))
 				&& (winwid->type != WIN_TYPE_THUMBNAIL)) {
 			opt.geom_w = winwid->w;
@@ -1006,8 +1050,9 @@ void winwidget_rename(winwidget winwid, char *newname)
 
 void winwidget_free_image(winwidget w)
 {
-	if (w->im)
+	if (w->im) {
 		gib_imlib_free_image(w->im);
+	}
 	w->im = NULL;
 	w->im_w = 0;
 	w->im_h = 0;
@@ -1149,8 +1194,11 @@ void winwidget_get_geometry(winwidget winwid, int *rect)
 {
 	unsigned int bw, bp;
 	Window child;
+
+	int inner_rect[4];
+
 	if (!rect)
-		return;
+		rect = inner_rect;
 
 	XGetGeometry(disp, winwid->win, &root, &(rect[0]), &(rect[1]), (unsigned
 				int *)&(rect[2]), (unsigned int *)&(rect[3]), &bw, &bp);

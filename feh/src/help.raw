@@ -29,6 +29,8 @@ OPTIONS
                            mode or when window geometry is fixed. If combined
                            with --auto-zoom, zooming will be limited to the
                            the size. Also support \"max\" and \"fill\"
+     --zoom-step PERCENT   Zoom images in and out by PERCENT (default: 25)
+                           when using the zoom keys / buttons
      --keep-zoom-vp        Keep viewport zoom and settings while changing images
  -w, --multiwindow         Open all files at once, one window per image
  -x, --borderless          Create borderless windows
@@ -39,7 +41,7 @@ OPTIONS
      --auto-rotate         Rotate images according to Exif info (if compiled with exif=1)
  -^, --title TITLE         Set window title (see FORMAT SPECIFIERS)
  -D, --slideshow-delay NUM Set delay between automatically changing slides
-     --on-last-slide quit  Exit after one loop through the slide show
+     --on-last-slide quit  Exit after one loop through the slide show (old --cycle-once)
      --on-last-slide hold  Stop at both ends of the filelist
  -R, --reload NUM          Reload images after NUM seconds
  -k, --keep-http           Keep local copies when viewing HTTP/FTP files
@@ -60,6 +62,7 @@ OPTIONS
                            reloads image with \";\", switches to next otherwise
      --action[1-9]         Extra actions triggered by pressing keys <1>to <9>
  -G, --draw-actions        Show the defined actions in the image window
+     --tap-zones           Enable tap zones for previous/next file in slide show mode
      --force-aliasing      Disable antialiasing
  -m, --montage             Enable montage mode
  -i, --index               Create an index print of all images
@@ -100,6 +103,7 @@ OPTIONS
      --scroll-step COUNT   scroll COUNT pixels when movement key is pressed
      --cache-size NUM      imlib cache size in mebibytes (0 .. 2048)
      --auto-reload         automatically reload shown image if file was changed
+     --window-id ID        Draw to an existing X11 window by its ID
 
 MONTAGE MODE OPTIONS
  -X, --ignore-aspect       Set thumbnail to specified width/height without
@@ -124,6 +128,7 @@ INDEX MODE OPTIONS
                            font is specified, a title will not be printed
 
 FORMAT SPECIFIERS
+ %a     information about slideshow state (playing/paused)
  %f     image path/filename
  %F     image path/filename (shell-escaped)
  %g     window dimensions (\"width,height\") in pixels
@@ -193,14 +198,14 @@ DEFAULT KEYS
  <KEYPAD UP>             Move the image up
  <KEYPAD DOWN>           Move the image down
  <KEYPAD BEGIN>          Antialias the image
- <KEYPAD +>              Zoom in
- <KEYPAD ->              Zoom out
+ <KEYPAD +>, <UP>        Zoom in
+ <KEYPAD ->, <DOWN>      Zoom out
  <KEYPAD *>              Zoom to 100%
  <KEYPAD />              Zoom to fit the window
 
 This program is free software, see the file COPYING for licensing info.
 Copyright Tom Gilbert (and various contributors) 1999-2003.
-Copyright Daniel Friesel (and various contributors) 2010-2018.
+Copyright Birte Kristina Friesel (and various contributors) 2010-2020.
 
 Homepage: http://feh.finalrewind.org
 Report bugs to <derf+feh@finalrewind.org> or #feh on irc.oftc.net.

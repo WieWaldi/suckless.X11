@@ -1,7 +1,7 @@
 /* index.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -131,7 +131,7 @@ void init_index_mode(void)
 				weprintf(
 					"The image size you specified (%dx%d) is not large\n"
 					"enough to hold all %d thumbnails. To fit all the thumbnails,\n"
-					"either decrease their size, choos e asmaller font,\n"
+					"either decrease their size, choose a smaller font,\n"
 					"or use a larger image (like %dx%d)",
 					opt.limit_w, opt.limit_h, filelist_len, w, h);
 			h = opt.limit_h;
@@ -332,7 +332,7 @@ void init_index_mode(void)
 
 		gib_imlib_save_image_with_error_return(im_main, output_buf, &err);
 		if (err) {
-			feh_imlib_print_load_error(output_buf, im_main, err);
+			feh_print_load_error(output_buf, im_main, err, LOAD_ERROR_IMLIB);
 		}
 		else if (opt.verbose) {
 			int tw, th;

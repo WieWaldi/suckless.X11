@@ -1,7 +1,7 @@
 /* slideshow.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -57,6 +57,7 @@ void init_slideshow_mode(void)
 	// Try finding an exact filename match first
 	for (; l && opt.start_list_at; l = l->next) {
 		if (!strcmp(opt.start_list_at, FEH_FILE(l->data)->filename)) {
+			free(opt.start_list_at);
 			opt.start_list_at = NULL;
 			break;
 		}
@@ -83,6 +84,7 @@ void init_slideshow_mode(void)
 				current_filename = FEH_FILE(l->data)->filename;
 			}
 			if (!strcmp(start_at_filename, current_filename)) {
+				free(opt.start_list_at);
 				opt.start_list_at = NULL;
 				break;
 			}
@@ -135,126 +137,57 @@ void cb_reload_timer(void *data)
 
 	winwidget w = (winwidget) data;
 
-	/* save the current filename for refinding it in new list */
-	current_filename = estrdup(FEH_FILE(current_file->data)->filename);
+	/*
+	 * multi-window mode has no concept of a "current file" and
+	 * dynamically adding/removing windows is not implemented at the moment.
+	 * So don't reload filelists in multi-window mode.
+	 */
+	if (current_file != NULL) {
+		/* save the current filename for refinding it in new list */
+		current_filename = estrdup(FEH_FILE(current_file->data)->filename);
 
-	for (l = filelist; l; l = l->next) {
-		feh_file_free(l->data);
-		l->data = NULL;
-	}
-	gib_list_free_and_data(filelist);
-	filelist = NULL;
-	filelist_len = 0;
-	current_file = NULL;
+		for (l = filelist; l; l = l->next) {
+			feh_file_free(l->data);
+			l->data = NULL;
+		}
+		gib_list_free_and_data(filelist);
+		filelist = NULL;
+		filelist_len = 0;
+		current_file = NULL;
 
-	/* rebuild filelist from original_file_items */
-	if (gib_list_length(original_file_items) > 0)
-		for (l = gib_list_last(original_file_items); l; l = l->prev)
-			add_file_to_filelist_recursively(l->data, FILELIST_FIRST);
-	else if (!opt.filelistfile && !opt.bgmode)
-		add_file_to_filelist_recursively(".", FILELIST_FIRST);
+		/* rebuild filelist from original_file_items */
+		if (gib_list_length(original_file_items) > 0)
+			for (l = gib_list_last(original_file_items); l; l = l->prev)
+				add_file_to_filelist_recursively(l->data, FILELIST_FIRST);
+		else if (!opt.filelistfile && !opt.bgmode)
+			add_file_to_filelist_recursively(".", FILELIST_FIRST);
 
-	if (opt.filelistfile) {
-		filelist = gib_list_cat(filelist, feh_read_filelist(opt.filelistfile));
-	}
-	
-	if (!(filelist_len = gib_list_length(filelist))) {
-		eprintf("No files found to reload.");
-	}
-
-	feh_prepare_filelist();
-
-	/* find the previously current file */
-	for (l = filelist; l; l = l->next)
-		if (strcmp(FEH_FILE(l->data)->filename, current_filename) == 0) {
-			current_file = l;
-			break;
+		if (opt.filelistfile) {
+			filelist = gib_list_cat(filelist, feh_read_filelist(opt.filelistfile));
 		}
 
-	free(current_filename);
+		if (!(filelist_len = gib_list_length(filelist))) {
+			eprintf("No files found to reload.");
+		}
 
-	if (!current_file)
-		current_file = filelist;
-	w->file = current_file;
+		feh_prepare_filelist();
+
+		/* find the previously current file */
+		for (l = filelist; l; l = l->next)
+			if (strcmp(FEH_FILE(l->data)->filename, current_filename) == 0) {
+				current_file = l;
+				break;
+			}
+
+		free(current_filename);
+
+		if (!current_file)
+			current_file = filelist;
+		w->file = current_file;
+	}
 
 	feh_reload_image(w, 1, 0);
 	feh_add_unique_timer(cb_reload_timer, w, opt.reload);
-	return;
-}
-
-void feh_reload_image(winwidget w, int resize, int force_new)
-{
-	char *new_title;
-	int len;
-	Imlib_Image tmp;
-	int old_w, old_h;
-
-	if (!w->file) {
-		im_weprintf(w, "couldn't reload, this image has no file associated with it.");
-		winwidget_render_image(w, 0, 0);
-		return;
-	}
-
-	D(("resize %d, force_new %d\n", resize, force_new));
-
-	free(FEH_FILE(w->file->data)->caption);
-	FEH_FILE(w->file->data)->caption = NULL;
-
-	len = strlen(w->name) + sizeof("Reloading: ") + 1;
-	new_title = emalloc(len);
-	snprintf(new_title, len, "Reloading: %s", w->name);
-	winwidget_rename(w, new_title);
-	free(new_title);
-
-	old_w = gib_imlib_image_get_width(w->im);
-	old_h = gib_imlib_image_get_height(w->im);
-
-	/*
-	 * If we don't free the old image before loading the new one, Imlib2's
-	 * caching will get in our way.
-	 * However, if --reload is used (force_new == 0), we want to continue if
-	 * the new image cannot be loaded, so we must not free the old image yet.
-	 */
-	if (force_new)
-		winwidget_free_image(w);
-
-	if ((feh_load_image(&tmp, FEH_FILE(w->file->data))) == 0) {
-		if (force_new)
-			eprintf("failed to reload image\n");
-		else {
-			im_weprintf(w, "Couldn't reload image. Is it still there?");
-			winwidget_render_image(w, 0, 0);
-		}
-		return;
-	}
-
-	if (!resize && ((old_w != gib_imlib_image_get_width(tmp)) ||
-			(old_h != gib_imlib_image_get_height(tmp))))
-		resize = 1;
-
-	if (!force_new)
-		winwidget_free_image(w);
-
-	w->im = tmp;
-	winwidget_reset_image(w);
-
-	w->mode = MODE_NORMAL;
-	if ((w->im_w != gib_imlib_image_get_width(w->im))
-	    || (w->im_h != gib_imlib_image_get_height(w->im)))
-		w->had_resize = 1;
-	if (w->has_rotated) {
-		Imlib_Image temp;
-
-		temp = gib_imlib_create_rotated_image(w->im, 0.0);
-		w->im_w = gib_imlib_image_get_width(temp);
-		w->im_h = gib_imlib_image_get_height(temp);
-		gib_imlib_free_image_and_decache(temp);
-	} else {
-		w->im_w = gib_imlib_image_get_width(w->im);
-		w->im_h = gib_imlib_image_get_height(w->im);
-	}
-	winwidget_render_image(w, resize, 0);
-
 	return;
 }
 
@@ -294,6 +227,18 @@ void slideshow_change_image(winwidget winwid, int change, int render)
 	/* The for loop prevents us looping infinitely */
 	for (i = 0; i < our_filelist_len; i++) {
 		winwidget_free_image(winwid);
+#ifdef HAVE_LIBEXIF
+		/*
+		 * An EXIF data chunk requires up to 50 kB of space. For large and
+		 * long-running slideshows, this would acculumate gigabytes of
+		 * EXIF data after a few days. We therefore do not cache EXIF data
+		 * in slideshows.
+		 */
+		if (FEH_FILE(winwid->file->data)->ed) {
+			exif_data_unref(FEH_FILE(winwid->file->data)->ed);
+			FEH_FILE(winwid->file->data)->ed = NULL;
+		}
+#endif
 		switch (change) {
 		case SLIDE_NEXT:
 			current_file = feh_list_jump(filelist, current_file, FORWARD, 1);
@@ -440,7 +385,8 @@ void feh_action_run(feh_file * file, char *action, winwidget winwid)
 
 		if (opt.verbose && !opt.list && !opt.customlist)
 			fprintf(stderr, "Running action -->%s<--\n", sys);
-		system(sys);
+		if (system(sys) == -1)
+			perror("running action via system() failed");
 	}
 	return;
 }
@@ -473,6 +419,14 @@ char *feh_printf(char *str, feh_file * file, winwidget winwid)
 		if ((*c == '%') && (*(c+1) != '\0')) {
 			c++;
 			switch (*c) {
+			case 'a':
+				if (opt.paused == 1) {
+				   strncat(ret, "paused", sizeof(ret) - strlen(ret) - 1);
+				}
+				else {
+				   strncat(ret, "playing", sizeof(ret) - strlen(ret) - 1);
+				}
+				break;
 			case 'f':
 				if (file)
 					strncat(ret, file->filename, sizeof(ret) - strlen(ret) - 1);
@@ -542,14 +496,14 @@ char *feh_printf(char *str, feh_file * file, winwidget winwid)
 				}
 				break;
 			case 's':
-				if (file && (file->info || !feh_file_info_load(file, NULL))) {
-					snprintf(buf, sizeof(buf), "%d", file->info->size);
+				if (file && (file->size >= 0 || !feh_file_stat(file))) {
+					snprintf(buf, sizeof(buf), "%d", file->size);
 					strncat(ret, buf, sizeof(ret) - strlen(ret) - 1);
 				}
 				break;
 			case 'S':
-				if (file && (file->info || !feh_file_info_load(file, NULL))) {
-					strncat(ret, format_size(file->info->size), sizeof(ret) - strlen(ret) - 1);
+				if (file && (file->size >= 0 || !feh_file_stat(file))) {
+					strncat(ret, format_size(file->size), sizeof(ret) - strlen(ret) - 1);
 				}
 				break;
 			case 't':
@@ -572,6 +526,12 @@ char *feh_printf(char *str, feh_file * file, winwidget winwid)
 			case 'w':
 				if (file && (file->info || !feh_file_info_load(file, NULL))) {
 					snprintf(buf, sizeof(buf), "%d", file->info->width);
+					strncat(ret, buf, sizeof(ret) - strlen(ret) - 1);
+				}
+				break;
+			case 'W':
+				if (winwid) {
+					snprintf(buf, sizeof(buf), "%dx%d+%d+%d", winwid->w, winwid->h, winwid->x, winwid->y);
 					strncat(ret, buf, sizeof(ret) - strlen(ret) - 1);
 				}
 				break;
@@ -687,7 +647,7 @@ void slideshow_save_image(winwidget win)
 	gib_imlib_save_image_with_error_return(win->im, tmpname, &err);
 
 	if (err)
-		feh_imlib_print_load_error(tmpname, win, err);
+		feh_print_load_error(tmpname, win, err, LOAD_ERROR_IMLIB);
 
 	free(tmpname);
 	return;

@@ -1,7 +1,7 @@
 /* main.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -49,6 +49,11 @@ int main(int argc, char **argv)
 	srandom(getpid() * time(NULL) % ((unsigned int) -1));
 
 	setup_signal_handlers();
+
+#ifdef HAVE_LIBMAGIC
+	init_magic();
+#endif
+
 	init_parse_options(argc, argv);
 
 	init_imlib_fonts();
@@ -102,6 +107,28 @@ int main(int argc, char **argv)
 	return(sig_exit);
 }
 
+static void feh_process_signal(void)
+{
+	winwidget winwid = winwidget_get_first_window_of_type(WIN_TYPE_SLIDESHOW);
+	int i;
+	int signo = sig_received;
+	sig_received = 0;
+
+	if (winwid) {
+		if (filelist_len > 1) {
+			if (signo == SIGUSR1)
+				slideshow_change_image(winwid, SLIDE_NEXT, 1);
+			else if (signo == SIGUSR2)
+				slideshow_change_image(winwid, SLIDE_PREV, 1);
+		} else {
+			feh_reload_image(winwid, 0, 0);
+		}
+	} else if (opt.multiwindow) {
+		for (i = window_num - 1; i >= 0; i--)
+			feh_reload_image(windows[i], 0, 0);
+	}
+}
+
 /* Return 0 to stop iterating, 1 if ok to continue. */
 int feh_main_iteration(int block)
 {
@@ -118,6 +145,10 @@ int feh_main_iteration(int block)
 
 	if (window_num == 0 || sig_exit != 0)
 		return(0);
+
+	if (sig_received) {
+		feh_process_signal();
+	}
 
 	if (first) {
 		/* Only need to set these up the first time */
@@ -151,6 +182,10 @@ int feh_main_iteration(int block)
 
 		if (window_num == 0 || sig_exit != 0)
 			return(0);
+
+		if (sig_received) {
+			feh_process_signal();
+		}
 	}
 	XFlush(disp);
 
@@ -158,8 +193,9 @@ int feh_main_iteration(int block)
 
 	FD_ZERO(&fdset);
 	FD_SET(xfd, &fdset);
-	if (control_via_stdin)
+	if (control_via_stdin) {
 		FD_SET(STDIN_FILENO, &fdset);
+	}
 #ifdef HAVE_INOTIFY
     if (opt.auto_reload) {
         FD_SET(opt.inotify_fd, &fdset);
@@ -210,10 +246,15 @@ int feh_main_iteration(int block)
 				   in that */
 				feh_handle_timer();
 			}
-			else if ((count > 0) && (FD_ISSET(0, &fdset)))
+			/*
+			 * Beware: If stdin is not connected, we may end up with xfd == 0.
+			 * However, STDIN_FILENO == 0 holds as well in most cases. So we must
+			 * check control_via_stdin to avoid mistaking an X11 event for stdin.
+			 */
+			else if ((count > 0) && control_via_stdin && (FD_ISSET(STDIN_FILENO, &fdset)))
 				feh_event_handle_stdin();
 #ifdef HAVE_INOTIFY
-			else if (count && (FD_ISSET(opt.inotify_fd, &fdset)))
+			else if ((count > 0) && (FD_ISSET(opt.inotify_fd, &fdset)))
                 feh_event_handle_inotify();
 #endif
 		}
@@ -227,17 +268,21 @@ int feh_main_iteration(int block)
 					&& ((errno == ENOMEM) || (errno == EINVAL)
 						|| (errno == EBADF)))
 				eprintf("Connection to X display lost");
-			else if ((count > 0) && (FD_ISSET(0, &fdset)))
+			else if ((count > 0) && control_via_stdin && (FD_ISSET(STDIN_FILENO, &fdset)))
 				feh_event_handle_stdin();
 #ifdef HAVE_INOTIFY
-			else if (count && (FD_ISSET(opt.inotify_fd, &fdset)))
+			else if ((count > 0) && (FD_ISSET(opt.inotify_fd, &fdset)))
                 feh_event_handle_inotify();
 #endif
 		}
 	}
 	if (window_num == 0 || sig_exit != 0)
 		return(0);
-	
+
+	if (sig_received) {
+		feh_process_signal();
+	}
+
 	return(1);
 }
 
@@ -255,6 +300,10 @@ void feh_clean_exit(void)
 
 	if(disp)
 		XCloseDisplay(disp);
+
+#ifdef HAVE_LIBMAGIC
+	uninit_magic();
+#endif
 
 	/*
 	 * Only restore the old terminal settings if

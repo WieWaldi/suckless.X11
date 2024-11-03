@@ -1,7 +1,7 @@
 /* menu.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -80,6 +80,8 @@ enum {
 	CB_OPT_FREEZE_WINDOW,
 	CB_OPT_FULLSCREEN,
 	CB_EDIT_ROTATE,
+	CB_EDIT_MIRROR,
+	CB_EDIT_FLIP,
 	CB_OPT_AUTO_ZOOM,
 	CB_OPT_KEEP_ZOOM_VP
 };
@@ -823,20 +825,16 @@ void feh_menu_draw_toggle_at(int x, int y, int w, int h, Imlib_Image dst, int ox
 
 void feh_menu_draw_submenu_at(int x, int y, Imlib_Image dst, int ox, int oy)
 {
-	ImlibPolygon poly;
-
-	x -= ox;
+        // Draw filled triangle
+        x -= ox;
 	y -= oy;
 
 	imlib_context_set_image(dst);
-
-	poly = imlib_polygon_new();
-	imlib_polygon_add_point(poly, x, y + 3);
-	imlib_polygon_add_point(poly, x + 3, y + 6);
-	imlib_polygon_add_point(poly, x, y + 9);
 	imlib_context_set_color(0, 0, 0, 255);
-	imlib_image_fill_polygon(poly);
-	imlib_polygon_free(poly);
+
+	for (int i= 0; i <= 3; i++) {
+	  imlib_image_draw_line(x+i, y+3+i, x+i, y+9-i, 0);
+	}
 
 	return;
 }
@@ -920,7 +918,12 @@ void feh_menu_init_main(void)
 	feh_menu_add_entry(m, "Reload", NULL, CB_RELOAD, 0, NULL);
 	feh_menu_add_entry(m, "Save Image", NULL, CB_SAVE_IMAGE, 0, NULL);
 	feh_menu_add_entry(m, "Save List", NULL, CB_SAVE_FILELIST, 0, NULL);
-	feh_menu_add_entry(m, "Edit in Place", "EDIT", 0, 0, NULL);
+	if (opt.edit) {
+		feh_menu_add_entry(m, "Edit in Place", "EDIT", 0, 0, NULL);
+	}
+	else {
+		feh_menu_add_entry(m, "Change View", "EDIT", 0, 0, NULL);
+	}
 	feh_menu_add_entry(m, "Background", "BACKGROUND", 0, 0, NULL);
 	feh_menu_add_entry(m, NULL, NULL, 0, 0, NULL);
 	feh_menu_add_entry(m, "Hide", NULL, CB_REMOVE, 0, NULL);
@@ -929,7 +932,7 @@ void feh_menu_init_main(void)
 	return;
 }
 
-void feh_menu_init_common()
+void feh_menu_init_common(void)
 {
 	int num_desks, i;
 	char buf[30];
@@ -963,6 +966,8 @@ void feh_menu_init_common()
 	feh_menu_add_entry(m, "Rotate 90 CW", NULL, CB_EDIT_ROTATE, 1, NULL);
 	feh_menu_add_entry(m, "Rotate 180", NULL, CB_EDIT_ROTATE, 2, NULL);
 	feh_menu_add_entry(m, "Rotate 90 CCW", NULL, CB_EDIT_ROTATE, 3, NULL);
+	feh_menu_add_entry(m, "Mirror", NULL, CB_EDIT_MIRROR, 0, NULL);
+	feh_menu_add_entry(m, "Flip", NULL, CB_EDIT_FLIP, 0, NULL);
 
 	menu_bg = feh_menu_new();
 	menu_bg->name = estrdup("BACKGROUND");
@@ -1309,6 +1314,12 @@ void feh_menu_cb(feh_menu * m, feh_menu_item * i, int action, unsigned short dat
 		case CB_EDIT_ROTATE:
 			feh_edit_inplace(m->fehwin, data);
 			break;
+		case CB_EDIT_MIRROR:
+			feh_edit_inplace(m->fehwin, INPLACE_EDIT_MIRROR);
+			break;
+		case CB_EDIT_FLIP:
+			feh_edit_inplace(m->fehwin, INPLACE_EDIT_FLIP);
+			break;
 		case CB_SAVE_IMAGE:
 			slideshow_save_image(m->fehwin);
 			break;
@@ -1390,7 +1401,7 @@ static feh_menu *feh_menu_func_gen_info(feh_menu * m)
 	if (!file->info)
 		feh_file_info_load(file, im);
 	if (file->info) {
-		snprintf(buffer, sizeof(buffer), "Size: %dKb", file->info->size / 1024);
+		snprintf(buffer, sizeof(buffer), "Size: %dKb", file->size / 1024);
 		feh_menu_add_entry(mm, buffer, NULL, 0, 0, NULL);
 		snprintf(buffer, sizeof(buffer), "Dimensions: %dx%d", file->info->width, file->info->height);
 		feh_menu_add_entry(mm, buffer, NULL, 0, 0, NULL);

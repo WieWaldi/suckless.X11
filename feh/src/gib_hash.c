@@ -53,7 +53,7 @@ void           gib_hash_node_free_and_data(gib_hash_node *node)
 	return;
 }
 
-gib_hash *gib_hash_new()
+gib_hash *gib_hash_new(void)
 {
 	gib_hash *hash = emalloc(sizeof(gib_hash));
 	hash->base = gib_hash_node_new("__gib_hash_new",NULL);
@@ -89,7 +89,7 @@ static unsigned char gib_hash_find_callback(gib_list *list, void *data)
 	gib_hash_node *node = GIB_HASH_NODE(list);
 	char          *key  = (char*) data;
 
-	/* strncasecmp causes simliar keys like key1 and key11 clobber eachother */
+	/* strncasecmp causes similar keys like key1 and key11 clobber each other */
 	return !strcasecmp(node->key, key);
 }
 

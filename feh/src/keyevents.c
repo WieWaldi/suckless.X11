@@ -1,7 +1,7 @@
 /* keyevents.c
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -35,7 +35,7 @@ struct __fehkey keys[EVENT_LIST_END];
 struct termios old_term_settings;
 unsigned char control_via_stdin = 0;
 
-void setup_stdin() {
+void setup_stdin(void) {
 	struct termios ctrl;
 
 	control_via_stdin = 1;
@@ -55,7 +55,7 @@ void setup_stdin() {
 		eprintf("tcsetattr failed");
 }
 
-void restore_stdin() {
+void restore_stdin(void) {
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &old_term_settings) == -1)
 		eprintf("tcsetattr failed");
 }
@@ -314,12 +314,12 @@ void feh_event_invoke_action(winwidget winwid, unsigned char action)
 	return;
 }
 
-void feh_event_handle_stdin()
+void feh_event_handle_stdin(void)
 {
 	char stdin_buf[2];
 	static char is_esc = 0;
 	KeySym keysym = NoSymbol;
-	if (read(STDIN_FILENO, &stdin_buf, 1) == -1) {
+	if (read(STDIN_FILENO, &stdin_buf, 1) <= 0) {
 		control_via_stdin = 0;
 		if (isatty(STDIN_FILENO) && getpgrp() == (tcgetpgrp(STDIN_FILENO))) {
 			weprintf("reading a command from stdin failed - disabling control via stdin");
@@ -359,7 +359,7 @@ void feh_event_handle_stdin()
 	else
 		keysym = XStringToKeysym(stdin_buf);
 
-	if (window_num)
+	if (window_num && keysym)
 		feh_event_handle_generic(windows[0], is_esc * Mod1Mask, keysym, 0);
 
 	is_esc = 0;
@@ -603,7 +603,7 @@ void feh_event_handle_generic(winwidget winwid, unsigned int state, KeySym keysy
 	}
 	else if (feh_is_kp(EVENT_zoom_in, state, keysym, button)) {
 		winwid->old_zoom = winwid->zoom;
-		winwid->zoom = winwid->zoom * 1.25;
+		winwid->zoom = winwid->zoom * opt.zoom_rate;
 
 		if (winwid->zoom > ZOOM_MAX)
 			winwid->zoom = ZOOM_MAX;
@@ -617,7 +617,7 @@ void feh_event_handle_generic(winwidget winwid, unsigned int state, KeySym keysy
 	}
 	else if (feh_is_kp(EVENT_zoom_out, state, keysym, button)) {
 		winwid->old_zoom = winwid->zoom;
-		winwid->zoom = winwid->zoom * 0.80;
+		winwid->zoom = winwid->zoom / opt.zoom_rate;
 
 		if (winwid->zoom < ZOOM_MIN)
 			winwid->zoom = ZOOM_MIN;
@@ -691,7 +691,10 @@ void feh_event_handle_generic(winwidget winwid, unsigned int state, KeySym keysy
 			slideshow_change_image(winwid, SLIDE_RAND, 1);
 	}
 	else if (feh_is_kp(EVENT_toggle_caption, state, keysym, button)) {
-		if (opt.caption_path) {
+		if (opt.caption_path && path_is_url(FEH_FILE(winwid->file->data)->filename)) {
+			im_weprintf(winwid, "Caption entry is not supported on URLs");
+		}
+		else if (opt.caption_path) {
 			/*
 			 * editing captions in slideshow mode does not make any sense
 			 * at all; this is just in case someone accidentally does it...
@@ -707,6 +710,8 @@ void feh_event_handle_generic(winwidget winwid, unsigned int state, KeySym keysy
 	}
 	else if (feh_is_kp(EVENT_toggle_pause, state, keysym, button)) {
 		slideshow_pause_toggle(winwid);
+		/* We need to re-render the image to update the info string immediately. */
+		winwidget_render_image(winwid, 0, 0);
 	}
 	else if (feh_is_kp(EVENT_save_image, state, keysym, button)) {
 		slideshow_save_image(winwid);

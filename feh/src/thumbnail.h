@@ -1,7 +1,7 @@
 /* thumbnail.h
 
 Copyright (C) 1999-2003 Tom Gilbert.
-Copyright (C) 2010-2018 Daniel Friesel.
+Copyright (C) 2010-2020 Birte Kristina Friesel.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -83,8 +83,8 @@ void feh_thumbnail_show_fullsize(feh_file *thumbfile);
 void feh_thumbnail_select(winwidget winwid, feh_thumbnail *thumbnail);
 void feh_thumbnail_select_next(winwidget winwid, int jump);
 void feh_thumbnail_select_prev(winwidget winwid, int jump);
-void feh_thumbnail_show_selected();
-feh_file *feh_thumbnail_get_selected_file();
+void feh_thumbnail_show_selected(void);
+feh_file *feh_thumbnail_get_selected_file(void);
 
 int feh_thumbnail_setup_thumbnail_dir(void);
 
