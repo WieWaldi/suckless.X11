@@ -18,8 +18,7 @@ all: ${TARGETS}
 	< ${@:.1=.pre} > $@
 
 clean:
-	echo "Leaving man file."
-	# rm -f *.1
+	rm -f *.1
 
 .SUFFIXES: .pre .1
 

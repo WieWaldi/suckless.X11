@@ -57,7 +57,7 @@ deps.mk: ${TARGETS} ${I_DSTS}
 	${CC} ${CFLAGS} -MM ${TARGETS} > $@
 
 clean:
-	rm -f feh *.o *.inc deps.mk
+	rm -f feh *.o *.inc
 
 .PHONY: clean
 
