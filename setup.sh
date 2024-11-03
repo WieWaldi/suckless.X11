@@ -110,7 +110,7 @@ declare -a applist=(
 # +----- Functions ------------------------------------------------------------+
 
 create_Backup_Directory() {
-    __echo_left "Creating Backup Directory:"
+    __echo_Left "Creating Backup Directory:"
     mkdir -p ${backupdir}
     __echo_Result
 }
