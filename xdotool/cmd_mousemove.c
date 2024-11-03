@@ -31,10 +31,10 @@ int cmd_mousemove(context_t *context) {
   mousemove.step = 0;
 
   int c;
-  typedef enum {
+  enum {
     opt_unused, opt_help, opt_sync, opt_clearmodifiers, opt_polar,
     opt_screen, opt_step, opt_delay, opt_window
-  } optlist_t;
+  };
   static struct option longopts[] = {
     { "clearmodifiers", no_argument, NULL, opt_clearmodifiers },
     { "help", no_argument, NULL, opt_help},
@@ -131,6 +131,8 @@ int cmd_mousemove(context_t *context) {
     }
   }); /* window_each(...) */
 
+  free(window_arg);
+
   return ret;
 }
 
@@ -216,8 +218,15 @@ static int _mousemove(context_t *context, struct mousemove *mousemove) {
     fprintf(stderr, "xdo_move_mouse reported an error\n");
   } else {
     if (mousemove->opsync) {
-      /* Wait until the mouse moves away from its current position */
-      xdo_wait_for_mouse_move_from(context->xdo, mx, my);
+      if (mx == x && my == y && mscreen == screen) {
+        /* Requested location is the same as the original mouse location, 
+         * so there's nothing to wait for */
+
+        // Blank, do nothing.
+      }  else {
+        /* Wait until the mouse moves away from its current position */
+        xdo_wait_for_mouse_move_from(context->xdo, mx, my);
+      }
     }
   }
 

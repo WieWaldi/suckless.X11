@@ -7,7 +7,7 @@
  */
 
 #ifndef _XOPEN_SOURCE
-#define _XOPEN_SOURCE 500
+#define _XOPEN_SOURCE 600
 #endif /* _XOPEN_SOURCE */
 
 #include <sys/select.h>
@@ -83,14 +83,23 @@ static Atom atom_UTF8_STRING = -1;
 xdo_t* xdo_new(const char *display_name) {
   Display *xdpy;
 
-  if ((xdpy = XOpenDisplay(display_name)) == NULL) {
-    /* Can't use _xdo_eprintf yet ... */
-    fprintf(stderr, "Error: Can't open display: %s\n", display_name);
+  if (display_name == NULL) {
+    display_name = XDisplayName(display_name);
+  }
+
+#define DISPLAY_HINT "Is there an Xorg or other X server running? You can try setting 'export DISPLAY=:0' and trying again."
+  if (display_name == NULL) {
+    fprintf(stderr, "Error: No DISPLAY environment variable is set. " DISPLAY_HINT "\n");
     return NULL;
   }
 
-  if (display_name == NULL) {
-    display_name = getenv("DISPLAY");
+  if (*display_name == '\0') {
+    fprintf(stderr, "Error: DISPLAY environment variable is empty. " DISPLAY_HINT "\n");
+    return NULL;
+  }
+
+  if ((xdpy = XOpenDisplay(display_name)) == NULL) {
+    return NULL;
   }
 
   return xdo_new_with_opened_display(xdpy, display_name, 1);
@@ -139,10 +148,8 @@ void xdo_free(xdo_t *xdo) {
   if (xdo == NULL)
     return;
 
-  if (xdo->display_name)
-    free(xdo->display_name);
-  if (xdo->charcodes)
-    free(xdo->charcodes);
+  free(xdo->display_name);
+  free(xdo->charcodes);
   if (xdo->xdpy && xdo->close_display_when_freed)
     XCloseDisplay(xdo->xdpy);
 
@@ -212,7 +219,7 @@ int xdo_get_window_location(const xdo_t *xdo, Window wid,
       y = attr.y;
     } else {
       XTranslateCoordinates(xdo->xdpy, wid, attr.root,
-                            attr.x, attr.y, &x, &y, &unused_child);
+                            0, 0, &x, &y, &unused_child);
     }
 
     if (x_ret != NULL) {
@@ -370,7 +377,7 @@ int xdo_set_window_property(const xdo_t *xdo, Window wid, const char *property, 
   
   char netwm_property[256] = "_NET_";
   int ret = 0;
-  strncat(netwm_property, property, strlen(property));
+  strcat(netwm_property, property);
 
   // Change the property
   ret = XChangeProperty(xdo->xdpy, wid, 
@@ -671,6 +678,9 @@ int xdo_get_desktop_for_window(const xdo_t *xdo, Window wid, long *desktop) {
   request = XInternAtom(xdo->xdpy, "_NET_WM_DESKTOP", False);
 
   data = xdo_get_window_property_by_atom(xdo, wid, request, &nitems, &type, &size);
+  if (data == NULL) {
+    return XDO_ERROR;
+  }
 
   if (nitems > 0) {
     *desktop = *((long*)data);
@@ -767,6 +777,13 @@ int xdo_raise_window(const xdo_t *xdo, Window wid) {
   return _is_success("XRaiseWindow", ret == 0, xdo);
 }
 
+int xdo_lower_window(const xdo_t *xdo, Window wid) {
+  int ret = 0;
+  ret = XLowerWindow(xdo->xdpy, wid);
+  XFlush(xdo->xdpy);
+  return _is_success("XLowerWindow", ret == 0, xdo);
+}
+
 int xdo_move_mouse(const xdo_t *xdo, int x, int y, int screen)  {
   int ret = 0;
 
@@ -775,8 +792,12 @@ int xdo_move_mouse(const xdo_t *xdo, int x, int y, int screen)  {
    * seem to recommend XWarpPointer instead, ie;
    * https://bugzilla.redhat.com/show_bug.cgi?id=518803
    */
-  Window screen_root = RootWindow(xdo->xdpy, screen);
-  ret = XWarpPointer(xdo->xdpy, None, screen_root, 0, 0, 0, 0, x, y);
+  if (screen > 0) {
+    Window screen_root = RootWindow(xdo->xdpy, screen);
+    ret = XWarpPointer(xdo->xdpy, None, screen_root, 0, 0, 0, 0, x, y);
+  } else {
+    ret = XTestFakeMotionEvent(xdo->xdpy, 0, x, y, CurrentTime);
+  }
   XFlush(xdo->xdpy);
   return _is_success("XWarpPointer", ret == 0, xdo);
 }
@@ -956,17 +977,10 @@ int xdo_click_window_multiple(const xdo_t *xdo, Window window, int button,
 
 /* XXX: Return proper code if errors found */
 int xdo_enter_text_window(const xdo_t *xdo, Window window, const char *string, useconds_t delay) {
+  /* Keep the original delay for key up events, but use 50000 microseconds (50ms) for key down */
+  useconds_t down_delay = 50000; 
 
-  /* Since we're doing down/up, the delay should be based on the number
-   * of keys pressed (including shift). Since up/down is two calls,
-   * divide by two. */
-  delay /= 2;
-
-  /* XXX: Add error handling */
-  //int nkeys = strlen(string);
-  //charcodemap_t *keys = calloc(nkeys, sizeof(charcodemap_t));
   charcodemap_t key;
-  //int modifier = 0;
   setlocale(LC_CTYPE,"");
   mbstate_t ps = { 0 };
   ssize_t len;
@@ -977,31 +991,18 @@ int xdo_enter_text_window(const xdo_t *xdo, Window window, const char *string, u
     }
     _xdo_charcodemap_from_char(xdo, &key);
     if (key.code == 0 && key.symbol == NoSymbol) {
-      fprintf(stderr, "I don't what key produces '%lc', skipping.\n",
+      fprintf(stderr, "I don't know which key produces '%lc', skipping.\n",
               key.key);
       continue;
-    } else {
-      //printf("Found key for %c\n", key.key);
-      //printf("code: %d\n", key.code);
-      //printf("sym: %s\n", XKeysymToString(key.symbol));
     }
 
-    //printf(stderr,
-            //"Key '%c' maps to code %d / sym %lu in group %d / mods %d (%s)\n",
-            //key.key, key.code, key.symbol, key.group, key.modmask,
-            //(key.needs_binding == 1) ? "needs binding" : "ok");
-
-    //_xdo_send_key(xdo, window, keycode, modstate, True, delay);
-    //_xdo_send_key(xdo, window, keycode, modstate, False, delay);
-    xdo_send_keysequence_window_list_do(xdo, window, &key, 1, True, NULL, delay / 2);
+    /* Send the key press event with the fixed 50ms delay */
+    xdo_send_keysequence_window_list_do(xdo, window, &key, 1, True, NULL, down_delay);
     key.needs_binding = 0;
-    xdo_send_keysequence_window_list_do(xdo, window, &key, 1, False, NULL, delay / 2);
+    /* Send the key release event with the user-specified delay */
+    xdo_send_keysequence_window_list_do(xdo, window, &key, 1, False, NULL, delay);
+  }
 
-    /* XXX: Flush here or at the end? or never? */
-    //XFlush(xdo->xdpy);
-  } /* walk string generating a keysequence */
-
-  //free(keys);
   return XDO_SUCCESS;
 }
 
@@ -1017,9 +1018,7 @@ int _xdo_send_keysequence_window_do(const xdo_t *xdo, Window window, const char 
   }
 
   ret = xdo_send_keysequence_window_list_do(xdo, window, keys, nkeys, pressed, modifier, delay);
-  if (keys != NULL) {
-    free(keys);
-  }
+  free(keys);
 
   return ret;
 }
@@ -1260,6 +1259,14 @@ static KeySym _xdo_keysym_from_char(const xdo_t *xdo, wchar_t key) {
 static void _xdo_charcodemap_from_char(const xdo_t *xdo, charcodemap_t *key) {
   KeySym keysym = _xdo_keysym_from_char(xdo, key->key);
   _xdo_charcodemap_from_keysym(xdo, key, keysym);
+
+  /* If the character is an uppercase character within the Basic Latin or Latin-1 code block,
+   * then sending the capital character keycode will not work.
+   * We have to also send the shift modifier.
+   * There are only three ranges of capital letters to worry about */
+  if ((key->key >= 0x41 && key->key <= 0x5A) || (key->key >= 0xC0 && key->key <= 0xD6) || (key->key >= 0xD8 && key->key <= 0xDE)) {
+    key->modmask = ShiftMask;
+  }
 }
 
 static void _xdo_charcodemap_from_keysym(const xdo_t *xdo, charcodemap_t *key, KeySym keysym) {
@@ -1336,7 +1343,7 @@ static void _xdo_populate_charcode_map(xdo_t *xdo) {
     }
   }
   xdo->charcodes_len = idx;
-  XkbFreeClientMap(desc, 0, 1);
+  XkbFreeKeyboard(desc, 0, 1);
   XFreeModifiermap(modmap);
 }
 
@@ -1792,18 +1799,21 @@ int xdo_get_desktop_viewport(const xdo_t *xdo, int *x_ret, int *y_ret) {
             "Got unexpected type returned from _NET_DESKTOP_VIEWPORT."
             " Expected CARDINAL, got %s\n",
             XGetAtomName(xdo->xdpy, type));
+    free(data);
     return XDO_ERROR;
   }
 
   if (nitems != 2) {
     fprintf(stderr, "Expected 2 items for _NET_DESKTOP_VIEWPORT, got %ld\n",
             nitems);
+    free(data);
     return XDO_ERROR;
   }
 
   int *viewport_data = (int *)data;
   *x_ret = viewport_data[0];
   *y_ret = viewport_data[1];
+  free(data);
 
   return XDO_SUCCESS;
 }
@@ -1843,6 +1853,29 @@ int xdo_close_window(const xdo_t *xdo, Window window) {
   return _is_success("XDestroyWindow", ret == 0, xdo);
 }
 
+int xdo_quit_window(const xdo_t *xdo, Window window) {
+  XEvent xev;
+  int ret;
+  Window root = RootWindow(xdo->xdpy, 0);
+
+  memset(&xev, 0, sizeof(xev));
+  xev.type = ClientMessage;
+  xev.xclient.serial = 0;
+  xev.xclient.send_event = True;
+  xev.xclient.display = xdo->xdpy;
+  xev.xclient.window = window;
+  xev.xclient.message_type = XInternAtom(xdo->xdpy, "_NET_CLOSE_WINDOW", False);
+  xev.xclient.format = 32;
+
+  ret = XSendEvent(xdo->xdpy, root, False,
+                   SubstructureNotifyMask | SubstructureRedirectMask,
+                   &xev);
+
+  /* XXX: XSendEvent returns 0 on conversion failure, nonzero otherwise.
+   * Manpage says it will only generate BadWindow or BadValue errors */
+  return _is_success("XSendEvent[_NET_CLOSE_WINDOW]", ret == 0, xdo);
+}
+
 int xdo_get_window_name(const xdo_t *xdo, Window window, 
                         unsigned char **name_ret, int *name_len_ret,
                         int *name_type) {
@@ -1879,6 +1912,19 @@ int xdo_get_window_name(const xdo_t *xdo, Window window,
   *name_type = type;
 
   return 0;
+}
+
+int xdo_get_window_classname(const xdo_t *xdo, Window window, unsigned char **class_ret) {
+  XClassHint classhint;
+  Status ret = XGetClassHint(xdo->xdpy, window, &classhint);
+
+  if (ret) {
+    XFree(classhint.res_name);
+    *class_ret = (unsigned char*) classhint.res_class;
+  } else {
+    *class_ret = NULL;
+  }
+  return _is_success("XGetClassHint[WM_CLASS]", ret == 0, xdo);
 }
 
 int xdo_window_state(xdo_t *xdo, Window window, unsigned long action, const char *property) {
@@ -1923,6 +1969,7 @@ void _xdo_debug(const xdo_t *xdo, const char *format, ...) {
     vfprintf(stderr, format, args);
     fprintf(stderr, "\n");
   }
+  va_end(args);
 } /* _xdo_debug */
 
 /* Used for printing things conditionally based on xdo->quiet */
@@ -1936,6 +1983,7 @@ void _xdo_eprintf(const xdo_t *xdo, int hushable, const char *format, ...) {
 
   vfprintf(stderr, format, args);
   fprintf(stderr, "\n");
+  va_end(args);
 } /* _xdo_eprintf */
 
 void xdo_enable_feature(xdo_t *xdo, int feature) {
