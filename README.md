@@ -118,6 +118,7 @@ suckless.org applications have been patched already.
   - st-scrollback-20200419-72e3f6c.diff
   - st-scrollback-mouse-20191024-a2c479c.diff
   - st-xresources-20200604-9ba7ecf.diff
+- [stw](https://github.com/sineemore/stw) - a simple text window for X
 - **surf** - simple webkit-based browser (Version 2.0) contains the following patches.
   - surf-bookmarks-20170722-723ff26.diff
   - surf-dlconsole-20190919-d068a38.diff
@@ -130,7 +131,7 @@ suckless.org applications have been patched already.
 - **tabbed** - generic tabbed interface
 - **xclickroot** - run command on button press on root window
 - **xclientprop** - show condenst X client properties through xmessage
-- **xdotool** - command-line X11 automation tool
+- **[xdotool](https://github.com/jordansissel/xdotool)** - command-line X11 automation tool
 - **xmenu** - menu utility for X
 - **xmerge** - Merge and apply .Xresource
 - **xssstate** - display the state of the X screensaver extension
