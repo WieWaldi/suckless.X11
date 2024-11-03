@@ -61,6 +61,7 @@ cmake="/bin/cmake"
 declare -a config_Directories=(
     "tmp"
     ".config"
+    ".config/dwm"
     ".config/dunst"
     ".config/password_store"
     ".local/bin"
