@@ -393,10 +393,6 @@ if [[ "${os}" = "Linux" ]]; then
             LogfileLocation
             ;;
         "Fedora"|"Fedora Linux" )
-            if [[ "${version}" != 3* ]]; then
-                __exit_Error 10 "This is not a supported version of Fedora."
-            fi
-            echo "Start" >> ${logfile}
             GoogleChrome_query
             VirtualBox_query
             HostName_query
