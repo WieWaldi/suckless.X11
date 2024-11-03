@@ -1,34 +1,31 @@
-.POSIX:
-.SUFFIXES:
-PREFIX ?= ${HOME}/.local
-MAN     = $(PREFIX)/share/man
-NAME    = stw
-CC      = cc
-INCS    = -I/usr/include/X11 -I/usr/include/freetype2
-LIBS    = -lX11 -lfontconfig -lXft -lXrender
-CFLAGS  = -std=c99 -pedantic -Wall -Werror -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=2 $(INCS)
-LDFLAGS = $(LIBS)
-SRC     = $(NAME).c
-OBJ     = ${SRC:.c=.o}
+# stw - simple X text window
+# See LICENSE file for copyright and license details.
 
-all: $(NAME)
+include config.mk
 
-$(NAME): $(OBJ)
-	$(CC) $(LDFLAGS) -o $@ $^
+all: stw
 
-.SUFFIXES: .c .o
-$(OBJ):
 .c.o:
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(STWCFLAGS) -c $<
 
-install: all
-	mkdir -p $(PREFIX)/bin
-	cp -f $(NAME) $(PREFIX)/bin
-	chmod 755 ${DESTDIR}${PREFIX}/bin/$(NAME)
-	mkdir -p ${DESTDIR}${MAN}/man1
-	cp stw.1 ${DESTDIR}${MAN}/man1/stw.1
+stw: stw.o
+	$(CC) $^ $(STWLDFLAGS) -o $@
+
+stw.o: arg.h config.h config.mk
 
 clean:
-	rm -f -- $(NAME) $(OBJ)
+	rm -f stw stw.o
 
-.PHONY: clean
+install: all
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	cp -f stw $(DESTDIR)$(PREFIX)/bin
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/stw
+	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
+	sed "s/VERSION/$(VERSION)/g" < stw.1 > $(DESTDIR)$(MANPREFIX)/man1/stw.1
+	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/stw.1
+
+uninstall:
+	rm -f $(DESTDIR)$(PREFIX)/bin/stw \
+		$(DESTDIR)$(MANPREFIX)/man1/stw.1
+
+.PHONY: all clean install uninstall
