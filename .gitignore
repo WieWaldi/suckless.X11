@@ -7,6 +7,7 @@ ToDo
 prepare.log
 config.h
 test.sh
+./*.log
 
 #======== maim =================================================================
 maim/src/cmdline.h
