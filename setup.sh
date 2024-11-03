@@ -145,7 +145,7 @@ install_X11files() {
     cp -r ${cdir}/.local/share/icons ${HOME}/.local/share
     cp -r ${cdir}/.config/compton.conf ${HOME}/.config
     cp -r ${cdir}/.config/picom.conf ${HOME}/.config
-    cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
+    cp -r ${cdir}/.config/dunst/dunstrc ${HOME}/.config/dunst
     cp -r ${cdir}/X.org.files/.xsession ${HOME}
     chmod 755 ${HOME}/.local/bin/.xsession
     fc-cache
