@@ -88,11 +88,13 @@ suckless.org applications have been patched already.
   - [dwm-statuscmd-nosignal-20210402-67d76bd.diff](https://dwm.suckless.org/patches/statuscmd/)
   - [dwm-resizecorners-6.5.diff](https://dwm.suckless.org/patches/resizecorners/)
   - [dwm-status2d-6.3.diff](https://dwm.suckless.org/patches/status2d/)
+- **[dwm-helper](https://github.com/WieWaldi/suckless.X11/tree/master/dwm-helper)** - A collection of wrapper and helper scripts for dwm.
 - **[farbfeld](https://tools.suckless.org/farbfeld/)** - A lossless image format which is easy to parse, pipe and compress.
 - **[feh](https://github.com/derf/feh)** — Image Viewer and Cataloguer (Release v3.10.3)
+- **[gllock](https://github.com/WieWaldi/suckless.X11/tree/master/gllock)** OpenGL extension to the simple screen locker slock.
 - **[lsw](https://tools.suckless.org/x/lsw/)** - Lists the titles of all running X windows to stdout (lsw-0.3 (20141129))
 - **[maim](https://github.com/naelstrof/maim)** - Make Image (v5.7.4)
-- **[rotwall](https://github.com/WieWaldi/suckless.X11/tree/develop/rotwall)** - rotate wallpapers
+- **[rotwall](https://github.com/WieWaldi/suckless.X11/tree/master/rotwall)** - rotate wallpapers.
 - **[sent](https://tools.suckless.org/sent/)** - Simple plaintext presentation tool. (sent-1 (20170904))
   - [sent-invertedcolors-72d33d4.diff](https://tools.suckless.org/sent/patches/inverted-colors/)
   - [sent-toggle-scm-20210119-2be4210.diff](https://tools.suckless.org/sent/patches/toggle-scm/)
@@ -102,7 +104,7 @@ suckless.org applications have been patched already.
   - [slock-colormessage-20200210-35633d4.diff](https://tools.suckless.org/slock/patches/colormessage/)
   - [slock-xresources-20191126-53e56c7.diff](https://tools.suckless.org/slock/patches/xresources/)
 - **[slop](https://github.com/naelstrof/slop)** - select operation
-- **[sselp](https://tools.suckless.org/x/sselp/)** - Simple X selection printer
+- **[sselp](https://tools.suckless.org/x/sselp/)** - Simple X selection printer.
 - **[st](https://st.suckless.org/)** - simple terminal (Version 0.8.4) contains the following patches.
   - [st-alpha-0.8.2.diff](https://st.suckless.org/patches/alpha/)
     - [ST+alpha patch renders background brighter than other programs.](https://www.reddit.com/r/suckless/comments/zbrple/stalpha_patch_renders_background_brighter_than/)
@@ -115,7 +117,7 @@ suckless.org applications have been patched already.
   - [st-scrollback-20200419-72e3f6c.diff](https://st.suckless.org/patches/scrollback/)
   - [st-scrollback-mouse-20191024-a2c479c.diff](https://st.suckless.org/patches/scrollback/)
   - [st-xresources-20200604-9ba7ecf.diff](https://st.suckless.org/patches/xresources/)
-- **[stw](https://github.com/sineemore/stw)** - a simple text window for X
+- **[stw](https://github.com/sineemore/stw)** - a simple text window for X.
 - **[surf](https://surf.suckless.org/)** - simple webkit-based browser (Version 2.0) contains the following patches.
   - [surf-bookmarks-20170722-723ff26.diff](https://surf.suckless.org/patches/bookmarking/)
   - [surf-dlconsole-20190919-d068a38.diff](https://surf.suckless.org/patches/dlconsole/)
@@ -124,11 +126,12 @@ suckless.org applications have been patched already.
   - [surf-popup-2.0.diff](https://surf.suckless.org/patches/popup-on-gesture/)
   - [surf-scrollmultiply-2.0.diff](https://surf.suckless.org/patches/scroll-faster/)
   - [surf-2.0-homepage.diff](https://surf.suckless.org/patches/homepage/)
-- **[sxiv](https://github.com/xyb3rt/sxiv)** - Simple X Image Viewer
-- **[tabbed](https://tools.suckless.org/tabbed/)** - generic tabbed interface
-- **[xclickroot](https://github.com/phillbush/xclickroot)** - run command on button press on root window
-- **[xclientprop](https://github.com/WieWaldi/suckless.X11/tree/develop/xclientprop)** - show condenst X client properties through xmessage
-- **[xdotool](https://github.com/jordansissel/xdotool)** - command-line X11 automation tool
-- **[xmenu](https://github.com/phillbush/xmenu)** - menu utility for X
-- **[xmerge](https://github.com/WieWaldi/suckless.X11/tree/develop/xmerge)** - Merge and apply .Xresource
-- **[xssstate](https://tools.suckless.org/x/xssstate/)** - display the state of the X screensaver extension
+- **[svkbd](https://tools.suckless.org/x/svkbd/)** - Simple Virtual Keyboard.
+- **[sxiv](https://github.com/xyb3rt/sxiv)** - Simple X Image Viewer.
+- **[tabbed](https://tools.suckless.org/tabbed/)** - generic tabbed interface.
+- **[xclickroot](https://github.com/phillbush/xclickroot)** - run command on button press on root window.
+- **[xclientprop](https://github.com/WieWaldi/suckless.X11/tree/master/xclientprop)** - show condenst X client properties through xmessage.
+- **[xdotool](https://github.com/jordansissel/xdotool)** - command-line X11 automation tool.
+- **[xmenu](https://github.com/phillbush/xmenu)** - menu utility for X.
+- **[xmerge](https://github.com/WieWaldi/suckless.X11/tree/master/xmerge)** - Merge and apply .Xresource.
+- **[xssstate](https://tools.suckless.org/x/xssstate/)** - display the state of the X screensaver extension.
