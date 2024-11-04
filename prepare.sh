@@ -282,8 +282,8 @@ RPMFusion_query() {
 }
 
 RPMFusion_enable() {
+    __echo_Left "Enabling RPM Fusion Free Repository."
     if [[ "${EnableRPMFusionFree}" = "yes" ]]; then
-        __echo_Left "Enabling RPM Fusion Free Repository."
         case ${distribution} in
             "Red Hat Enterprise Linux" )
                 dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm >> ${logfile} 2>&1
@@ -299,7 +299,7 @@ RPMFusion_enable() {
             ;;
         esac
         __echo_Left "Enable fedora-cisco-openh264."
-        dnf config-manager --enable fedora-cisco-openh264 >> ${logfile} 2>&1
+        dnf config-manager setopt fedora-cisco-openh264.enabled=1
         __echo_Result
         __echo_Left "dnf makecache."
         dnf makecache >> ${logfile} 2>&1
@@ -307,8 +307,8 @@ RPMFusion_enable() {
     else
         __echo_Skipped
     fi
-    if [[ "${EnableRPMFusionFree}" = "yes" ]]; then
-        __echo_Left "Enabling RPM Fusion Non-Free Repository."
+    __echo_Left "Enabling RPM Fusion Non-Free Repository."
+    if [[ "${EnableRPMFusionNonFree}" = "yes" ]]; then
         case ${distribution} in
             "Red Hat Enterprise Linux" )
                 dnf install -y --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm >> ${logfile} 2>&1
@@ -323,6 +323,8 @@ RPMFusion_enable() {
                 __echo_Result
             ;;
         esac
+        __echo_Left "dnf makecache."
+        dnf makecache >> ${logfile} 2>&1
         __echo_Result
     else
         __echo_Skipped
