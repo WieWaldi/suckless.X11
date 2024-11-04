@@ -342,7 +342,7 @@ DefaultPackages_query() {
 DefaultPackages_install() {
     __echo_Left "Installing Default Packages"
     if [[ "${InstallDefaultPackages}" = "yes" ]]; then
-        IFS=$'\r\n' GLOBIGNORE='*' command eval 'packages=($(cat ./src/packages.${packagelistext}))'
+        IFS=$'\r\n' GLOBIGNORE='*' command eval 'packages=($(cat ./src/packages/packages.${packagelistext}))'
         echo -e "\n\nPackage List: ${packagelistext}\n" >> ${logfile} 2>&1
         echo -e "List of packages: ${packages[@]}" >> ${logfile} 2>&1
         dnf install -y ${packages[@]} >> ${logfile} 2>&1
