@@ -6,11 +6,11 @@ Inspired by this [reddit post](https://www.reddit.com/r/unixporn/comments/3358vu
 
 ## few examples
 
-#### [circles](http://www.shadertoy.com/view/4dsXWs)
-#### [squares](http://www.shadertoy.com/view/MtfXRN)
-#### [ascii](http://www.shadertoy.com/view/lssGDj)
-#### [crt](http://www.shadertoy.com/view/lt3yz7)
-#### [glitch](http://www.shadertoy.com/view/MlVSD3)
+  - [circles](http://www.shadertoy.com/view/4dsXWs)
+  - [squares](http://www.shadertoy.com/view/MtfXRN)
+  - [ascii](http://www.shadertoy.com/view/lssGDj)
+  - [crt](http://www.shadertoy.com/view/lt3yz7)
+  - [glitch](http://www.shadertoy.com/view/MlVSD3)
 
 ## Requirements
 In order to build gllock you need the following packages:
