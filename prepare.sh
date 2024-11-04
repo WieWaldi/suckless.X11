@@ -82,7 +82,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # +----- Variables ------------------------------------------------------------+
-notice="notice-prepare.txt"
+notice="src/notice-prepare.txt"
 
 # +----- Functions ------------------------------------------------------------+
 

@@ -52,7 +52,7 @@ fi
 
 # +----- Variables ------------------------------------------------------------+
 
-notice="notice-setup.txt"
+notice="src/notice-setup.txt"
 backupdir="${HOME}/Backup.X11files.$$"
 cdir="$(dirname "$(readlink -f "${0}")")"
 make="/bin/make -j 4"
