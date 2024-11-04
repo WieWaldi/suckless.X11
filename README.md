@@ -115,7 +115,7 @@ suckless.org applications have been patched already.
   - [st-scrollback-20200419-72e3f6c.diff](https://st.suckless.org/patches/scrollback/)
   - [st-scrollback-mouse-20191024-a2c479c.diff](https://st.suckless.org/patches/scrollback/)
   - [st-xresources-20200604-9ba7ecf.diff](https://st.suckless.org/patches/xresources/)
-- [stw](https://github.com/sineemore/stw) - a simple text window for X
+- **[stw](https://github.com/sineemore/stw)** - a simple text window for X
 - **[surf](https://surf.suckless.org/)** - simple webkit-based browser (Version 2.0) contains the following patches.
   - [surf-bookmarks-20170722-723ff26.diff](https://surf.suckless.org/patches/bookmarking/)
   - [surf-dlconsole-20190919-d068a38.diff](https://surf.suckless.org/patches/dlconsole/)
@@ -132,7 +132,3 @@ suckless.org applications have been patched already.
 - **[xmenu](https://github.com/phillbush/xmenu)** - menu utility for X
 - **[xmerge](https://github.com/WieWaldi/suckless.X11/tree/develop/xmerge)** - Merge and apply .Xresource
 - **[xssstate](https://tools.suckless.org/x/xssstate/)** - display the state of the X screensaver extension
-
-## Links/URLs/Credits  
-[256 Colors Cheat Sheet](https://www.ditig.com/256-colors-cheat-sheet) - List of 256 colors for Xterm prompt (console)  
-[Solarized Theme](https://github.com/altercation/solarized) - Precision colors for machines and people  
