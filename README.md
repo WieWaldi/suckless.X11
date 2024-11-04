@@ -67,56 +67,54 @@ suckless.org applications have been patched already.
 - **[dmenu](https://tools.suckless.org/dmenu/)** - dynamic menu (Version 5.0) contains the following patches.
   - [dmenu-borderoption-20200217-bf60a1e.diff](https://tools.suckless.org/dmenu/patches/border/)
   - [dmenu-center-20200111-8cd37e1.diff](https://tools.suckless.org/dmenu/patches/center/)
-  - dmenu-mousesupport-5.0.diff
-  - dmenu-mousesupporthoverbgcol-5.0.diff
-  - dmenu-numbers-4.9.diff
-  - dmenu-xresources-4.9.diff
-- **dunst** - A customizable and lightweight notification-daemon
-- **dwm** - dynamic window manager (Version 6.3, 2022-08-26) contains the following patches.
-  - dwm-autostart-20210120-cb3f58a.diff
-  - dwm-center-6.2.diff
-  - dwm-cfacts-vanitygaps-6.2_combo.diff
-  - dwm-fakefullscreen-20210714-138b405.diff
-  - dwm-focusedontop-6.4.diff
-  - dwm-focusonclick-20200110-61bb8b2.diff
-  - dwm-colorbar-6.3.diff
-  - dwm-layoutmenu-6.2.diff
-  - dwm-layoutscroll-6.2.diff
-  - dwm-monoclesymbol-6.2.diff
-  - dwm-movestack-20211115-a786211.diff
-  - dwm-namedscratchpads-6.2.diff
-  - dwm-pertag-20200914-61bb8b2.diff
-  - dwm-resizecorners-6.2.diff
-  - dwm-status2d-6.3.diff
-  - dwm-status2d-xrdb-6.2.diff
-  - dwm-windowfollow-20221002-69d5652.diff
-  - dwm-xresources-20210827-138b405.diff
-- **farbfeld** - A lossless image format which is easy to parse, pipe and compress.
-- **feh** — image viewer and cataloguer
-- **lsw** - list windows
-- **maim** - make image
+  - [dmenu-mousesupport-5.0.diff](https://tools.suckless.org/dmenu/patches/mouse-support/)
+  - [dmenu-mousesupporthoverbgcol-5.0.diff](https://tools.suckless.org/dmenu/patches/mouse-support/)
+  - [dmenu-numbers-4.9.diff](https://tools.suckless.org/dmenu/patches/numbers/)
+  - [dmenu-xresources-4.9.diff](https://tools.suckless.org/dmenu/patches/xresources/)
+- **[dwm](https://dwm.suckless.org/)** - dynamic window manager (Version 6.5, 2024-10-05) contains the following patches.
+  - [dwm-autostart-20210120-cb3f58a.diff](https://dwm.suckless.org/patches/autostart/)
+  - [dwm-center-6.3.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-center-6.3.diff)
+  - [dwm-cfacts-vanitygaps-6.5_full.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-cfacts-vanitygaps-6.5_full.diff)
+  - [dwm-cfacts-dragfact-6.5_full.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-cfacts-dragfact-6.5_full.diff)
+  - [dwm-colorbar-6.3.diff](https://dwm.suckless.org/patches/colorbar/)
+  - [dwm-focusedontop-6.5.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-focusedontop-6.5.diff)
+  - [dwm-focusonclick-20200110-61bb8b2.diff](https://dwm.suckless.org/patches/focusonclick/)
+  - [dwm-fullscreen-compilation-rule-6.3_full.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-fullscreen-compilation-rule-6.3_full.diff)
+  - [dwm-layoutmenu-6.2.diff](https://dwm.suckless.org/patches/layoutmenu/)
+  - [dwm-movestack-20211115-a786211.diff](https://dwm.suckless.org/patches/movestack/)
+  - [dwm-namedscratchpads-6.2.diff](https://dwm.suckless.org/patches/namedscratchpads/)
+  - [dwm-netclientliststacking-6.5.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-netclientliststacking-6.5.diff)
+  - [dwm-pertag-6.5.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-pertag-6.5.diff)
+  - [dwm-statuscmd-nosignal-20210402-67d76bd.diff](https://dwm.suckless.org/patches/statuscmd/)
+  - [dwm-resizecorners-6.5.diff](https://dwm.suckless.org/patches/resizecorners/)
+  - [dwm-status2d-6.3.diff](https://dwm.suckless.org/patches/status2d/)
+- **[farbfeld](https://tools.suckless.org/farbfeld/)** - A lossless image format which is easy to parse, pipe and compress.
+- **[feh](https://github.com/derf/feh)** — Image Viewer and Cataloguer (Release v3.10.3)
+- **[lsw](https://tools.suckless.org/x/lsw/)** - Lists the titles of all running X windows to stdout (lsw-0.3 (20141129))
+- **[maim](https://github.com/naelstrof/maim)** - Make Image (v5.7.4)
 - **rotwall** - rotate wallpapers
-- **sent** - Simple plaintext presentation tool.
-  - sent-invertedcolors-72d33d4.diff
-  - sent-toggle-scm-20210119-2be4210.diff
-  - sent-options-20190213-72d33d4.diff
-- **slock** — simple X screen locker (Version 1.4) contains the following patches.
-  - slock-capscolor-20170106-2d2a21a.diff
-  - slock-colormessage-20200210-35633d4.diff
-  - slock-xresources-20191126-53e56c7.diff
-- **slop** - select operation
-- **sselp** - Simple X selection printer
-- **st** - simple terminal (Version 0.8.4) contains the following patches.
-  - st-alpha-0.8.2.diff
-  - st-blinking_cursor-20200531-a2a7044.diff
-  - st-bold-is-not-bright-20190127-3be4cf1.diff
-  - st-boxdraw_v2-0.8.3.diff
-  - st-focus-20230610-68d1ad9.diff
-  - st-iso14755-0.8.3.diff
-  - st-iso14755-20180911-67d0cb6.diff
-  - st-scrollback-20200419-72e3f6c.diff
-  - st-scrollback-mouse-20191024-a2c479c.diff
-  - st-xresources-20200604-9ba7ecf.diff
+- **[sent](https://tools.suckless.org/sent/)** - Simple plaintext presentation tool. (sent-1 (20170904))
+  - [sent-invertedcolors-72d33d4.diff](https://tools.suckless.org/sent/patches/inverted-colors/)
+  - [sent-toggle-scm-20210119-2be4210.diff](https://tools.suckless.org/sent/patches/toggle-scm/)
+  - [sent-options-20190213-72d33d4.diff](https://tools.suckless.org/sent/patches/toggle-scm/)
+- **[slock](https://tools.suckless.org/slock/)** — simple X screen locker (Version 1.4) contains the following patches.
+  - [slock-capscolor-20170106-2d2a21a.diff](https://tools.suckless.org/slock/patches/capscolor/)
+  - [slock-colormessage-20200210-35633d4.diff](https://tools.suckless.org/slock/patches/colormessage/)
+  - [slock-xresources-20191126-53e56c7.diff](https://tools.suckless.org/slock/patches/xresources/)
+- **[slop](https://github.com/naelstrof/slop)** - select operation
+- **[sselp](https://tools.suckless.org/x/sselp/)** - Simple X selection printer
+- **[st](https://st.suckless.org/)** - simple terminal (Version 0.8.4) contains the following patches.
+  - [st-alpha-0.8.2.diff](https://st.suckless.org/patches/alpha/)
+    - [ST+alpha patch renders background brighter than other programs.](https://www.reddit.com/r/suckless/comments/zbrple/stalpha_patch_renders_background_brighter_than/)
+    - [st with alpha patch looks awful while using solarized light theme](https://www.reddit.com/r/suckless/comments/170d1yl/st_with_alpha_patch_looks_awful_while_using/)
+  - [st-blinking_cursor-20200531-a2a7044.diff](https://st.suckless.org/patches/blinking_cursor/)
+  - [st-bold-is-not-bright-20190127-3be4cf1.diff](https://st.suckless.org/patches/bold-is-not-bright/)
+  - [st-boxdraw_v2-0.8.3.diff](https://st.suckless.org/patches/boxdraw/)
+  - [st-focus-20230610-68d1ad9.diff](https://st.suckless.org/patches/alpha_focus_highlight/)
+  - [st-iso14755-0.8.3.diff](https://st.suckless.org/patches/iso14755/)
+  - [st-scrollback-20200419-72e3f6c.diff](https://st.suckless.org/patches/scrollback/)
+  - [st-scrollback-mouse-20191024-a2c479c.diff](https://st.suckless.org/patches/scrollback/)
+  - [st-xresources-20200604-9ba7ecf.diff](https://st.suckless.org/patches/xresources/)
 - [stw](https://github.com/sineemore/stw) - a simple text window for X
 - **surf** - simple webkit-based browser (Version 2.0) contains the following patches.
   - surf-bookmarks-20170722-723ff26.diff
