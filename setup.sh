@@ -142,16 +142,16 @@ install_X11files() {
             __echo_Result
         fi
         __echo_Left "Creating ${i}"
-        /bin/cp -r ${cdir}/X.org.files/${i} ${HOME}
+        /bin/cp -r ${cdir}/src/X.org.files/${i} ${HOME}
         __echo_Result
     done
-    cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
-    cp -r ${cdir}/.local/share/wallpapers ${HOME}/.local/share
-    cp -r ${cdir}/.local/share/icons ${HOME}/.local/share
-    cp -r ${cdir}/.local/bin/picom ${HOME}/.local/bin
-    cp -r ${cdir}/.config/picom.conf ${HOME}/.config
-    cp -r ${cdir}/.config/dunst/dunstrc ${HOME}/.config/dunst
-    cp -r ${cdir}/X.org.files/.xsession ${HOME}
+    cp -r ${cdir}/src/.local/share/fonts ${HOME}/.local/share
+    cp -r ${cdir}/src/.local/share/wallpapers ${HOME}/.local/share
+    cp -r ${cdir}/src/.local/share/icons ${HOME}/.local/share
+    cp -r ${cdir}/src/.local/bin/picom ${HOME}/.local/bin
+    cp -r ${cdir}/src/.config/picom.conf ${HOME}/.config
+    cp -r ${cdir}/src/.config/dunst/dunstrc ${HOME}/.config/dunst
+    cp -r ${cdir}/src/X.org.files/.xsession ${HOME}
     chmod 755 ${HOME}/.xsession
     fc-cache
 }
@@ -160,7 +160,7 @@ install_suckless() {
     for i in "${applist[@]}"
     do
         echo -ne "\n\n=== ${i} ===\n" >> ${logfile} 2>&1
-        cd ${cdir}/${i}
+        cd ${cdir}/src/${i}
         __echo_Left "Compiling ${i}"
         ${make} >> ${logfile} 2>&1
         __echo_Result
@@ -173,7 +173,7 @@ install_suckless() {
 clean_suckless() {
     for i in "${applist[@]}"
     do
-        cd ${cdir}/${i}
+        cd ${cdir}/src/${i}
         __echo_Left "Cleaning up after intalling ${i}"
         ${make} clean >> ${logfile} 2>&1
         __echo_Result

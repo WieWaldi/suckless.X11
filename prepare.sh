@@ -86,19 +86,22 @@ notice="notice-prepare.txt"
 
 # +----- Functions ------------------------------------------------------------+
 
-Create_Dir() {
-    [[ ! -d "${backupdir}" ]] && mkdir -p ${backupdir}
-    [[ ! -d "${HOME}/tmp" ]] && mkdir -p ${HOME}/tmp
-    [[ ! -d "${HOME}/.config" ]] && mkdir -p ${HOME}/.config
-    [[ ! -d "${HOME}/.config/dunst" ]] && mkdir -p ${HOME}/.config/dunst
-    [[ ! -d "${HOME}/.local/lib" ]] && mkdir -p ${HOME}/.local/lib
-    [[ ! -d "${HOME}/.local/lib64" ]] && mkdir -p ${HOME}/.local/lib64
-    [[ ! -d "${HOME}/Downloads" ]] && mkdir -p ${HOME}/Downloads
-    [[ ! -d "${HOME}/Screenshots" ]] && mkdir -p ${HOME}/Screenshots
-}
-
 GoogleChrome_query() {
     InstallGoogleChrome="$(__read_Antwoord_YN "Do you want to get Google Chrome installed?")"
+}
+
+GoogleChrome_install() {
+    __echo_Left "Installing Repository: google-chrome"
+    if [[ "${InstallGoogleChrome}" = "yes" ]]; then
+        __echo_Left "Adding google-chrome.repo"
+        cp ${cdir}/src/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d >>${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Installing google-chrome-stable"
+        dnf install -y google-chrome-stable >> ${logfile} 2>&1
+        __echo_Result
+    else
+        __echo_Skipped
+    fi
 }
 
 HostName_query() {
@@ -112,19 +115,6 @@ HostName_set() {
     __echo_Left "Setting Hostname to: ${gethostname}"
     if [[ "${SetHostname}" = "yes" ]]; then
         hostnamectl set-hostname ${gethostname} >>${logfile} 2>&1
-        __echo_Result
-    else
-        __echo_Skipped
-    fi
-}
-GoogleChrome_install() {
-    __echo_Left "Installing Repository: google-chrome"
-    if [[ "${InstallGoogleChrome}" = "yes" ]]; then
-        __echo_Left "Adding google-chrome.repo"
-        cp ${cdir}/etc/yum.repos.d/google-chrome.repo /etc/yum.repos.d >>${logfile} 2>&1
-        __echo_Result
-        __echo_Left "Installing google-chrome-stable"
-        dnf install -y google-chrome-stable >> ${logfile} 2>&1
         __echo_Result
     else
         __echo_Skipped
@@ -234,16 +224,16 @@ FilesXorg_query() {
 FilesXorg_copy() {
     if [[ "${FilesXorg}" = "yes" ]]; then
         __echo_Left "Copying files to /etc/X11/xorg.conf.d/"
-        cp ${cdir}/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d >> ${logfile} 2>&1
+        cp ${cdir}/src/etc/X11/xorg.conf.d/*.conf /etc/X11/xorg.conf.d >> ${logfile} 2>&1
         __echo_Result
         __echo_Left "Copying /etc/sddm.conf"
-        cp ${cdir}/etc/sddm.conf /etc >> ${logfile} 2>&1
+        cp ${cdir}/src/etc/sddm.conf /etc >> ${logfile} 2>&1
         __echo_Result
         __echo_Left "Copying /usr/share/xsessions/dwm.desktop"
-        cp ${cdir}/X.org.files/dwm.desktop /usr/share/xsessions >> ${logfile} 2>&1
+        cp ${cdir}/src/X.org.files/dwm.desktop /usr/share/xsessions >> ${logfile} 2>&1
         __echo_Result
         __echo_Left "Copying /usr/share/xsessions/xinit-compat.dektop"
-        cp ${cdir}/X.org.files/xinit-compat.desktop /usr/share/xsessions >> ${logfile} 2>&1
+        cp ${cdir}/src/X.org.files/xinit-compat.desktop /usr/share/xsessions >> ${logfile} 2>&1
         __echo_Result
     fi
 }
