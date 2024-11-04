@@ -92,7 +92,7 @@ suckless.org applications have been patched already.
 - **[feh](https://github.com/derf/feh)** — Image Viewer and Cataloguer (Release v3.10.3)
 - **[lsw](https://tools.suckless.org/x/lsw/)** - Lists the titles of all running X windows to stdout (lsw-0.3 (20141129))
 - **[maim](https://github.com/naelstrof/maim)** - Make Image (v5.7.4)
-- **rotwall** - rotate wallpapers
+- **[rotwall](https://github.com/WieWaldi/suckless.X11/tree/develop/rotwall)** - rotate wallpapers
 - **[sent](https://tools.suckless.org/sent/)** - Simple plaintext presentation tool. (sent-1 (20170904))
   - [sent-invertedcolors-72d33d4.diff](https://tools.suckless.org/sent/patches/inverted-colors/)
   - [sent-toggle-scm-20210119-2be4210.diff](https://tools.suckless.org/sent/patches/toggle-scm/)
@@ -116,22 +116,22 @@ suckless.org applications have been patched already.
   - [st-scrollback-mouse-20191024-a2c479c.diff](https://st.suckless.org/patches/scrollback/)
   - [st-xresources-20200604-9ba7ecf.diff](https://st.suckless.org/patches/xresources/)
 - [stw](https://github.com/sineemore/stw) - a simple text window for X
-- **surf** - simple webkit-based browser (Version 2.0) contains the following patches.
-  - surf-bookmarks-20170722-723ff26.diff
-  - surf-dlconsole-20190919-d068a38.diff
-  - surf-git-20170323-webkit2-searchengines.diff
-  - surf-notifications-20201223-7dcce9e1.diff
-  - surf-popup-2.0.diff
-  - surf-scrollmultiply-2.0.diff
-  - surf-2.0-homepage.diff
-- **sxiv** - Simple X Image Viewer
-- **tabbed** - generic tabbed interface
-- **xclickroot** - run command on button press on root window
-- **xclientprop** - show condenst X client properties through xmessage
+- **[surf](https://surf.suckless.org/)** - simple webkit-based browser (Version 2.0) contains the following patches.
+  - [surf-bookmarks-20170722-723ff26.diff](https://surf.suckless.org/patches/bookmarking/)
+  - [surf-dlconsole-20190919-d068a38.diff](https://surf.suckless.org/patches/dlconsole/)
+  - [surf-git-20170323-webkit2-searchengines.diff](https://surf.suckless.org/patches/dlconsole/)
+  - [surf-notifications-20201223-7dcce9e1.diff](https://surf.suckless.org/patches/notifications/)
+  - [surf-popup-2.0.diff](https://surf.suckless.org/patches/popup-on-gesture/)
+  - [surf-scrollmultiply-2.0.diff](https://surf.suckless.org/patches/scroll-faster/)
+  - [surf-2.0-homepage.diff](https://surf.suckless.org/patches/homepage/)
+- **[sxiv](https://github.com/xyb3rt/sxiv)** - Simple X Image Viewer
+- **[tabbed](https://tools.suckless.org/tabbed/)** - generic tabbed interface
+- **[xclickroot](https://github.com/phillbush/xclickroot)** - run command on button press on root window
+- **[xclientprop](https://github.com/WieWaldi/suckless.X11/tree/develop/xclientprop)** - show condenst X client properties through xmessage
 - **[xdotool](https://github.com/jordansissel/xdotool)** - command-line X11 automation tool
-- **xmenu** - menu utility for X
-- **xmerge** - Merge and apply .Xresource
-- **xssstate** - display the state of the X screensaver extension
+- **[xmenu](https://github.com/phillbush/xmenu)** - menu utility for X
+- **[xmerge](https://github.com/WieWaldi/suckless.X11/tree/develop/xmerge)** - Merge and apply .Xresource
+- **[xssstate](https://tools.suckless.org/x/xssstate/)** - display the state of the X screensaver extension
 
 ## Links/URLs/Credits  
 [256 Colors Cheat Sheet](https://www.ditig.com/256-colors-cheat-sheet) - List of 256 colors for Xterm prompt (console)  
