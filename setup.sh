@@ -27,7 +27,7 @@ export cdir=$(pwd)
 export scriptname="${BASH_SOURCE##*/}"
 export scriptdir="${BASH_SOURCE%/*}"
 export datetime="$(date "+%Y-%m-%d-%H-%M-%S")"
-export logfile="${scriptdir}/${datetime}.log"
+export logfile="${cdir}/${datetime}.log"
 export framework_width=80
 
 if [[ -f "${scriptdir}"/bash-framework.sh ]]; then
@@ -52,7 +52,7 @@ fi
 
 # +----- Variables ------------------------------------------------------------+
 
-notice="notice-setup.txt"
+notice="src/notice-setup.txt"
 backupdir="${HOME}/Backup.X11files.$$"
 cdir="$(dirname "$(readlink -f "${0}")")"
 make="/bin/make -j 4"
@@ -61,6 +61,7 @@ cmake="/bin/cmake"
 declare -a config_Directories=(
     "tmp"
     ".config"
+    ".config/dwm"
     ".config/dunst"
     ".config/password_store"
     ".local/bin"
@@ -88,27 +89,31 @@ declare -a applist=(
     "dwm"
     "dwm-helper"
     "farbfeld"
+    "feh"
     "lsw"
+    "rotwall"
     "sent"
     "slock"
     "sselp"
     "st"
     "stw"
     "surf"
-    "tabbed"
-    "xssstate"
-    "feh"
-    "compton"
     "sxiv"
+    "tabbed"
     "xdotool"
-    "rotwall"
     "xclickroot"
     "xmenu"
     "xmerge"
+    "xssstate"
     )
 
 # +----- Functions ------------------------------------------------------------+
 
+create_Backup_Directory() {
+    __echo_Left "Creating Backup Directory:"
+    mkdir -p ${backupdir}
+    __echo_Result
+}
 create_Config_Directories() {
     __echo_Left "Config Directories:"
     if [[ "${get_Config_Directories}" = "yes" ]]; then
@@ -137,26 +142,30 @@ install_X11files() {
             __echo_Result
         fi
         __echo_Left "Creating ${i}"
-        /bin/cp -r ${cdir}/X.org.files/${i} ${HOME}
+        /bin/cp -r ${cdir}/src/X.org.files/${i} ${HOME}
         __echo_Result
     done
-    cp -r ${cdir}/.local/share/fonts ${HOME}/.local/share
-    cp -r ${cdir}/.local/share/wallpapers ${HOME}/.local/share
-    cp -r ${cdir}/.local/share/icons ${HOME}/.local/share
-    cp -r ${cdir}/.config/compton.conf ${HOME}/.config
-    cp -r ${cdir}/.config/picom.conf ${HOME}/.config
-    cp -r ${cdir}/dunst/dunstrc ${HOME}/.config/dunst
-    cp -r ${cdir}/X.org.files/.xsession ${HOME}
-    chmod 755 ${HOME}/.local/bin/.xsession
+    cp -r ${cdir}/src/.local/share/fonts ${HOME}/.local/share
+    cp -r ${cdir}/src/.local/share/wallpapers ${HOME}/.local/share
+    cp -r ${cdir}/src/.local/share/icons ${HOME}/.local/share
+    cp -r ${cdir}/src/.local/bin/picom ${HOME}/.local/bin
+    cp -r ${cdir}/src/.config/picom.conf ${HOME}/.config
+    cp -r ${cdir}/src/.config/dunst/dunstrc ${HOME}/.config/dunst
+    cp -r ${cdir}/src/X.org.files/.xsession ${HOME}
+    chmod 755 ${HOME}/.xsession
     fc-cache
 }
 
 install_suckless() {
     for i in "${applist[@]}"
     do
-        __echo_Left "Compiling and installing ${i}"
-        cd ${cdir}/${i}
+        echo -ne "\n\n=== ${i} ===\n" >> ${logfile} 2>&1
+        cd ${cdir}/src/${i}
+        __echo_Left "Compiling ${i}"
         ${make} >> ${logfile} 2>&1
+        __echo_Result
+        __echo_Left "Installing ${i}"
+        ${make} install >> ${logfile} 2>&1
         __echo_Result
     done
 }
@@ -164,8 +173,8 @@ install_suckless() {
 clean_suckless() {
     for i in "${applist[@]}"
     do
+        cd ${cdir}/src/${i}
         __echo_Left "Cleaning up after intalling ${i}"
-        cd ${cdir}/${i}
         ${make} clean >> ${logfile} 2>&1
         __echo_Result
     done
@@ -181,6 +190,7 @@ if [[ "$(__read_Antwoord_YN "Do you want to proceed?")" = "no" ]]; then
 fi
 get_Config_Directories="yes"
 create_Config_Directories
+create_Backup_Directory
 install_X11files
 install_suckless
 clean_suckless
