@@ -1,161 +1,36 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-// static const unsigned int borderpx          = 1;        /* border pixel of windows */
-// static const unsigned int snap              = 32;       /* snap pixel */
-// static const unsigned int gappih            = 20;       /* horiz inner gap between windows */
-// static const unsigned int gappiv            = 10;       /* vert inner gap between windows */
-// static const unsigned int gappoh            = 10;       /* horiz outer gap between windows and screen edge */
-// static const unsigned int gappov            = 30;       /* vert outer gap between windows and screen edge */
-// static       int smartgaps                  = 0;        /* 1 means no outer gap when there is only one window */
-// static const int showbar                    = 1;        /* 0 means no bar */
-// static const int topbar                     = 1;        /* 0 means bottom bar */
-// static const int focusedontoptiled          = 1;        /* 1 means focused tile client is shown on top of floating windows */
-// static const int focusonwheel               = 0;
-// static const char *fonts[]                  = { "FiraMono Nerd Font:size=12", "monospace:size=10" };
-// static const char dmenufont[]               = "monospace:size=10";
-// static const char col_gray1[]               = "#222222";
-// static const char col_gray2[]               = "#444444";
-// static const char col_gray3[]               = "#bbbbbb";
-// static const char col_gray4[]               = "#eeeeee";
-// static const char col_cyan[]                = "#005577";
-// 
-// static const char *colors[][3] = {
-// 		/*                                         fg          bg      border   */
-// 		[SchemeNorm]                        = { "#bcbcbc", "#5f005f", "#444444" },
-// 		[SchemeSel]                         = { "#eeeeee", "#000000", "#000000" },
-// 		[SchemeStatus]                      = { "#eeeeee", "#5f005f", "#000000" },  // Statusbar right {text,background,not used but cannot be empty}
-// 		[SchemeTagsSel]                     = { "#eeeeee", "#5f005f", "#000000" },  // Tagbar left selected {text,background,not used but cannot be empty}
-// 		[SchemeTagsNorm]                    = { "#af87d7", "#5f005f", "#000000" },  // Tagbar left unselected {text,background,not used but cannot be empty}
-// 		[SchemeInfoSel]                     = { "#eeeeee", "#5f005f", "#000000" },  // infobar middle  selected {text,background,not used but cannot be empty}
-// 		[SchemeInfoNorm]                    = { "#eeeeee", "#5f005f", "#000000" },  // infobar middle  unselected {text,background,not used but cannot be empty}
-// };
+static const unsigned int borderpx          = 1;        /* border pixel of windows */
+static const unsigned int snap              = 32;       /* snap pixel */
+static const unsigned int gappih            = 20;       /* horiz inner gap between windows */
+static const unsigned int gappiv            = 10;       /* vert inner gap between windows */
+static const unsigned int gappoh            = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov            = 30;       /* vert outer gap between windows and screen edge */
+static       int smartgaps                  = 0;        /* 1 means no outer gap when there is only one window */
+static const int showbar                    = 1;        /* 0 means no bar */
+static const int topbar                     = 1;        /* 0 means bottom bar */
+static const int focusedontoptiled          = 1;        /* 1 means focused tile client is shown on top of floating windows */
+static const int focusonwheel               = 0;
+static const char *fonts[]                  = { "FiraMono Nerd Font:size=12", "monospace:size=10" };
+static const char dmenufont[]               = "monospace:size=10";
+static const char col_gray1[]               = "#222222";
+static const char col_gray2[]               = "#444444";
+static const char col_gray3[]               = "#bbbbbb";
+static const char col_gray4[]               = "#eeeeee";
+static const char col_cyan[]                = "#005577";
 
-static char font[]                          = "monospace:size=10";                                              // font used at topbar
-static const char *fonts[]                        = { font };                                                         // get fonts from font.-)
-static float mfact                          = 0.55;                                                             // factor of master area size [0.05..0.95]
-static int nmaster                          = 1;                                                                // number of clients in master area
-static int resizehints                      = 1;                                                                // 1 means respect size hints in tiled resizals
-static int lockfullscreen                   = 0;                                                                // 1 will force focus on the fullscreen window
-static unsigned int gappih                  = 20;                                                               // horiz inner gap between windows
-static unsigned int gappiv                  = 10;                                                               // vert inner gap between windows
-static unsigned int gappoh                  = 10;                                                               // horiz outer gap between windows and screen edge
-static unsigned int gappov                  = 30;                                                               // vert outer gap between windows and screen edge
-static int smartgaps                        = 0;                                                                // 1 means no outer gap when there is only one window
-static unsigned int borderpx                = 1;                                                                // border pixel of windows
-static unsigned int snap                    = 32;                                                               // snap pixel
-static int showbar                          = 1;                                                                // 0 means no bar
-static int topbar                           = 1;                                                                // 0 means bottom bar
-static int focusonwheel                     = 0;
-static int focusedontoptiled                = 1;                                                                // 1 means focused tile client is shown on top of floating windows
-static char normbgcolor[]                   = "#222222";
-static char normbordercolor[]               = "#444444";
-static char normfgcolor[]                   = "#bbbbbb";
-static char selfgcolor[]                    = "#eeeeee";
-static char selbordercolor[]                = "#005577";
-static char selbgcolor[]                    = "#005577";
-static char statusfgcolor[]                 = "#eeeeee";
-static char statusbgcolor[]                 = "#5f005f";
-static char tagselfgcolor[]                 = "#eeeeee";
-static char tagselbgcolor[]                 = "#5f005f";
-static char tagnormfgcolor[]                = "#af87d7";
-static char tagnormbgcolor[]                = "#5f005f";
-static char infoselfgcolor[]                = "#eeeeee";
-static char infoselbgcolor[]                = "#5f005f";
-static char infonormfgcolor[]               = "#eeeeee";
-static char infonormbgcolor[]               = "#5f005f";
-static char termcol0[]                      = "#000000";                                                        // black
-static char termcol1[]                      = "#ff0000";                                                        // red
-static char termcol2[]                      = "#33ff00";                                                        // gree
-static char termcol3[]                      = "#ff0099";                                                        // yellow
-static char termcol4[]                      = "#0066ff";                                                        // blue
-static char termcol5[]                      = "#cc00ff";                                                        // magenta
-static char termcol6[]                      = "#00ffff";                                                        // cyan
-static char termcol7[]                      = "#d0d0d0";                                                        // white
-static char termcol8[]                      = "#808080";                                                        // black
-static char termcol9[]                      = "#ff0000";                                                        // red
-static char termcol10[]                     = "#33ff00";                                                        // green
-static char termcol11[]                     = "#ff0099";                                                        // yellow
-static char termcol12[]                     = "#0066ff";                                                        // blue
-static char termcol13[]                     = "#cc00ff";                                                        // magenta
-static char termcol14[]                     = "#00ffff";                                                        // cyan
-static char termcol15[]                     = "#ffffff";                                                        // white
-// static char *termcolor[]                    = { termcol0,
-//                                                 termcol1,
-//                                                 termcol2,
-//                                                 termcol3,
-//                                                 termcol4,
-//                                                 termcol5,
-//                                                 termcol6,
-//                                                 termcol7,
-//                                                 termcol8,
-//                                                 termcol9,
-//                                                 termcol10,
-//                                                 termcol11,
-//                                                 termcol12,
-//                                                 termcol13,
-//                                                 termcol14,
-//                                                 termcol15 };
-
-static char *colors[][3] = {
-		/*                                      fg                  bg                  border   */
-		[SchemeNorm]                        = { normfgcolor,        normbgcolor,        normbordercolor },
-		[SchemeSel]                         = { selfgcolor,         selbgcolor,         selbordercolor  },
-		[SchemeStatus]                      = { statusfgcolor,      statusbgcolor,      "#000000"  },           // Statusbar right {text,background,not used but cannot be empty}
-		[SchemeTagsSel]                     = { tagselfgcolor,      tagselbgcolor,      "#000000"  },           // Tagbar left selected {text,background,not used but cannot be empty}
-		[SchemeTagsNorm]                    = { tagnormfgcolor,     tagnormbgcolor,     "#000000"  },           // Tagbar left unselected {text,background,not used but cannot be empty}
-		[SchemeInfoSel]                     = { infoselfgcolor,     infoselbgcolor,     "#000000"  },           // infobar middle  selected {text,background,not used but cannot be empty}
-		[SchemeInfoNorm]                    = { infonormfgcolor,    infonormbgcolor,    "#000000"  },           // infobar middle  unselected {text,background,not used but cannot be empty}
+static const char *colors[][3] = {
+		/*                                         fg          bg      border   */
+		[SchemeNorm]                        = { "#bcbcbc", "#5f005f", "#444444" },
+		[SchemeSel]                         = { "#eeeeee", "#000000", "#000000" },
+		[SchemeStatus]                      = { "#eeeeee", "#5f005f", "#000000" },  // Statusbar right {text,background,not used but cannot be empty}
+		[SchemeTagsSel]                     = { "#eeeeee", "#5f005f", "#000000" },  // Tagbar left selected {text,background,not used but cannot be empty}
+		[SchemeTagsNorm]                    = { "#af87d7", "#5f005f", "#000000" },  // Tagbar left unselected {text,background,not used but cannot be empty}
+		[SchemeInfoSel]                     = { "#eeeeee", "#5f005f", "#000000" },  // infobar middle  selected {text,background,not used but cannot be empty}
+		[SchemeInfoNorm]                    = { "#eeeeee", "#5f005f", "#000000" },  // infobar middle  unselected {text,background,not used but cannot be empty}
 };
 
-/* Xresources preferences to load at startup */
-ResourcePref resources[] = {
-		{ "borderpx",           INTEGER, &borderpx },
-		{ "font",               STRING,  &font },
-		{ "gappih",             INTEGER, &gappih },
-		{ "gappiv",             INTEGER, &gappiv },
-		{ "gappoh",             INTEGER, &gappoh },
-		{ "gappov",             INTEGER, &gappov },
-		{ "infonormbgcolor",    STRING,  &infonormbgcolor },
-		{ "infonormfgcolor",    STRING,  &infonormfgcolor },
-		{ "infoselbgcolor",     STRING,  &infoselbgcolor },
-		{ "infoselfgcolor",     STRING,  &infoselfgcolor },
-		{ "lockfullscreen",     STRING,  &lockfullscreen },
-		{ "mfact",              FLOAT,   &mfact },
-		{ "nmaster",            INTEGER, &nmaster },
-		{ "normbgcolor",        STRING,  &normbgcolor },
-		{ "normbordercolor",    STRING,  &normbordercolor },
-		{ "normfgcolor",        STRING,  &normfgcolor },
-		{ "resizehints",        INTEGER, &resizehints },
-		{ "selbgcolor",         STRING,  &selbgcolor },
-		{ "selbordercolor",     STRING,  &selbordercolor },
-		{ "selfgcolor",         STRING,  &selfgcolor },
-		{ "showbar",            INTEGER, &showbar },
-		{ "snap",               INTEGER, &snap },
-		{ "statusbgcolor",      STRING,  &statusbgcolor },
-		{ "statusfgcolor",      STRING,  &statusfgcolor },
-		{ "tagnormbgcolor",     STRING,  &tagnormbgcolor },
-		{ "tagnormfgcolor",     STRING,  &tagnormfgcolor },
-		{ "tagselbgcolor",      STRING,  &tagselbgcolor },
-		{ "tagselfgcolor",      STRING,  &tagselfgcolor },
-		{ "topbar",             INTEGER, &topbar },
-		{ "termcol0",             STRING,  &termcol0 },
-		{ "termcol1",             STRING,  &termcol1 },
-		{ "termcol2",             STRING,  &termcol2 },
-		{ "termcol3",             STRING,  &termcol3 },
-		{ "termcol4",             STRING,  &termcol4 },
-		{ "termcol5",             STRING,  &termcol5 },
-		{ "termcol6",             STRING,  &termcol6 },
-		{ "termcol7",             STRING,  &termcol7 },
-		{ "termcol8",             STRING,  &termcol8 },
-		{ "termcol9",             STRING,  &termcol9 },
-		{ "termcol10",            STRING,  &termcol10 },
-		{ "termcol11",            STRING,  &termcol11 },
-		{ "termcol12",            STRING,  &termcol12 },
-		{ "termcol13",            STRING,  &termcol13 },
-		{ "termcol14",            STRING,  &termcol14 },
-		{ "termcol15",            STRING,  &termcol15 },
-};
 /* tagging */
 /* static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }; */
 /* static const char *tags[] = { "➊", "➋", "➌", "➍", "➎", "➏", "➐", "➑", "➒" }; */
@@ -217,10 +92,10 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-// static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-// static const int nmaster     = 1;    /* number of clients in master area */
-// static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-// static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const int nmaster     = 1;    /* number of clients in master area */
+static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
 
