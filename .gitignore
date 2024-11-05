@@ -9,44 +9,44 @@ config.h
 test.sh
 
 #======== maim =================================================================
-maim/src/cmdline.h
-maim/CMakeFiles/*
-maim/Makefile
-maim/cmake_install.cmake
-maim/CMakeCache.txt
-maim/bin/maim
-maim/install_manifest.txt
+src/maim/src/cmdline.h
+src/maim/CMakeFiles/*
+src/maim/Makefile
+src/maim/cmake_install.cmake
+src/maim/CMakeCache.txt
+src/maim/bin/maim
+src/maim/install_manifest.txt
 
 #======== slop =================================================================
-slop/CMakeCache.txt
-slop/CMakeFiles/
-slop/Makefile
-slop/bin/
-slop/cmake_install.cmake
-slop/libslopy.so
-slop/.vscode
-slop/libslopy.so*
-slop/install_manifest.txt
+src/slop/CMakeCache.txt
+src/slop/CMakeFiles/
+src/slop/Makefile
+src/slop/bin/
+src/slop/cmake_install.cmake
+src/slop/libslopy.so
+src/slop/.vscode
+src/slop/libslopy.so*
+src/slop/install_manifest.txt
 
 #======== suckless =============================================================
-dwm/dwm
-st/st
-dmenu/dmenu
-dusk/dusk
-dusk/duskc
-slock/slock
-gllock/gllock
-sent/sent
-surf/surf
-stw/stw
+src/dwm/dwm
+src/st/st
+src/dmenu/dmenu
+src/dusk/dusk
+src/dusk/duskc
+src/slock/slock
+src/gllock/gllock
+src/sent/sent
+src/surf/surf
+src/stw/stw
 
 #======== sxiv =================================================================
-sxiv/sxiv
-sxiv/version.h
+src/sxiv/sxiv
+src/sxiv/version.h
 
 #======== xdotool ==============================================================
-xdotool/xdo_version.h
-xdotool/xdotool
+src/xdotool/xdo_version.h
+src/xdotool/xdotool
 
 #======== xmenu ================================================================
 xmenu/xmenu
