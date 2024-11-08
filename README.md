@@ -85,9 +85,10 @@ suckless.org applications have been patched already.
   - [dwm-namedscratchpads-6.2.diff](https://dwm.suckless.org/patches/namedscratchpads/)
   - [dwm-netclientliststacking-6.5.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-netclientliststacking-6.5.diff)
   - [dwm-pertag-6.5.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-pertag-6.5.diff)
-  - [dwm-statuscmd-nosignal-20210402-67d76bd.diff](https://dwm.suckless.org/patches/statuscmd/)
   - [dwm-resizecorners-6.5.diff](https://dwm.suckless.org/patches/resizecorners/)
   - [dwm-status2d-6.3.diff](https://dwm.suckless.org/patches/status2d/)
+  - [dwm-statuscmd-nosignal-20210402-67d76bd.diff](https://dwm.suckless.org/patches/statuscmd/)
+  - [dwm-xresources-20210827-138b405.diff](https://dwm.suckless.org/patches/xresources/)
 - **[dwm-helper](https://github.com/WieWaldi/suckless.X11/tree/master/dwm-helper)** - A collection of wrapper and helper scripts for dwm.
 - **[farbfeld](https://tools.suckless.org/farbfeld/)** - A lossless image format which is easy to parse, pipe and compress.
 - **[feh](https://github.com/derf/feh)** — Image Viewer and Cataloguer (Release v3.10.3)
