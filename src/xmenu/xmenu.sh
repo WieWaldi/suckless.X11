@@ -18,7 +18,7 @@
 # +----------------------------------------------------------------------------+
 
 cat <<EOF | xmenu | sh &
-IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-tasklist.png					Open File									${HOME}/.local/bin/xmenu-openfile.sh
+IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-tasklist.png					Open File									/usr/bin/xdg-open \$(zenity --file-selection)
 
 Internet
 	IMG:${HOME}/.local/share/icons/hicolor/48x48/apps/rz-chrome.png					Google Chrome								/bin/google-chrome
