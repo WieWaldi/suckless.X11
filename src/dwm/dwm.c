@@ -284,7 +284,7 @@ static const char autostartsh[] = "autostart.sh";
 static const char broken[] = "broken";
 static const char dwmdir[] = "dwm";
 static const char localshare[] = ".local/share";
-static char stext[1024];
+static char stext[2048];
 static int statusw;
 static int statuscmdn;
 static char lastbutton[] = "-";
