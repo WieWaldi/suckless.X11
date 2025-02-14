@@ -42,6 +42,34 @@ tbo_color13="#444444"
 tbo_color14="#bcbcbc"
 tbo_color15="#eeeeee"
 
+color00="#AF1B7C"
+color01="#AF1B93"
+color02="#AF1BAA"
+color03="#9C1BAF"
+color04="#861BAF"
+color05="#691BAF"
+color06="#521BAF"
+color07="#3B1BAF"
+color08="#241BAF"
+color09="#1B3FAF"
+color10="#1B6DAF"
+color11="#1B84AF"
+color12="#1B9BAF"
+color13="#1BAFAC"
+color14="#1BAF7E"
+color15="#1BAF4B"
+color16="#1BAF1D"
+color17="#5EAF1B"
+color18="#8CAF1B"
+color19="#A2AF1B"
+color20="#AF8E1B"
+color21="#AF761B"
+color22="#AF5F1B"
+color23="#AF431B"
+color24="#AF1B1B"
+color30="#FFFFFF"
+color31="#002b36"
+
 gpu_amd_card0_dir=""
 SEPA=""
 SEPB=""
@@ -77,7 +105,7 @@ prompt_segment() {
     fi
     c_bckg=${bckg}
     # echo -e -n "^B${bckg}^^C${forg}^${SEPB} ${cont}"
-    echo -e -n "^b${bckg}^^c${forg}^ ${cont}"
+    echo -e -n "^b${bckg}^^c${forg}^${cont}"
 }
 
 print_mem_used() {
@@ -211,15 +239,43 @@ print_appleicons() {
 
 # Build status with colors
 build_dwm_status() {
-    prompt_segment ${tbo_color0} ${tbo_color15} "\x01$(print_battery)"
-    prompt_segment ${tbo_color1} ${tbo_color15} "\x02$(print_volume)"
-    prompt_segment ${tbo_color2} ${tbo_color15} "\x03$(print_network)"
-    prompt_segment ${tbo_color3} ${tbo_color15} "\x04$(print_temperature)"
-    prompt_segment ${tbo_color5} ${tbo_color15} "\x05$(print_cpu_used)"
-    prompt_segment ${tbo_color6} ${tbo_color15} "\x06$(print_mem_used)"
-    prompt_segment ${tbo_color7} ${tbo_color15} "\x09$(print_date_time)"
+    prompt_segment ${color00} ${color30} "\x01$(print_battery)"
+    prompt_segment ${color01} ${color30} ""
+    prompt_segment ${color02} ${color30} ""
+    prompt_segment ${color03} ${color30} ""
+    prompt_segment ${color04} ${color30} "\x02$(print_volume)"
+    prompt_segment ${color05} ${color30} ""
+    prompt_segment ${color06} ${color30} ""
+    prompt_segment ${color07} ${color30} ""
+    prompt_segment ${color08} ${color30} "\x03$(print_network)"
+    prompt_segment ${color09} ${color30} ""
+    prompt_segment ${color10} ${color30} ""
+    prompt_segment ${color11} ${color30} ""
+    prompt_segment ${color12} ${color30} "\x04$(print_temperature)"
+    prompt_segment ${color13} ${color30} ""
+    prompt_segment ${color14} ${color30} ""
+    prompt_segment ${color15} ${color30} ""
+    prompt_segment ${color16} ${color30} "\x05$(print_cpu_used)"
+    prompt_segment ${color17} ${color30} ""
+    prompt_segment ${color18} ${color30} ""
+    prompt_segment ${color19} ${color30} ""
+    prompt_segment ${color20} ${color30} "\x06$(print_mem_used)"
+    prompt_segment ${color21} ${color30} ""
+    prompt_segment ${color22} ${color30} ""
+    prompt_segment ${color23} ${color30} ""
+    prompt_segment ${color24} ${color30} "\x09$(print_date_time)"
 }
 
+# build_dwm_status() {
+#     prompt_segment ${tbo_color0} ${tbo_color15} "\x01$(print_battery)"
+#     prompt_segment ${tbo_color1} ${tbo_color15} "\x02$(print_volume)"
+#     prompt_segment ${tbo_color2} ${tbo_color15} "\x03$(print_network)"
+#     prompt_segment ${tbo_color3} ${tbo_color15} "\x04$(print_temperature)"
+#     prompt_segment ${tbo_color5} ${tbo_color15} "\x05$(print_cpu_used)"
+#     prompt_segment ${tbo_color6} ${tbo_color15} "\x06$(print_mem_used)"
+#     prompt_segment ${tbo_color7} ${tbo_color15} "\x09$(print_date_time)"
+# }
+# 
 # Build status without colors
 # build_dwm_status(){
 #     printf '\x01[%s]' "$(print_battery)"
