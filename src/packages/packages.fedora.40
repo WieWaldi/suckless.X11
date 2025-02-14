@@ -48,6 +48,7 @@ libev-devel
 libexif-devel
 libglvnd-devel
 libjpeg-turbo-devel
+libnotify-devel
 libpciaccess-devel
 libpng-devel
 libX11-devel
