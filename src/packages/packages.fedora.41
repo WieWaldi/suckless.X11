@@ -28,6 +28,7 @@ git
 glew-devel
 glib2-devel
 glm-devel
+gnome-session-xsession
 gpick
 gstreamer*
 gtk2-devel
@@ -112,11 +113,18 @@ xlsatoms
 xlsclients
 xlsfonts
 xmessage
+xorg-x11-drivers
+xorg-x11-drv-amdgpu
 xorg-x11-drv-evdev
 xorg-x11-drv-synaptics-legacy
 xorg-x11-fonts-misc.noarch
+xorg-x11-server-Xephyr
+xorg-x11-server-Xnest
+xorg-x11-server-Xspice
 xorg-x11-xbitmaps
+xorg-x11-xdm
 xorg-x11-xinit
+xorg-x11-xinit-session
 xprop
 xrandr
 xsensors
