@@ -2,9 +2,10 @@
 
 ### dwm - dynamic window manager
 *dwm is an extremely fast, small, and dynamic window manager for X.*  
+[![MIT Licence](https://raw.githubusercontent.com/WieWaldi/badges/master/badges/licence_mit.svg)](https://opensource.org/licenses/mit-license.php)
+![Maintained](https://raw.githubusercontent.com/WieWaldi/badges/master/badges/maintained_yes-green.svg)
 
-  
-</br>
+
 ## Requirements
 In order to build dwm you need the Xlib header files.
 
