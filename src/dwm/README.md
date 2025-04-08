@@ -1,7 +1,6 @@
 <img src="https://raw.githubusercontent.com/WieWaldi/badges/master/img/dwm_logo.png" align="left" width="135px" height="135px" />
 
 ### dwm - dynamic window manager
-*My personal build of dwm and other tools to form a suckless X11 environment.*  
 *dwm is an extremely fast, small, and dynamic window manager for X.*  
 ============================
 
