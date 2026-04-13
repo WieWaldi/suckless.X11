@@ -1,37 +1,50 @@
-<img src="https://raw.githubusercontent.com/WieWaldi/suckless.X11/master/img/RZ-Amper_Logo_135x135.png" align="left" width="135px" height="135px" />
+<img src="https://raw.githubusercontent.com/WieWaldi/badges/master/img/RZ-Amper_Logo_135x135.png" align="left" width="135px" height="135px" />
 
 ### suckless.X11 by WieWaldi
-> *My personal build of dwm and other tools to form a suckless X11 environment.*
-
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
-
-<br />
+*My personal build of dwm and other tools to form a suckless X11 environment.*  
+[![MIT Licence](https://raw.githubusercontent.com/WieWaldi/badges/master/badges/licence_mit.svg)](https://opensource.org/licenses/mit-license.php)
+![Maintained](https://raw.githubusercontent.com/WieWaldi/badges/master/badges/maintained_yes-green.svg)
 
 # suckless.X11
-WieWaldi's collection of suckless applications and other simple tools adapted to
-a minimal installation of CentOS. Yes, the name of this repository may be kinda
-missleading since it doesn't contain suckless implementations only but other
-stuff as well. This repo targets specially and only a minimal installation of
-CentOS 7/8.
+sucklessX11 is a personal build of dwm (Dynamic Window Manager) and other tools
+that form a minimalist X11 environment, inspired by the Suckless philosophy of 
+simplicity and efficiency. This collection is not limited to just Suckless 
+applications; it encompasses a variety of lightweight tools designed specifically 
+for a minimal installation of CentOS, along with adaptations for other 
+RedHat-based distributions
+
+Be aware that the name of this repository may be slightly misleading. While it 
+prominently features Suckless implementations, it also includes various other 
+applications that complement the overall experience.
 
 ![screenshot](https://raw.githubusercontent.com/WieWaldi/suckless.X11/master/img/screenshot.jpg)
 
 ## Motivation ...
-... is to get a CentOS minimal installation equiped with a suckless graphical
-user interface in pretty much no time and hassle using a script for building
-and installation.
-I'm convinced that RedHatEL/CentOS is one of the best GNU/Linux distributions
-and very well suited for company and business use. In my case, I'm running many
-RedHatEL/CentOS servers at the back office and on some workstations as well.
-I'm running security and data integrity tools for monitoring and alerting on
-file & directory changes on all of my servers and workstations. The alarm bells
-go off every time something gets changed besides the home directory. Hence I'm
-installing most of these applications in my home directory.
+The primary motivation behind WieWaldisucklessX11 was to develop a
+straightforward and efficient desktop environment that prioritizes essential
+features for a clean and productive operating experience. As a network
+administrator, I often find myself with multiple console sessions open,
+connecting to various network devices via SSH, executing pings and traceroutes,
+and comparing configurations side by side.
+
+Initially tailored for CentOS, the project has since evolved to support all
+RedHat-based distributions, including Fedora and Rocky Linux. This broader
+compatibility allows a wider audience to benefit from a minimalistic setup,
+reducing bloat while maintaining functionality and user-friendly interaction. 
+
+By leveraging the strengths of these distributions, WieWaldisucklessX11 enables
+users to experience a seamless window management experience alongside
+streamlined applications that adhere to the Suckless philosophy. My aim is to
+empower users, particularly in network administration roles, to take control of
+their desktop environment, ensuring it is both lightweight and effective for
+daily tasks that require managing numerous open sessions and quick access to
+crucial data.
+
 
 ## Requirements
-A minimal installation of CentOS 8/7. All needed repositories and packages will
-get installed during preparation. Don't forget to update your system right after
-installation.
+- Any RedHat-based distribution (e.g., CentOS, Fedora, Rocky Linux)
+- Minimal installation preferred
+- Basic knowledge of terminal usage and Linux commands
 
 ## Installation
 Installation is split up in two parts. First you have to run the preparation
@@ -85,9 +98,10 @@ suckless.org applications have been patched already.
   - [dwm-namedscratchpads-6.2.diff](https://dwm.suckless.org/patches/namedscratchpads/)
   - [dwm-netclientliststacking-6.5.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-netclientliststacking-6.5.diff)
   - [dwm-pertag-6.5.diff](https://github.com/bakkeby/patches/blob/master/dwm/dwm-pertag-6.5.diff)
-  - [dwm-statuscmd-nosignal-20210402-67d76bd.diff](https://dwm.suckless.org/patches/statuscmd/)
   - [dwm-resizecorners-6.5.diff](https://dwm.suckless.org/patches/resizecorners/)
   - [dwm-status2d-6.3.diff](https://dwm.suckless.org/patches/status2d/)
+  - [dwm-statuscmd-nosignal-20210402-67d76bd.diff](https://dwm.suckless.org/patches/statuscmd/)
+  - [dwm-xresources-20210827-138b405.diff](https://dwm.suckless.org/patches/xresources/)
 - **[dwm-helper](https://github.com/WieWaldi/suckless.X11/tree/master/dwm-helper)** - A collection of wrapper and helper scripts for dwm.
 - **[farbfeld](https://tools.suckless.org/farbfeld/)** - A lossless image format which is easy to parse, pipe and compress.
 - **[feh](https://github.com/derf/feh)** — Image Viewer and Cataloguer (Release v3.10.3)

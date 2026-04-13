@@ -1,0 +1,200 @@
+=head1 NAME
+
+dunst - a customizable and lightweight notification-daemon
+
+=head1 SYNOPSIS
+
+dunst [-conf file] [-verbosity v] [-print] [--startup_notification]
+
+=head1 DESCRIPTION
+
+Dunst is a highly configurable and lightweight notification daemon.
+
+=head2 Autostarting dunst
+
+On most installations, dunst should be able to automatically be started by D-Bus
+when a notification is sent. This is not recommended when multiple notification
+daemons are installed, because D-Bus will not know which one to start.
+Other ways of autostarting dunst include starting dunst with your desktop
+environment or window manager's autostart functionality or via the provided
+systemd service.
+
+=head1 COMMAND LINE OPTIONS
+
+=over 4
+
+=item B<-h/-help/--help>
+
+List all command line flags
+
+=item B<-conf/-config file>
+
+Use alternative config file.
+This disables the search for other config files.
+If it cannot be opened, dunst will issue a warning and fall back on its internal
+defaults.
+(Hint: `dunst -conf - </dev/null` can be used to enforce the defaults, i.e. for
+testing)
+
+=item B<-v/-version/--version>
+
+Print version information.
+
+=item B<-verbosity> (values: 'crit', 'warn', 'mesg', 'info', 'debug' default 'mesg')
+
+Do not display log messages, which have lower precedence than specified
+verbosity. This won't affect printing notifications on the terminal. Use
+the '-print' option for this.
+
+=item B<-print/--print>
+
+Print notifications to stdout. This might be useful for logging, setting up
+rules or using the output in other scripts.
+
+=item B<-startup_notification/--startup_notification>
+
+Display a notification on startup.
+
+=back
+
+=head2 DEPRECATED OPTIONS
+
+Old version of dunst allowed changing the colors of different urgencies through
+command line options. This has been long removed in favour of RULES, see issue #328.
+
+=over 4
+
+=item B<-li/ni/ci icon>
+
+Set notification icon.
+
+=item B<-lf/nf/cf color>
+
+Set notification foreground color.
+
+=item B<-lb/nb/cb color>
+
+Set notification background color.
+
+=item B<-lh/nh/ch color>
+
+Set notification highlight color.
+
+=item B<-lfr/nfr/cfr color>
+
+Set notification frame color.
+
+=item B<-lto/nto/cto secs>
+
+Set notification timeout time.
+
+=back
+
+=head1 CONFIGURATION
+
+A default configuration file is included (usually ##SYSCONFDIR##/dunst/dunstrc)
+and serves as the least important configuration file. Note: this was previously
+/usr/share/dunst/dunstrc. You can edit this file to change the system-wide
+defaults or copy it to a more important location to override its settings. See
+the FILES section for more details on where dunst searches for its
+configuration files and how settings get applied.
+
+See dunst(5) for all possible settings.
+
+=head2 NOTIFY-SEND HINTS
+
+Dunst is able to get different colors for a message via notify-send.
+In order to do that you have to add a hint via the -h option.
+The progress value can be set with a hint, too.
+
+See dunst(5) for the list of accepted hints.
+
+Some examples:
+
+	notify-send -h string:fgcolor:#ff4444
+
+	notify-send -h string:bgcolor:#4444ff -h string:fgcolor:#ff4444 -h string:frcolor:#44ff44
+
+	notify-send -h int:value:42 "Working ..."
+
+=head1 MISCELLANEOUS
+
+Dunst can be paused via the `dunstctl set-paused true` command. To unpause dunst use
+`dunstctl set-paused false`.
+Another way is to send SIGUSR1 and SIGUSR2 to pause and unpause
+respectively. Pausing using dunstctl is recommended over using signals, because
+the meaning of the signals isn't stable and might change in the future.
+
+When paused, dunst won't display any notifications, but keeps all notifications
+in a queue. This can for example be wrapped around a screen locker (i3lock,
+slock) to prevent flickering of notifications through the lock, and to read all
+missed notifications after returning to the computer.
+
+=head1 FILES
+
+These are the base directories dunst searches for configuration files in
+I<descending order of importance>:
+
+=over 8
+
+=item C<$XDG_CONFIG_HOME>
+
+This is the most important directory. (C<$HOME/.config> if unset or empty)
+
+=item C<$XDG_CONFIG_DIRS>
+
+This, like C<$PATH> for instance, is a :-separated list of base directories
+in I<descending order of importance>.
+(F<##SYSCONFDIR##> if unset or empty)
+
+=back
+
+Dunst will search these directories for the following relative file paths:
+
+=over 8
+
+=item F<dunst/dunstrc>
+
+This is the base config and as such the least important in a particular base
+directory.
+
+=item F<dunst/dunstrc.d/*.conf>
+
+These are "drop-ins" (mind the ".d" suffix of the directory).
+They are more important than the base dunstrc in the parent directory, as they
+are considered to be small snippets to override settings.
+The last in lexical order is the most important one, so you can easily change
+the order by renaming them.
+A common approach to naming drop-ins is to prefix them with numbers, i.e.:
+
+    00-least-important.conf
+    01-foo.conf
+    20-bar.conf
+    99-most-important.conf
+
+Only files with the B<.conf> suffix will be read.
+
+=back
+
+Only settings from the last base config the corresponding drop-ins get applied.
+So if a dunstrc is first found in F<~/.config/dunst/dunstrc>, drop-ins will be
+searched in F<~/.config/dunst/dunstrc.d/*>. Settings in more important files
+override those in less important ones.
+
+=head1 AUTHORS
+
+Written by Sascha Kruse <knopwob@googlemail.com>
+
+=head1 REPORTING BUGS
+
+Bugs and suggestions should be reported on GitHub at https://github.com/dunst-project/dunst/issues
+
+=head1 COPYRIGHT
+
+Copyright 2013 Sascha Kruse and contributors (see LICENSE for licensing information)
+
+If you feel that copyrights are violated, please send me an email.
+
+=head1 SEE ALSO
+
+dunst(5), dunstctl(1), dmenu(1), notify-send(1), dunstify(1)

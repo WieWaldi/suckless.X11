@@ -36,6 +36,37 @@ send_notification(){
     dunstify -a "${3:-dwm-statuscmd}" -u "${4:-normal}" -h "${5:-string:x-dunst-stack-tag:Status}" "${1}" "${2}"
 
 }
+
+get_interfaces_info() {
+    # Get all interfaces except loopback
+    for interface in $(ip -o link show | awk -F': ' '{print $2}' | grep -v '^lo$'); do
+        # Get IP address from interface
+        ip_info=$(ip -o -4 addr show "$interface" 2>/dev/null | awk '{print $4}')
+
+        # Check if interface has IP address
+        if [ -n "$ip_info" ]; then
+            ip_address=${ip_info%/*}
+            netmask=$(ipcalc -m "$ip_info" | awk -F'=' '{print $2}')
+            # Get Speed and Duplex
+            ethtool_output=$(ethtool "$interface" 2>/dev/null)
+            speed=$(echo "$ethtool_output" | grep "Speed:" | awk '{print $2}')
+            duplex=$(echo "$ethtool_output" | grep "Duplex:" | awk '{print $2}')
+            
+            # Fallback, falls Informationen nicht verfügbar sind
+            speed=${speed:-"Unknown"}
+            duplex=${duplex:-"Unknown"}
+
+            # Print interface informations
+            echo " "
+            echo "Interface Name: $interface"
+            echo "    IP Address: $ip_address"
+            echo "       IP Mask: $netmask"
+            echo "         Speed: $speed"
+            echo "        Duplex: $duplex"
+        fi
+    done
+}
+
 if [[ "${#}" != "2" ]]; then
     send_errormsg ${1} ${2}
     exit 1
@@ -65,19 +96,77 @@ case ${1} in
         send_notification "${summary}" "${body}" "affe"
         ;;
     2)
-        send_notification "Not in use." "You may come up with a new idea."
+        case ${2} in
+            1)
+                dwm-volumectrl up
+                ;;
+            2)
+                dwm-volumectrl mute
+                ;;
+            3)
+                dwm-volumectrl down
+                ;;
+            *)
+                send_errormsg "${1}" "${2}"
+                exit 1
+        esac
         ;;
     3)
-        send_notification "Not in use." "You may come up with a new idea."
+        case ${2} in
+            1)
+                send_notification "IP Addresses" "$(get_interfaces_info)"
+                ;;
+            2)
+                dwm-volumectrl mute
+                ;;
+            3)
+                dwm-volumectrl down
+                ;;
+            *)
+                send_errormsg "${1}" "${2}"
+                exit 1
+        esac
         ;;
     4)
-        send_notification "Not in use." "You may come up with a new idea."
+        summary="Sensors Information"
+        body="$(sensors)"
+        send_notification "${summary}" "${body}" "sensors"
         ;;
     5)
-        send_notification "Not in use." "You may come up with a new idea."
+        case ${2} in
+            1)
+                summary="top"
+                body="$(top -b -n 1 | head -20)"
+                ;;
+            2)
+                summary="CPU statistics and input/output statistics"
+                body="$(iostat -p ALL -k -N)"
+                ;;
+            3)
+                summary="CPU Information"
+                body="No Information yet."
+                ;;
+            *)
+                send_errormsg "${1}" "${2}"
+                exit 1
+        esac
+        send_notification "${summary}" "${body}" "CPU"
         ;;
     6)
-        send_notification "Not in use." "You may come up with a new idea."
+        case ${2} in
+            1)
+                summary="Free and Used Memory"
+                body="$(free --human --lohi --committed)"
+                ;;
+            2)
+                summary="CPU statistics and input/output statistics"
+                body="$(iostat -p ALL -k -N)"
+                ;;
+            *)
+                send_errormsg "${1}" "${2}"
+                exit 1
+        esac
+        send_notification "${summary}" "${body}" "Memory"
         ;;
     7)
         send_notification "Not in use." "You may come up with a new idea."
